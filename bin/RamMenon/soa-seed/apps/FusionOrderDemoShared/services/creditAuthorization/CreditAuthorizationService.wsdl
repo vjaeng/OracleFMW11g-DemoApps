@@ -1,0 +1,41 @@
+<definitions
+    
+     targetNamespace="http://www.globalcompany.example.com/ns/CreditAuthorizationService"
+     xmlns="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:tns="http://www.globalcompany.example.com/ns/CreditAuthorizationService"
+     xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+     xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+     xmlns:types="http://www.globalcompany.example.com/ns/CCAuthorizationService"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+     xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+     xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+     xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"     
+    >
+    <types>
+        <xsd:schema>
+            <xsd:import schemaLocation="creditauthorization.xsd" id="creditauthorization.xsd" namespace="http://www.globalcompany.example.com/ns/CCAuthorizationService"/>
+        </xsd:schema>
+    </types>
+    <message name="CreditAuthorizationRequestMessage">
+        <part name="Authorization" element="types:AuthInformation"/>
+    </message>
+    <message name="CreditAuthorizationResponseMessage">
+        <part name="status" element="types:status"/>
+    </message>
+    <message name="CreditAuthorizationFaultMessage">
+        <part name="error" element="types:error"/>
+    </message>
+    <portType name="CreditAuthorizationPort">
+        <operation name="AuthorizeCredit">
+            <input message="tns:CreditAuthorizationRequestMessage"/>
+            <output message="tns:CreditAuthorizationResponseMessage"/>
+            <fault name="InvalidCredit" message="tns:CreditAuthorizationFaultMessage"/>
+        </operation>
+    </portType>
+    <plnk:partnerLinkType name="CreditCardAuthorizationService">
+        <plnk:role name="CreditAuthorizationPort">
+            <plnk:portType name="tns:CreditAuthorizationPort"/>
+        </plnk:role>
+    </plnk:partnerLinkType>
+    
+</definitions>

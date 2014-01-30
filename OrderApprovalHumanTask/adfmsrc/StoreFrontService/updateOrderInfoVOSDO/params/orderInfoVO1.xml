@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="orderInfoVO1"
+          Package="StoreFrontService.updateOrderInfoVOSDO.params"
+          BeanClass="StoreFrontService.updateOrderInfoVOSDO.params.orderInfoVO1"
+          isJavaBased="false">
+  <Attribute Name="OrderId" Type="java.lang.Integer"/>
+  <Attribute Name="OrderDate" Type="java.sql.Date"/>
+  <Attribute Name="OrderShippedDate" Type="java.sql.Date"/>
+  <Attribute Name="OrderStatusCode" Type="java.lang.String"/>
+  <Attribute Name="OrderTotal" Type="java.math.BigDecimal"/>
+  <Attribute Name="CustomerId" Type="java.lang.Long"/>
+  <Attribute Name="ShipToName" Type="java.lang.String"/>
+  <Attribute Name="ShipToPhoneNumber" Type="java.lang.String"/>
+  <Attribute Name="AddressId" Type="java.lang.Integer"/>
+  <Attribute Name="Address1" Type="java.lang.String"/>
+  <Attribute Name="Address2" Type="java.lang.String"/>
+  <Attribute Name="City" Type="java.lang.String"/>
+  <Attribute Name="PostalCode" Type="java.lang.String"/>
+  <Attribute Name="StateProvince" Type="java.lang.String"/>
+  <Attribute Name="CountryId" Type="java.lang.String"/>
+  <Attribute Name="PaymentOptionId" Type="java.lang.Long"/>
+  <Attribute Name="BillingAddressId" Type="java.lang.Integer"/>
+  <Attribute Name="AccountNumber" Type="java.lang.Integer"/>
+  <Attribute Name="CardTypeCode" Type="java.lang.String"/>
+  <Attribute Name="ExpireDate" Type="java.sql.Date"/>
+  <Attribute Name="CheckDigits" Type="java.lang.Integer"/>
+  <Attribute Name="RoutingIdentifier" Type="java.lang.String"/>
+  <Attribute Name="InstitutionName" Type="java.lang.String"/>
+  <Attribute Name="ShipToAddressId" Type="java.lang.Long"/>
+  <Attribute Name="ObjectVersionId" Type="java.lang.Long"/>
+  <Attribute Name="ShippingOptionId" Type="java.lang.Long"/>
+  <Attribute Name="ObjectVersionId1" Type="java.lang.Long"/>
+  <Attribute Name="FreeShippingFlag" Type="java.lang.String"/>
+  <Attribute Name="ObjectVersionId2" Type="java.lang.Long"/>
+  <Attribute Name="CustomerCollectFlag" Type="java.lang.String"/>
+  <Attribute Name="GiftwrapFlag" Type="java.lang.String"/>
+  <Attribute Name="PaymentOptionId1" Type="java.lang.Integer"/>
+  <AccessorAttribute id="OrderItemsInfoVO" IsCollection="true"
+                     BeanClass="StoreFrontService.updateOrderInfoVOSDO.params.orderInfoVO1.OrderItemsInfoVO"
+                     CollectionBeanClass="StoreFrontService.updateOrderInfoVOSDO.params.orderInfoVO1_Operations"/>
+</JavaBean>

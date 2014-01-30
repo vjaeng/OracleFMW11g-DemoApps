@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="processData"
+          Package="StoreFrontService.processCSOrderInfoVOSDO.params"
+          BeanClass="StoreFrontService.processCSOrderInfoVOSDO.params.processData"
+          isJavaBased="false">
+  <AccessorAttribute id="Message" IsCollection="true"
+                     BeanClass="StoreFrontService.processCSOrderInfoVOSDO.params.processData.Message"
+                     CollectionBeanClass="StoreFrontService.processCSOrderInfoVOSDO.params.processData_Operations"/>
+  <AccessorAttribute id="Value" IsCollection="true"
+                     BeanClass="StoreFrontService.processCSOrderInfoVOSDO.params.processData.Value"
+                     CollectionBeanClass="StoreFrontService.processCSOrderInfoVOSDO.params.processData_Operations"/>
+  <AccessorAttribute id="ChangeSummary" IsCollection="false"
+                     BeanClass="StoreFrontService.processCSOrderInfoVOSDO.params.processData.ChangeSummary"/>
+</JavaBean>

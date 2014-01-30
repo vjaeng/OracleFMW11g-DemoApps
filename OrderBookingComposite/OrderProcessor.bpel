@@ -1,0 +1,808 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer 
+  
+  Created: Fri Sep 12 14:19:45 PDT 2008
+  Author:  lloywill
+  Purpose: Asynchronous BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<process name="OrderProcessor"
+         targetNamespace="http://www.globalcompany.example.com/ns/OrderBookingService"
+         xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+         xmlns:client="http://www.globalcompany.example.com/ns/OrderBookingService"
+         xmlns:ora="http://schemas.oracle.com/xpath/extension"
+         xmlns:orcl="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"
+         xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20"
+         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap"
+         xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+         xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+         xmlns:ns1="http://www.globalcompany.example.com/ns/InternalWarehouse"
+         xmlns:ns2="http://www.globalcompany.example.com/ns/CreditAuthorizationService"
+         xmlns:ns3="www.globalcompany.example.com"
+         xmlns:ns4="/oracle/fodemo/storefront/store/queries/common/"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:dvm="http://www.oracle.com/XSL/Transform/java/oracle.tip.dvm.LookupValue"
+         xmlns:hwf="http://xmlns.oracle.com/bpel/workflow/xpath"
+         xmlns:mhdr="http://www.oracle.com/XSL/Transform/java/oracle.tip.mediator.service.common.functions.GetRequestHeaderExtnFunction"
+         xmlns:med="http://schemas.oracle.com/mediator/xpath"
+         xmlns:ids="http://xmlns.oracle.com/bpel/services/IdentityService/xpath"
+         xmlns:xdk="http://schemas.oracle.com/bpel/extension/xpath/function/xdk"
+         xmlns:xref="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions"
+         xmlns:ns5="http://www.globalcompany.example.com/ns/OrderProcessor"
+         xmlns:ns6="www.globalcompany.example.com/types/"
+         xmlns:ns7="http://xmlns.oracle.com/adf/svc/types/"
+         xmlns:ns8="http://www.globalcompany.example.com/ns/CCAuthorizationService"
+         xmlns:ns9="www.globalcompany.example.com/ns/OrderProcessor"
+         xmlns:ns10="http://www.globalcompany.example.com/ns/OrderBookingService/rules"
+         xmlns:ns11="http://xmlns.oracle.com/RequiresApprovalRule/OracleRules1_DecisionService_1"
+         xmlns:ns12="http://xmlns.oracle.com/bpel"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+         xmlns:wf="http://schemas.oracle.com/bpel/extension/workflow"
+         xmlns:ns13="http://xmlns.oracle.com/bpel/workflow/common/tsc"
+         xmlns:ns14="http://xmlns.oracle.com/bpel/workflow/TaskEvidenceService"
+         xmlns:ns15="http://xmlns.oracle.com/WebLogicFusionOrderDemo/OrderBookingComposite/PartnerSupplierMediator"
+         xmlns:ns16="http://www.globalcompany.com/ns/OrderBooking"
+         xmlns:ns17="http://xmlns.oracle.com/WebLogicFusionOrderDemo/OrderBookingComposite/FulfillOrder"
+         xmlns:ns18="http://xmlns.oracle.com/ias/pcbpel/NotificationService"
+         queryLanguage="http://www.w3.org/TR/1999/REC-xpath-19991116"
+         expressionLanguage="http://www.w3.org/TR/1999/REC-xpath-19991116"
+         suppressJoinFailure="no" enableInstanceCompensation="no"
+         abstractProcess="no"
+         xmlns:ns19="http://xmlns.oracle.com/EvaluatePreferredSupplierRule/OracleRules1_DecisionService_1"
+         xmlns:ns20="http://www.oracle.com/XSL/Transform/java/oracle.tip.adapter.socket.ProtocolTranslator"
+         xmlns:task="http://xmlns.oracle.com/bpel/workflow/task"
+         xmlns:taskservice="http://xmlns.oracle.com/bpel/workflow/taskService"
+         xmlns:wfcommon="http://xmlns.oracle.com/bpel/workflow/common"
+         xmlns:bpel2="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+
+    <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        PARTNERLINKS                                                      
+        List of services participating in this BPEL process               
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    --> 
+    <partnerLinks>
+        <!-- 
+      The 'client' role represents the requester of this service. It is 
+      used for callback. The location and correlation information associated
+      with the client role are automatically set using WS-Addressing.
+    -->
+        <partnerLink name="orderprocessor_client_ep"
+                     partnerLinkType="client:OrderProcessor"
+                     myRole="OrderProcessorProvider"
+                     partnerRole="OrderProcessorRequester"/>
+        <partnerLink myRole="InternalWarehouseServiceRequester"
+                     name="InternalWarehouseService"
+                     partnerRole="InternalWarehouseServiceProvider"
+                     partnerLinkType="ns1:InternalWarehouseService"/>
+        <partnerLink name="CreditCardAuthorizationService"
+                     partnerRole="CreditAuthorizationPort"
+                     partnerLinkType="ns2:CreditCardAuthorizationService"/>
+        <partnerLink name="StoreFrontService" partnerRole="StoreFrontService"
+                     partnerLinkType="ns3:StorefrontService"/>
+        <partnerLink myRole="TaskServiceCallbackListener"
+                     name="TaskService"
+                     partnerRole="TaskService"
+                     partnerLinkType="taskservice:TaskService"/>
+        <partnerLink name="PartnerSupplierMediator"
+                     myRole="callback_ptt"
+                     partnerRole="execute_ptt"
+                     partnerLinkType="ns15:PartnerSupplierMediator.PartnerSupplierMediator"/>
+        <partnerLink name="NotificationService_WSDL"
+                     partnerLinkType="ns18:NotificationServiceLink"
+                     partnerRole="NotificationServiceProvider"/>
+        <partnerLink name="RequiresApprovalRule_OracleRules1_DecisionService_1"
+                     partnerLinkType="ns11:IDecisionService_PL"
+                     partnerRole="IDecisionService_Role"/>
+        <partnerLink name="FulfillOrder.FulfillOrder" partnerRole="execute_ptt"
+                     partnerLinkType="ns17:FulfillOrder.FulfillOrder"/>
+        <partnerLink name="EvaluatePreferredSupplierRule.OracleRules1_DecisionService_1"
+                     partnerRole="IDecisionService_Role"
+                     partnerLinkType="ns19:IDecisionService_PL"/>
+    </partnerLinks>
+
+    <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        VARIABLES                                                        
+        List of messages and XML documents used within this BPEL process 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    -->
+    <variables>
+        <!-- Reference to the message passed as input during initiation -->
+
+        <!-- Reference to the message that will be sent back to the requester during callback -->
+        <variable name="inputVariable"
+                  messageType="client:OrderProcessorRequestMessage"/>
+        <variable name="outputVariable"
+                  messageType="client:OrderProcessorResponseMessage"/>
+        <variable name="ApprovalHumanTask_1_globalVariable"
+                  messageType="taskservice:taskMessage"/>
+        <variable name="gOrderInfoVariable" element="ns4:orderInfoVOSDO"
+                  bpelx:entity.si="StoreFrontService"/>
+        <variable name="gCustomerInfoVariable"
+                  messageType="ns3:StoreFrontService_findCustomerInfoVO1CustomerInfoVOCriteriaResponse"/>
+        <variable name="gWarehouseQuotes" element="ns1:WarehouseList"/>
+        <variable name="gPreferredSupplier" element="ns1:WarehouseResponse"/>
+        <variable name="gOrderProcessorFaultVariable"
+                  messageType="client:OrderProcessorFault"/>
+    </variables>
+    <faultHandlers>
+        <catch faultName="client:OrderProcessorFault">
+            <sequence xml:id="id5">
+                <assign name="Assign_FaultedStatusToOrder">
+                    <copy>
+                        <from expression="string('FAULTED')"/>
+                        <to variable="gOrderInfoVariable"
+                            query="/ns4:orderInfoVOSDO/ns4:OrderStatusCode"/>
+                    </copy>
+                    <copy>
+                        <from expression="concat ('OrderProcessor, order: ', bpws:getVariableData('inputVariable','payload','/client:process/client:orderId'), ' fault')"/>
+                        <to variable="gOrderProcessorFaultVariable" part="fault"
+                            query="/client:orderProcessFault/client:code"/>
+                    </copy>
+                </assign>
+                <invoke xml:id="id4"
+                        name="Invoke_FaultOrderProcessorFaultCallback"
+                        inputVariable="gOrderProcessorFaultVariable"
+                        partnerLink="orderprocessor_client_ep"
+                        portType="client:OrderProcessorCallback"
+                        operation="processFault"/>
+            </sequence>
+        </catch>
+        <catchAll>
+            <sequence>
+                <assign name="Assign_Fault">
+                    <copy>
+                        <from expression="ora:getFaultAsString()"/>
+                        <to variable="gOrderProcessorFaultVariable" part="fault"
+                            query="/client:orderProcessFault/client:detail"/>
+                    </copy>
+                    <copy>
+                        <from expression="ora:getFaultName()"/>
+                        <to variable="gOrderProcessorFaultVariable" part="fault"
+                            query="/client:orderProcessFault/client:code"/>
+                    </copy>
+                    <copy xml:id="id9">
+                        <from xml:id="id10"
+                              expression="concat(bpws:getVariableData('inputVariable','payload','/client:process/client:orderId'), string(' failed to process, detail: '), ora:getFaultAsString())"/>
+                        <to xml:id="id11"
+                            variable="gOrderProcessorFaultVariable" part="fault"
+                            query="/client:orderProcessFault/client:summary"/>
+                    </copy>
+                </assign>
+                <invoke name="Invoke_FaultCallback"
+                        inputVariable="gOrderProcessorFaultVariable"
+                        partnerLink="orderprocessor_client_ep"
+                        portType="client:OrderProcessorCallback"
+                        operation="processFault"/>
+            </sequence>
+        </catchAll>
+    </faultHandlers>
+    <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+       ORCHESTRATION LOGIC                                               
+       Set of activities coordinating the flow of messages across the    
+       services integrated within this business process                  
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    -->
+    <sequence name="main">
+        <!-- Receive input from requestor. (Note: This maps to operation defined in OrderProcessor.wsdl) -->
+        <receive name="receiveInput" partnerLink="orderprocessor_client_ep" portType="client:OrderProcessor" operation="process" variable="inputVariable" createInstance="yes"/>
+
+        <!-- 
+          Asynchronous callback to the requester. (Note: the callback location and correlation id is transparently handled using WS-addressing.)
+        -->
+        <scope name="Scope_RetrieveOrder">
+            <variables xml:id="id12">
+                <variable xml:id="id13" name="lTmpOrderInfoVariable"
+                          element="ns4:orderInfoVOSDO"/>
+            </variables>
+            <sequence xml:id="id15">
+                <bpelx:bindEntity name="findOrderById"
+                                  variable="gOrderInfoVariable">
+                    <bpelx:key keyname="ns4:OrderId">bpws:getVariableData('inputVariable','payload','/client:process/client:orderId')</bpelx:key>
+                </bpelx:bindEntity>
+                <assign xml:id="id14" name="Assign_lVariableForSensor">
+                    <copy xml:id="id16">
+                        <from xml:id="id17" variable="gOrderInfoVariable"
+                              query="/ns4:orderInfoVOSDO"/>
+                        <to xml:id="id18" variable="lTmpOrderInfoVariable"
+                            query="/ns4:orderInfoVOSDO"/>
+                    </copy>
+                </assign>
+            </sequence>
+        </scope>
+        <scope name="Scope_RetrieveCustomerForOrder">
+            <variables>
+                <variable name="lFindCustomerInfo_InputVariable"
+                          messageType="ns3:StoreFrontService_findCustomerInfoVO1CustomerInfoVOCriteria"/>
+            </variables>
+            <sequence>
+                <assign name="AssignCustomerId">
+                    <copy>
+                        <from variable="gOrderInfoVariable"
+                              query="/ns4:orderInfoVOSDO/ns4:CustomerId"/>
+                        <to variable="lFindCustomerInfo_InputVariable"
+                            part="parameters"
+                            query="/ns6:findCustomerInfoVO1CustomerInfoVOCriteria/ns6:CustId"/>
+                    </copy>
+                    <copy>
+                        <from expression="-1"/>
+                        <to variable="lFindCustomerInfo_InputVariable"
+                            part="parameters"
+                            query="/ns6:findCustomerInfoVO1CustomerInfoVOCriteria/ns6:findCriteria/ns7:fetchStart"/>
+                    </copy>
+                    <copy>
+                        <from expression="1"/>
+                        <to variable="lFindCustomerInfo_InputVariable"
+                            part="parameters"
+                            query="/ns6:findCustomerInfoVO1CustomerInfoVOCriteria/ns6:findCriteria/ns7:fetchSize"/>
+                    </copy>
+                    <copy>
+                        <from expression="false()"/>
+                        <to variable="lFindCustomerInfo_InputVariable"
+                            part="parameters"
+                            query="/ns6:findCustomerInfoVO1CustomerInfoVOCriteria/ns6:findCriteria/ns7:excludeAttribute"/>
+                    </copy>
+                    <copy>
+                        <from expression="false()"/>
+                        <to variable="lFindCustomerInfo_InputVariable"
+                            part="parameters"
+                            query="/ns6:findCustomerInfoVO1CustomerInfoVOCriteria/ns6:findControl/ns7:retrieveAllTranslations"/>
+                    </copy>
+                </assign>
+                <invoke name="InvokeFindCustomer"
+                        inputVariable="lFindCustomerInfo_InputVariable"
+                        outputVariable="gCustomerInfoVariable"
+                        partnerLink="StoreFrontService"
+                        portType="ns3:StoreFrontService"
+                        operation="findCustomerInfoVO1CustomerInfoVOCriteria"/>
+            </sequence>
+        </scope>
+        <scope name="Scope_AuthorizeCreditCard">
+            <variables>
+                <variable name="lCreditCardInput"
+                          messageType="ns2:CreditAuthorizationRequestMessage"/>
+                <variable name="lCreditCardOutput"
+                          messageType="ns2:CreditAuthorizationResponseMessage"/>
+            </variables>
+            <faultHandlers>
+                <catch faultName="bpws:selectionFailure">
+                    <sequence>
+                        <assign name="Assign_noCCNumber">
+                            <copy>
+                                <from expression="string('CreditCardCheck - NO CreditCard')"/>
+                                <to variable="gOrderProcessorFaultVariable"
+                                    part="fault"
+                                    query="/client:orderProcessFault/client:summary"/>
+                            </copy>
+                        </assign>
+                        <throw name="Throw_NoCreditCard"
+                               faultVariable="gOrderProcessorFaultVariable"
+                               faultName="client:OrderProcessorFault"/>
+                    </sequence>
+                </catch>
+                <catch faultName="ns2:InvalidCredit">
+                    <sequence>
+                        <assign name="Assign_InvalidCreditFault">
+                            <copy>
+                                <from expression="concat(bpws:getVariableData('gOrderInfoVariable','/ns4:orderInfoVOSDO/ns4:CardTypeCode'), ' is not a valid creditcard type')"/>
+                                <to variable="gOrderProcessorFaultVariable"
+                                    part="fault"
+                                    query="/client:orderProcessFault/client:detail"/>
+                            </copy>
+                            <copy>
+                                <from expression="string('CreditCardCheck - NOT VALID')"/>
+                                <to variable="gOrderProcessorFaultVariable"
+                                    part="fault"
+                                    query="/client:orderProcessFault/client:summary"/>
+                            </copy>
+                        </assign>
+                        <throw name="Throw_OrderProcessingFault"
+                               faultName="client:OrderProcessorFault"
+                               faultVariable="gOrderProcessorFaultVariable"/>
+                    </sequence>
+                </catch>
+            </faultHandlers>
+            <sequence>
+                <assign name="Assign_CreditCheckInput">
+                    <copy>
+                        <from variable="gOrderInfoVariable"
+                              query="/ns4:orderInfoVOSDO/ns4:OrderTotal"/>
+                        <to variable="lCreditCardInput" part="Authorization"
+                            query="/ns8:AuthInformation/ns8:PurchaseAmount"/>
+                    </copy>
+                    <copy>
+                        <from variable="gOrderInfoVariable"
+                              query="/ns4:orderInfoVOSDO/ns4:CardTypeCode"/>
+                        <to variable="lCreditCardInput" part="Authorization"
+                            query="/ns8:AuthInformation/ns8:CCType"/>
+                    </copy>
+                    <copy>
+                        <from variable="gOrderInfoVariable"
+                              query="/ns4:orderInfoVOSDO/ns4:AccountNumber"/>
+                        <to variable="lCreditCardInput" part="Authorization"
+                            query="/ns8:AuthInformation/ns8:CCNumber"/>
+                    </copy>
+                </assign>
+                <invoke name="InvokeCheckCreditCard"
+                        inputVariable="lCreditCardInput"
+                        outputVariable="lCreditCardOutput"
+                        partnerLink="CreditCardAuthorizationService"
+                        portType="ns2:CreditAuthorizationPort"
+                        operation="AuthorizeCredit"/>
+                <switch name="Switch_EvaluateCCResult">
+                    <case condition="bpws:getVariableData('lCreditCardOutput','status','/ns8:status') != 'APPROVED'">
+                        <bpelx:annotation>
+                            <bpelx:pattern>status &lt;&gt; approved</bpelx:pattern>
+                            <bpelx:general>
+                                <bpelx:property name="userLabel">Check if CC
+                                                                 card was
+                                                                 validated and
+                                                                 amount approved</bpelx:property>
+                            </bpelx:general>
+                        </bpelx:annotation>
+                        <sequence>
+                            <assign name="Assign_StatusAndMessage">
+                                <copy>
+                                    <from expression="concat('Creditcard: ', bpws:getVariableData('lCreditCardInput','Authorization','/ns8:AuthInformation/ns8:CCNumber'), ' Status: ', bpws:getVariableData('lCreditCardOutput','status','/ns8:status') )"/>
+                                    <to variable="gOrderProcessorFaultVariable"
+                                        part="fault"
+                                        query="/client:orderProcessFault/client:summary"/>
+                                </copy>
+                            </assign>
+                            <throw name="Throw_Fault_CC_Denied"
+                                   faultName="client:OrderProcessorFault"
+                                   faultVariable="gOrderProcessorFaultVariable"/>
+                        </sequence>
+                    </case>
+                </switch>
+            </sequence>
+        </scope>
+        <scope name="Scope_CheckApprovalLimit">
+            <variables>
+                <variable name="lOrderApproved" type="xsd:string"/>
+            </variables>
+            <sequence>
+                <assign name="Assign_DefaultNotRequiresApproval">
+                    <copy>
+                        <from expression="string('false')"/>
+                        <to variable="lOrderApproved"/>
+                    </copy>
+                </assign>
+                <scope name="BusinessRule_ApprovalRequired">
+                    <bpelx:annotation>
+                        <bpelx:pattern patternName="bpelx:decide"></bpelx:pattern>
+                    </bpelx:annotation>
+                    <variables>
+                        <variable name="com_example_globalcompany_ns_orderbookingservice_rules_Approve_i"
+                                  element="ns10:approve"/>
+                        <variable name="com_example_globalcompany_ns_orderbookingservice_rules_Approve_o"
+                                  element="ns10:approve"/>
+                        <variable name="dsIn"
+                                  messageType="ns11:callFunctionStatelessMessage"/>
+                        <variable name="dsOut"
+                                  messageType="ns11:callFunctionStatelessDecisionMessage"/>
+                    </variables>
+                    <sequence name="Sequence_1">
+                        <assign name="BPEL_Var_To_Rule_Facts">
+                            <copy>
+                                <from variable="gOrderInfoVariable"
+                                      query="/ns4:orderInfoVOSDO/ns4:OrderTotal"/>
+                                <to variable="com_example_globalcompany_ns_orderbookingservice_rules_Approve_i"
+                                    query="/ns10:approve/ns10:price"/>
+                            </copy>
+                            <copy>
+                                <from variable="lOrderApproved"/>
+                                <to variable="com_example_globalcompany_ns_orderbookingservice_rules_Approve_i"
+                                    query="/ns10:approve/ns10:approvalRequired"/>
+                            </copy>
+                        </assign>
+                        <assign name="Facts_To_Rule_Service">
+                            <copy>
+                                <from variable="com_example_globalcompany_ns_orderbookingservice_rules_Approve_i"/>
+                                <to variable="dsIn" part="payload"
+                                    query="/ns11:callFunctionStateless/ns11:parameterList/ns10:approve"/>
+                            </copy>
+                        </assign>
+                        <assign name="BPEL_Header">
+            <copy>
+                <from expression="'OracleRules1_DecisionService_1'"/>
+                <to variable="dsIn" part="payload"
+                    query="/ns11:callFunctionStateless/@name"/>
+            </copy>
+        </assign>
+                        <invoke name="Invoke"
+                                partnerLink="RequiresApprovalRule_OracleRules1_DecisionService_1"
+                                portType="ns11:IDecisionService"
+                                operation="callFunctionStateless"
+                                inputVariable="dsIn" outputVariable="dsOut"/>
+                        <assign name="Rule_Service_To_Facts">
+                            <copy>
+                                <from variable="dsOut" part="payload"
+                                      query="/ns11:callFunctionStatelessDecision/ns11:resultList/ns10:approve"/>
+                                <to variable="com_example_globalcompany_ns_orderbookingservice_rules_Approve_o"/>
+                            </copy>
+                        </assign>
+                        <assign name="Facts_To_BPEL_Var">
+                            <copy>
+                                <from variable="com_example_globalcompany_ns_orderbookingservice_rules_Approve_o"
+                                      query="/ns10:approve/ns10:approvalRequired"/>
+                                <to variable="lOrderApproved"/>
+                            </copy>
+                        </assign>
+                    </sequence>
+                </scope>
+                <switch name="Switch_ApprovalRequired">
+                    <case condition="bpws:getVariableData('lOrderApproved') = 'true'">
+                        <bpelx:annotation>
+                            <bpelx:pattern>approval required = true</bpelx:pattern>
+                        </bpelx:annotation>
+                        <sequence>
+                            <scope name="ApprovalHumanTask_1"
+                                   xmlns:wf="http://schemas.oracle.com/bpel/extension/workflow"
+                                   wf:key="ApprovalHumanTask_1_globalVariable">
+            <bpelx:annotation xmlns:bpelx="http://schemas.oracle.com/bpel/extension">
+                <bpelx:pattern patternName="bpelx:workflow"></bpelx:pattern>
+            </bpelx:annotation>
+	    <variables>
+	        <variable name="initiateTaskInput"
+                   messageType="taskservice:initiateTaskMessage"/>
+        	<variable name="initiateTaskResponseMessage"
+                   messageType="taskservice:initiateTaskResponseMessage"/>
+            </variables>
+            <sequence>
+                <assign name="ApprovalHumanTask_1_AssignTaskAttributes">
+                                        <copy>
+                                            <from expression="number(3)"/>
+                                            <to variable="initiateTaskInput"
+                                                part="payload"
+                                                query="/taskservice:initiateTask/task:task/task:priority"/>
+                                        </copy>
+                                        <copy>
+                                            <from>
+                                                <payload xmlns="http://xmlns.oracle.com/bpel/workflow/task">
+                                                    <orderId xmlns="http://xmlns.oracle.com/bpel/workflow/task"/>
+                                                </payload>
+                                            </from>
+                                            <to variable="initiateTaskInput"
+                                                part="payload"
+                                                query="/taskservice:initiateTask/task:task/task:payload"/>
+                                        </copy>
+                                        <copy>
+                                            <from variable="gOrderInfoVariable"
+                                                  query="/ns4:orderInfoVOSDO/ns4:OrderId"/>
+                                            <to variable="initiateTaskInput"
+                                                part="payload"
+                                                query="/taskservice:initiateTask/task:task/task:payload/task:orderId"/>
+                                        </copy>
+                                        <copy>
+                                            <from expression="concat(bpws:getVariableData('gCustomerInfoVariable','parameters','/ns6:findCustomerInfoVO1CustomerInfoVOCriteriaResponse/ns6:result/ns4:FirstName'), ' ', bpws:getVariableData('gCustomerInfoVariable','parameters','/ns6:findCustomerInfoVO1CustomerInfoVOCriteriaResponse/ns6:result/ns4:LastName'))"/>
+                                            <to variable="initiateTaskInput"
+                                                part="payload"
+                                                query="/taskservice:initiateTask/task:task/task:creator"/>
+                                        </copy>
+                                        <copy>
+                                            <from expression="concat(string('Order approval for order ('), bpws:getVariableData('inputVariable','payload','/client:process/client:orderId'), string(')'))"/>
+                                            <to variable="initiateTaskInput"
+                                                part="payload"
+                                                query="/taskservice:initiateTask/task:task/task:title"/>
+                                        </copy>
+                                    </assign>
+                <invoke name="initiateTask_ApprovalHumanTask_1"
+                        partnerLink="TaskService"
+                        portType="taskservice:TaskService"
+                        operation="initiateTask"
+                        inputVariable="initiateTaskInput"
+                        outputVariable="initiateTaskResponseMessage">
+                </invoke>
+                <receive name="receiveCompletedTask_ApprovalHumanTask_1"
+                         partnerLink="TaskService"
+                         portType="taskservice:TaskServiceCallback"
+                         operation="onTaskCompleted"
+                         variable="ApprovalHumanTask_1_globalVariable"
+                         createInstance="no">
+                </receive>
+            </sequence>
+        </scope>
+                            <switch name="taskSwitch">
+                                <case condition="bpws:getVariableData('ApprovalHumanTask_1_globalVariable', 'payload', '/task:task/task:systemAttributes/task:state') = 'COMPLETED' and bpws:getVariableData('ApprovalHumanTask_1_globalVariable', 'payload', '/task:task/task:systemAttributes/task:outcome') = 'REJECT'">
+                                    <bpelx:annotation>
+                                        <bpelx:pattern>Task outcome is REJECT</bpelx:pattern>
+                                    </bpelx:annotation>
+                                    <sequence>
+                                        <assign name="Assign_FaultDetails">
+                                            <copy>
+                                                <from expression="concat('Approval for order was rejected by: ', bpws:getVariableData('ApprovalHumanTask_1_globalVariable','payload','/task:task/task:systemAttributes/task:updatedBy/task:id'))"/>
+                                                <to variable="gOrderProcessorFaultVariable"
+                                                    part="fault"
+                                                    query="/client:orderProcessFault/client:summary"/>
+                                            </copy>
+                                        </assign>
+                                        <throw name="Throw_OrderProcessorFault"
+                                               faultName="client:OrderProcessorFault"
+                                               faultVariable="gOrderProcessorFaultVariable"/>
+                                    </sequence>
+                                </case>
+                                <case condition="bpws:getVariableData('ApprovalHumanTask_1_globalVariable', 'payload', '/task:task/task:systemAttributes/task:state') = 'COMPLETED' and bpws:getVariableData('ApprovalHumanTask_1_globalVariable', 'payload', '/task:task/task:systemAttributes/task:outcome') = 'APPROVE'">
+                                    <bpelx:annotation>
+                                        <bpelx:pattern>Task outcome is APPROVE</bpelx:pattern>
+                                    </bpelx:annotation>
+                                    <sequence>
+                                        <empty/>
+                                    </sequence>
+                                </case>
+                                <otherwise>
+                                    <sequence>
+                                        <assign name="Assign_FaultDetails">
+                                            <copy>
+                                                <from expression="concat ('Approval task changed state', bpws:getVariableData('ApprovalHumanTask_1_globalVariable','payload','/task:task/task:systemAttributes/task:state'))"/>
+                                                <to variable="gOrderProcessorFaultVariable"
+                                                    part="fault"
+                                                    query="/client:orderProcessFault/client:summary"/>
+                                            </copy>
+                                        </assign>
+                                        <throw name="Throw_OrderProcessingFault"
+                                               faultName="client:OrderProcessorFault"
+                                               faultVariable="gOrderProcessorFaultVariable"/>
+                                    </sequence>
+                                </otherwise>
+                            </switch>
+                        </sequence>
+                    </case>
+                </switch>
+            </sequence>
+        </scope>
+        <scope name="Scope_RetrieveQuotes">
+            <variables>
+                <variable name="lPartnerSupplierInputVariable"
+                          messageType="ns15:requestMessage"/>
+                <variable name="lPartnerResponseVariable"
+                          messageType="ns15:callbackMessage"/>
+                <variable name="lInternalWarehouseResponseVariable"
+                          messageType="ns1:InternalWarehouseServiceResponseMessage"/>
+                <variable name="lInternalWarehouseInputVariable"
+                          messageType="ns1:InternalWarehouseServiceRequestMessage"/>
+            </variables>
+            <flow name="Retrieve_QuotesFromSuppliers">
+                <sequence name="Sequence_4">
+                    <assign name="Assign_InternalWarehouseRequest">
+                        <copy>
+                            <from variable="gOrderInfoVariable"
+                                  query="/ns4:orderInfoVOSDO/ns4:OrderId"/>
+                            <to variable="lInternalWarehouseInputVariable"
+                                part="payload"
+                                query="/ns1:WarehouseRequest/ns1:orderId"/>
+                        </copy>
+                    </assign>
+                    <invoke name="Invoke_InternalWarehouse"
+                            inputVariable="lInternalWarehouseInputVariable"
+                            partnerLink="InternalWarehouseService"
+                            portType="ns1:InternalWarehouseService"
+                            operation="process"/>
+                    <receive name="Receive_InternalWarehouse"
+                             createInstance="no"
+                             variable="lInternalWarehouseResponseVariable"
+                             partnerLink="InternalWarehouseService"
+                             portType="ns1:InternalWarehouseServiceCallback"
+                             operation="processResponse"/>
+                    <assign name="Assign_InterWHResponse">
+                        <bpelx:append>
+                            <bpelx:from variable="lInternalWarehouseResponseVariable"
+                                        part="payload"
+                                        query="/ns1:WarehouseResponse"/>
+                            <bpelx:to variable="gWarehouseQuotes"
+                                      query="/ns1:WarehouseList"/>
+                        </bpelx:append>
+                    </assign>
+                </sequence>
+                <sequence name="Sequence_4">
+                    <assign name="Assign_PartnerRequest">
+                        <copy>
+                            <from variable="gOrderInfoVariable"
+                                  query="/ns4:orderInfoVOSDO"/>
+                            <to variable="lPartnerSupplierInputVariable"
+                                part="request" query="/ns4:orderInfoVOSDO"/>
+                        </copy>
+                    </assign>
+                    <invoke name="Invoke_PartnerSupplier"
+                            partnerLink="PartnerSupplierMediator"
+                            portType="ns15:execute_ptt" operation="execute"
+                            inputVariable="lPartnerSupplierInputVariable"/>
+                    <receive name="Receive_PartnerResponse"
+                             createInstance="no"
+                             variable="lPartnerResponseVariable"
+                             partnerLink="PartnerSupplierMediator"
+                             portType="ns15:callback_ptt" operation="callback"/>
+                    <assign name="Assign_PartnerWHResponse">
+                        <bpelx:append>
+                            <bpelx:from variable="lPartnerResponseVariable"
+                                        part="callback"
+                                        query="/ns1:WarehouseResponse"/>
+                            <bpelx:to variable="gWarehouseQuotes"
+                                      query="/ns1:WarehouseList"/>
+                        </bpelx:append>
+                    </assign>
+                </sequence>
+            </flow>
+        </scope>
+        <scope name="Scope_SelectPreferredSupplier">
+            <!--scope name="BusinessRule_1">
+                <bpelx:annotation>
+                    <bpelx:pattern patternName="bpelx:decide"></bpelx:pattern>
+                </bpelx:annotation>
+            </scope-->
+            <scope name="BusinessRule_SelectPreferredSupplier">
+                <bpelx:annotation>
+                    <bpelx:pattern patternName="bpelx:decide"></bpelx:pattern>
+                </bpelx:annotation>
+                <variables>
+                    <variable name="com_example_globalcompany_ns_internalwarehouse_WarehouseList_i"
+                              element="ns1:WarehouseList"/>
+                    <variable name="com_example_globalcompany_ns_internalwarehouse_WarehouseResponse_o"
+                              element="ns1:WarehouseResponse"/>
+                    <variable name="dsIn"
+                              messageType="ns19:callFunctionStatelessMessage"/>
+                    <variable name="dsOut"
+                              messageType="ns19:callFunctionStatelessDecisionMessage"/>
+                </variables>
+                <sequence name="Sequence_6">
+                    <assign name="BPEL_Var_To_Rule_Facts">
+                        <copy>
+                            <from variable="gWarehouseQuotes"
+                                  query="/ns1:WarehouseList"/>
+                            <to variable="com_example_globalcompany_ns_internalwarehouse_WarehouseList_i"
+                                query="/ns1:WarehouseList"/>
+                        </copy>
+                    </assign>
+                    <assign name="Facts_To_Rule_Service">
+                        <copy>
+                            <from variable="com_example_globalcompany_ns_internalwarehouse_WarehouseList_i"/>
+                            <to variable="dsIn" part="payload"
+                                query="/ns19:callFunctionStateless/ns19:parameterList/ns1:WarehouseList"/>
+                        </copy>
+                    </assign>
+                    <assign name="BPEL_Header">
+                        <copy>
+                            <from expression="'OracleRules1_DecisionService_1'"/>
+                            <to variable="dsIn" part="payload"
+                                query="/ns19:callFunctionStateless/@name"/>
+                        </copy>
+                    </assign>
+                    <invoke name="Invoke"
+                            partnerLink="EvaluatePreferredSupplierRule.OracleRules1_DecisionService_1"
+                            portType="ns19:IDecisionService"
+                            operation="callFunctionStateless"
+                            inputVariable="dsIn" outputVariable="dsOut"/>
+                    <assign name="Rule_Service_To_Facts">
+                        <copy>
+                            <from variable="dsOut" part="payload"
+                                  query="/ns19:callFunctionStatelessDecision/ns19:resultList/ns1:WarehouseResponse"/>
+                            <to variable="com_example_globalcompany_ns_internalwarehouse_WarehouseResponse_o"/>
+                        </copy>
+                    </assign>
+                    <assign name="Facts_To_BPEL_Var">
+                        <copy>
+                            <from variable="com_example_globalcompany_ns_internalwarehouse_WarehouseResponse_o"
+                                  query="/ns1:WarehouseResponse"/>
+                            <to variable="gPreferredSupplier"
+                                query="/ns1:WarehouseResponse"/>
+                        </copy>
+                    </assign>
+                </sequence>
+            </scope>
+        </scope>
+        <scope name="Scope_FulfillOrder">
+            <variables>
+                <variable name="lFulfillOrder_InputVariable"
+                          messageType="ns17:requestMessage"/>
+            </variables>
+            <sequence>
+                <assign name="Assign_OrderData">
+                    <copy>
+                        <from variable="gOrderInfoVariable"
+                              query="/ns4:orderInfoVOSDO"/>
+                        <to variable="lFulfillOrder_InputVariable"
+                            part="request" query="/ns4:orderInfoVOSDO"/>
+                    </copy>
+                </assign>
+                <invoke name="Invoke_FulfillOrder"
+                        inputVariable="lFulfillOrder_InputVariable"
+                        partnerLink="FulfillOrder.FulfillOrder"
+                        portType="ns17:execute_ptt" operation="execute"/>
+            </sequence>
+        </scope>
+        <scope name="Scope_UpdateStatusToComplete">
+            <assign name="UpdateOrderStatus">
+                <copy>
+                    <from expression="string('complete')"/>
+                    <to variable="gOrderInfoVariable"
+                        query="/ns4:orderInfoVOSDO/ns4:OrderStatusCode"/>
+                </copy>
+                <copy xml:id="id1">
+                    <from xml:id="id2" variable="inputVariable" part="payload"
+                          query="/client:process/client:orderId"/>
+                    <to xml:id="id3" variable="outputVariable" part="payload"
+                        query="/client:processResponse/client:result"/>
+                </copy>
+            </assign>
+        </scope>
+        <scope name="Scope_NotifyCustomerOfCompletion">
+            <scope name="Email_ConfirmationToCustomer">
+                <bpelx:annotation>
+                    <bpelx:pattern patternName="bpelx:email"></bpelx:pattern>
+                </bpelx:annotation>
+                <variables>
+                    <variable name="varNotificationReq"
+                              messageType="ns18:EmailNotificationRequest"/>
+                    <variable name="varNotificationResponse"
+                              messageType="ns18:ArrayOfResponse"/>
+                    <variable name="NotificationServiceFaultVariable"
+                              messageType="ns18:NotificationServiceErrorMessage"/>
+                </variables>
+                <sequence name="Sequence_5">
+                    <assign name="EmailParamsAssign">
+                        <copy>
+                            <from expression="string('Default')"/>
+                            <to variable="varNotificationReq"
+                                part="EmailPayload"
+                                query="/EmailPayload/ns18:FromAccountName"/>
+                        </copy>
+                        <copy>
+                            <from expression="string('')"/>
+                            <to variable="varNotificationReq"
+                                part="EmailPayload"
+                                query="/EmailPayload/ns18:Bcc"/>
+                        </copy>
+                        <copy>
+                            <from expression="string('')"/>
+                            <to variable="varNotificationReq"
+                                part="EmailPayload"
+                                query="/EmailPayload/ns18:Cc"/>
+                        </copy>
+                        <copy>
+                            <from expression="string('')"/>
+                            <to variable="varNotificationReq"
+                                part="EmailPayload"
+                                query="/EmailPayload/ns18:ReplyToAddress"/>
+                        </copy>
+                        <copy>
+                            <from expression="concat(string('Order with id '), bpws:getVariableData('gOrderInfoVariable','/ns4:orderInfoVOSDO/ns4:OrderId'), string(' shipped!'))"/>
+                            <to variable="varNotificationReq"
+                                part="EmailPayload"
+                                query="/EmailPayload/ns18:Subject"/>
+                        </copy>
+                        <copy>
+                            <from expression="bpws:getVariableData('gCustomerInfoVariable','parameters','/ns6:findCustomerInfoVO1CustomerInfoVOCriteriaResponse/ns6:result/ns4:ConfirmedEmail')"/>
+                            <to variable="varNotificationReq"
+                                part="EmailPayload"
+                                query="/EmailPayload/ns18:To"/>
+                        </copy>
+                        <copy>
+                            <from expression="concat(string('Dear '), bpws:getVariableData('gCustomerInfoVariable','parameters','/ns6:findCustomerInfoVO1CustomerInfoVOCriteriaResponse/ns6:result/ns4:FirstName') , string(',
+your order has been shipped.'))"/>
+                            <to variable="varNotificationReq"
+                                part="EmailPayload"
+                                query="/EmailPayload/ns18:Content/ns18:ContentBody"/>
+                        </copy>
+                        <copy>
+                            <from expression="string('text/html; charset=UTF-8')"/>
+                            <to variable="varNotificationReq"
+                                part="EmailPayload"
+                                query="/EmailPayload/ns18:Content/ns18:MimeType"/>
+                        </copy>
+                    </assign>
+                    <invoke name="InvokeNotificationService"
+                            portType="ns18:NotificationService"
+                            partnerLink="NotificationService_WSDL"
+                            inputVariable="varNotificationReq"
+                            outputVariable="varNotificationResponse"
+                            operation="sendEmailNotification"/>
+                </sequence>
+            </scope>
+        </scope>
+        <invoke name="callbackClient" partnerLink="orderprocessor_client_ep" portType="client:OrderProcessorCallback" operation="processResponse" inputVariable="outputVariable"/>
+    </sequence>
+</process>

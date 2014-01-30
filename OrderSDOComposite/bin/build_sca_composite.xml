@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<project name="OrderBookingComposite" default="create-deployable-composite">
+  
+  <!-- master build.properties -->  
+  <property file="../../bin/build.properties"/>
+
+  <!-- import the property file -->
+  <property file="sca-build.properties"/>           
+  <property name="deploy.dir" value="../deploy"/>
+  
+    <!-- cleanup -->  
+  <target name="clean">
+    <property name="sca-inf.classes.dir" value="../SCA-INF/classes"/>
+    <echo message="Deleting contents of ${sca-inf.classes.dir}"/>
+    <delete dir="${sca-inf.classes.dir}" includeemptydirs="true" includes="*/**">
+    </delete>
+    <property name="deploy.composite.filename" 
+        value="${deploy.dir}/sca_${composite.name}_rev${composite.revision}.jar"/>
+    <echo message="Deleting ${deploy.composite.filename}"/>
+    <delete file="${deploy.composite.filename}"/>
+  </target>
+  
+  <target name="create-deployable-composite" description="Creates the SDO composite SAR">
+    <property name="sca-inf.classes.dir" value="../SCA-INF/classes"/>
+    <mkdir dir="${sca-inf.classes.dir}"/>
+    <ant antfile="${oracle.home}/bin/ant-sca-package.xml" target="package" inheritall="false">
+        <property name="oracle.home" value="${oracle.home}"/>
+        <!-- we leverage the inbuilt scac -->
+        <property name="compositeDir" value="${basedir}/../"/>
+        <!-- needed for adf config -->
+        <property name="scac.application.home" value="${basedir}/../.."/>
+        <!-- name of the composite -->
+        <property name="compositeName" value="${composite.name}"/>
+        <!-- revision of the composite -->
+        <property name="revision" value="${composite.revision}"/>
+        <!-- input for scac -->
+        <property name="java.passed.home" value="${java.home}"/>
+    </ant>
+  </target>
+  
+  <!-- deploy the composite -->
+  <target name="deploy-composite" description="Deploys the SDO composite SAR"> 
+    <condition property="deploymentplan.name" value="null">
+       <not>
+          <isset property="${deploymentplan.name}"/>
+       </not>
+    </condition>
+    <echo>Deploying to http://${managed.server.host}:${managed.server.port}/soa-infra/deployer</echo>
+    <ant antfile="${oracle.home}/bin/ant-sca-deploy.xml" target="deploy" 
+        inheritall="false" output="deployResult.dat">
+        <!-- reformat of prop names -->
+        <property name="user" value="${server.user}"/>
+        <property name="password" value="${server.password}"/>
+        <!-- overwrite? -->
+        <property name="overwrite" value="true"/>
+        <!-- create the url for deployment -->
+        <property name="serverURL" value="http://${managed.server.host}:${managed.server.port}/soa-infra/deployer"/>
+        <!-- location of the sar -->
+        <property name="sarLocation" value="${deploy.dir}/sca_${composite.name}_rev${composite.revision}.jar"/>
+        <!-- configplan-->
+        <property name="configplan" value="${deploymentplan.name}"/>
+        <!-- partition name -->
+        <property name="partition" value="${soa.partition.name}"/>        
+    </ant>
+    <loadfile property="deploylog" srcfile="deployResult.dat"></loadfile>
+    <fail message="Deployment failed, please check above exception">
+        <condition>
+            <not>
+                <contains string="${deploylog}" substring="200"/>
+            </not>
+        </condition>
+    </fail>
+    <delete file="deployResult.dat"/>    
+  </target>
+
+  <!-- undeploy the composite -->
+  <target name="undeploy-composite" description="Undeploys the SDO composite SAR">
+    <echo>Undeploying from http://${managed.server.host}:${managed.server.port}</echo>
+    <ant antfile="${oracle.home}/bin/ant-sca-deploy.xml" target="undeploy" inheritall="false">
+        <!-- reformat of prop names -->
+        <property name="user" value="${server.user}"/>
+        <property name="password" value="${server.password}"/>
+        <!-- create the url for deployment -->
+        <property name="serverURL" value="http://${managed.server.host}:${managed.server.port}/soa-infra/deployer"/>
+        <!-- name of the composite -->
+        <property name="compositeName" value="${composite.name}"/>
+        <!-- revision of the composite -->
+        <property name="revision" value="${composite.revision}"/>
+        <!-- partition name -->
+        <property name="partition" value="${soa.partition.name}"/>        
+    </ant>
+  </target>
+  
+</project>

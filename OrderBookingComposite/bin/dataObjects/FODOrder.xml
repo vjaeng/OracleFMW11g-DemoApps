@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<OracleBAMExport Version="2018">
+  <DataObject Version="14" Name="Order" ID="_Order" Path="/Demos/Fusion Order Demo" External="0">
+    <Layout>
+      <Column Name="ECID" ID="_ECID" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Column Name="OrderID" ID="_OrderID" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Column Name="CustomerID" ID="_CustomerID" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Column Name="OrderDate" ID="_OrderDate" Type="datetime" Nullable="1" Public="1"/>
+      <Column Name="OrderStatus" ID="_OrderStatus" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Column Name="OrderPrice" ID="_OrderPrice" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Indexes/>
+    </Layout>
+    <Contents>
+      <Row ID="1">
+        <Column ID="_ECID" Value="30033"/>
+        <Column ID="_OrderID" Value="5264029"/>
+        <Column ID="_CustomerID" Value="20"/>
+        <Column ID="_OrderDate" Null="1"/>
+        <Column ID="_OrderStatus" Value="PENDING"/>
+        <Column ID="_OrderPrice" Value="2001"/>
+      </Row>
+      <Row ID="2">
+        <Column ID="_ECID" Value="30041"/>
+        <Column ID="_OrderID" Value="999"/>
+        <Column ID="_CustomerID" Value="10"/>
+        <Column ID="_OrderDate" Null="1"/>
+        <Column ID="_OrderStatus" Value="PENDING"/>
+        <Column ID="_OrderPrice" Value="1999"/>
+      </Row>
+      <Row ID="3">
+        <Column ID="_ECID" Value="30046"/>
+        <Column ID="_OrderID" Value="123"/>
+        <Column ID="_CustomerID" Value="10"/>
+        <Column ID="_OrderDate" Null="1"/>
+        <Column ID="_OrderStatus" Value="PENDING"/>
+        <Column ID="_OrderPrice" Value="1999"/>
+      </Row>
+      <Row ID="4">
+        <Column ID="_ECID" Value="30052"/>
+        <Column ID="_OrderID" Value="1002"/>
+        <Column ID="_CustomerID" Value="20"/>
+        <Column ID="_OrderDate" Null="1"/>
+        <Column ID="_OrderStatus" Value="PENDING"/>
+        <Column ID="_OrderPrice" Value="2001"/>
+      </Row>
+      <Row ID="5">
+        <Column ID="_ECID" Value="30058"/>
+        <Column ID="_OrderID" Value="1003"/>
+        <Column ID="_CustomerID" Value="20"/>
+        <Column ID="_OrderDate" Null="1"/>
+        <Column ID="_OrderStatus" Value="PENDING"/>
+        <Column ID="_OrderPrice" Value="2001"/>
+      </Row>
+      <Row ID="6">
+        <Column ID="_ECID" Value="30062"/>
+        <Column ID="_OrderID" Value="1004"/>
+        <Column ID="_CustomerID" Value="20"/>
+        <Column ID="_OrderDate" Null="1"/>
+        <Column ID="_OrderStatus" Value="PENDING"/>
+        <Column ID="_OrderPrice" Value="2001"/>
+      </Row>
+      <Row ID="7">
+        <Column ID="_ECID" Value="40001"/>
+        <Column ID="_OrderID" Value="106"/>
+        <Column ID="_CustomerID" Value="10"/>
+        <Column ID="_OrderDate" Null="1"/>
+        <Column ID="_OrderStatus" Value="PENDING"/>
+        <Column ID="_OrderPrice" Value="1999"/>
+      </Row>
+      <Row ID="8">
+        <Column ID="_ECID" Value="40002"/>
+        <Column ID="_OrderID" Value="1106"/>
+        <Column ID="_CustomerID" Value="20"/>
+        <Column ID="_OrderDate" Null="1"/>
+        <Column ID="_OrderStatus" Value="PENDING"/>
+        <Column ID="_OrderPrice" Value="2001"/>
+      </Row>
+      <Row ID="9">
+        <Column ID="_ECID" Value="40011"/>
+        <Column ID="_OrderID" Value="107"/>
+        <Column ID="_CustomerID" Value="10"/>
+        <Column ID="_OrderDate" Null="1"/>
+        <Column ID="_OrderStatus" Value="PENDING"/>
+        <Column ID="_OrderPrice" Value="1999"/>
+      </Row>
+    </Contents>
+  </DataObject>
+</OracleBAMExport>

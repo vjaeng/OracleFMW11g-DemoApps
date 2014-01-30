@@ -1,0 +1,10 @@
+<?xml version = '1.0' encoding = 'windows-1252'?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_5.xsd" version="5" xmlns="http://java.sun.com/xml/ns/javaee">
+    <display-name>OrderApprovalHumanTask</display-name>
+    <module>
+        <web>
+            <web-uri>OrderApprovalHumanTask.war</web-uri>
+            <context-root>/workflow/OrderApprovalHumanTask</context-root>
+        </web>
+    </module>
+</application>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<definitions xmlns="http://schemas.oracle.com/events/edl"
+             targetNamespace="http://schemas.oracle.com/events/edl/OrderEventsDefinition">
+    <schema-import namespace="http://www.globalcompany.example.com/ns/OrderBookingService"
+                   location="oramds:/apps/FusionOrderDemoShared/services/orderbooking/OrderProcessor.xsd"/>
+    <event-definition name="OrderUpdateEvent">
+        <content xmlns:ns0="http://www.globalcompany.example.com/ns/OrderBookingService"
+                 element="ns0:updateOrderStatus"/>
+    </event-definition>
+    <event-definition name="OrderInformationCheckEvent">
+        <content xmlns:ns0="http://www.globalcompany.example.com/ns/OrderBookingService"
+                 element="ns0:orderInformationEvent"/>
+    </event-definition>
+    <event-definition name="ContinueOrderProcessingEvent">
+        <content xmlns:ns0="http://www.globalcompany.example.com/ns/OrderBookingService"
+                 element="ns0:continueOrderProcessingEvent"/>
+    </event-definition>
+    <event-definition name="StopOrderProcessingEvent">
+        <content xmlns:ns0="http://www.globalcompany.example.com/ns/OrderBookingService"
+                 element="ns0:stopOrderProcessingEvent"/>
+    </event-definition>
+</definitions>

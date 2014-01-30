@@ -1,0 +1,40 @@
+<wsdl:definitions
+     name="InternalWarehouseService"
+     targetNamespace="http://www.globalcompany.example.com/ns/InternalWarehouse"
+     xmlns:ns1="http://www.globalcompany.example.com/ns/InternalWarehouse"
+     xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+     xmlns:client="http://www.globalcompany.example.com/ns/InternalWarehouse"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    >
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://www.globalcompany.example.com/ns/InternalWarehouse"
+             xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:client="http://www.globalcompany.example.com/ns/InternalWarehouse"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+            <import namespace="http://www.globalcompany.example.com/ns/InternalWarehouse" schemaLocation="xsd/InternalWarehouse.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="InternalWarehouseServiceResponseMessage">
+        <wsdl:part name="payload" element="ns1:WarehouseResponse"/>
+    </wsdl:message>
+    <wsdl:message name="InternalWarehouseServiceRequestMessage">
+        <wsdl:part name="payload" element="ns1:WarehouseRequest"/>
+    </wsdl:message>
+    <wsdl:portType name="InternalWarehouseServiceCallback">
+        <wsdl:operation name="processResponse">
+            <wsdl:input message="ns1:InternalWarehouseServiceResponseMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:portType name="InternalWarehouseService">
+        <wsdl:operation name="process">
+            <wsdl:input message="ns1:InternalWarehouseServiceRequestMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <plnk:partnerLinkType name="InternalWarehouseService">
+        <plnk:role name="InternalWarehouseServiceProvider">
+            <plnk:portType name="client:InternalWarehouseService"/>
+        </plnk:role>
+        <plnk:role name="InternalWarehouseServiceRequester">
+            <plnk:portType name="client:InternalWarehouseServiceCallback"/>
+        </plnk:role>
+    </plnk:partnerLinkType>
+</wsdl:definitions>

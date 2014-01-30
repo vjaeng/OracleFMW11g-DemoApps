@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:nxsd="http://xmlns.oracle.com/pcbpel/nxsd"
+            xmlns:tns="http://TargetNamespace.com/writeProducts"
+            targetNamespace="http://TargetNamespace.com/writeProducts"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified"
+
+            nxsd:version="NXSD"
+            nxsd:stream="chars"
+            nxsd:encoding="ASCII"
+>
+
+
+  <xsd:element name="quoteRequest">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="product" minOccurs="1" maxOccurs="unbounded">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="productId" type="xsd:string" nxsd:style="terminated" nxsd:terminatedBy="," nxsd:quotedBy="&quot;" />
+              <xsd:element name="price" type="xsd:double" nxsd:style="terminated" nxsd:terminatedBy="," nxsd:quotedBy="&quot;" />
+              <xsd:element name="quantity" type="xsd:int" nxsd:style="terminated" nxsd:terminatedBy=";" nxsd:quotedBy="&quot;" />
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+</xsd:schema>
+<!--NXSDWIZ:C:\tmp\quoteInfo\New Text Document.txt:-->
+<!--USE-HEADER:false:-->

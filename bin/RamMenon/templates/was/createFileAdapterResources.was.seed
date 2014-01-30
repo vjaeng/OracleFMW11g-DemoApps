@@ -1,0 +1,39 @@
+#------------------------------------------------------------------------------
+# WSADMIN Python script that seeds file adapter resources for fusion order demo
+#------------------------------------------------------------------------------
+print "Removing FODFileAdapterJ2C if it exists" 
+oldcf = AdminConfig.getid('/J2CConnectionFactory:FODFileAdapterJ2C/')
+if oldcf != "":
+	AdminConfig.remove(oldcf)
+
+AdminConfig.create('J2CConnectionFactory', 
+	AdminConfig.getid('/Cell:@was.cell@/Node:@was.node@/Server:@server.targets@/J2CResourceAdapter:FileAdapter/') , 
+		[['name', 'FODFileAdapterJ2C'],['jndiName','eis/file/FODFileAdapter']])
+print "Done Creating new FODFileAdapterJ2C"
+
+newcf = AdminConfig.getid('/J2CConnectionFactory:FODFileAdapterJ2C/')
+#print newcf
+
+propSet = AdminConfig.showAttribute(newcf, 'propertySet')
+#print propSet
+
+custProps = AdminConfig.list('J2EEResourceProperty', propSet).split("\n")
+#print custProps
+
+for cust in custProps:
+	customName = AdminConfig.showAttribute(cust, 'name')
+	print customName
+	if customName == "controlDir":
+		AdminConfig.modify(cust, [['value', '@file.adapter.controldir@']])
+	if customName == "inboundDataSource":
+		AdminConfig.modify(cust, [['value', 'jdbc/SOADataSource']])
+	if customName == "outboundDataSource":
+		AdminConfig.modify(cust, [['value', 'jdbc/SOADataSource']])
+	if customName == "outboundDataSourceLocal":
+		AdminConfig.modify(cust, [['value', 'jdbc/SOALocalTxDataSource']])
+	if customName == "outboundLockTypeForWrite":
+		AdminConfig.modify(cust, [['value', 'oracle']])
+	continue
+
+print "Done setting custom props for FODFileAdapterJ2C"
+AdminConfig.save()

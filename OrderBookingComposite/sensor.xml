@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sensors xmlns="http://xmlns.oracle.com/bpel/sensor">
+    <sensor sensorName="OrderProcessingStart" kind="service" target="undefined" filter="" xmlns:client="http://www.globalcompany.example.com/ns/OrderBookingService">
+        <serviceConfig service="orderprocessor_client_ep" expression="concat('Order ', $in.payload/client:process/client:orderId)" operation="process" outputDataType="string" outputNamespace="http://www.w3.org/2001/XMLSchema"/>
+    </sensor>
+    <sensor sensorName="OrderBookingCompositeProcessorResult" kind="service" target="undefined" filter="" xmlns:client="http://www.globalcompany.example.com/ns/OrderBookingService">
+        <serviceConfig service="orderprocessor_client_ep" expression="$in.payload/client:processResponse/client:result" operation="processResponse" outputDataType="string" outputNamespace="http://www.w3.org/2001/XMLSchema"/>
+    </sensor>
+    <sensor sensorName="CreditCardAuthResultSensor" kind="reference" target="undefined" filter="" xmlns:types="http://www.globalcompany.example.com/ns/CCAuthorizationService">
+        <referenceConfig reference="CreditCardAuthorizationService" expression="$out.status/types:status" operation="AuthorizeCredit" outputDataType="string" outputNamespace="http://www.w3.org/2001/XMLSchema"/>
+    </sensor>
+    <sensor sensorName="AssignedUserForApprovalSensor" kind="reference" target="undefined" filter="" xmlns:imp1="http://xmlns.oracle.com/bam">
+        <referenceConfig reference="BAM_ProcessTimeDO_ECID" expression="$in._ProcessTimesCollection/imp1:_ProcessTimesCollection/imp1:_ProcessTimes/imp1:_AssigneeID" operation="writetoBAM" outputDataType="anonymous" outputNamespace="anonymous"/>
+    </sensor>
+    <sensor sensorName="OrderBookingCompositeProcessorFault" kind="service" target="undefined" filter="" xmlns:client="http://www.globalcompany.example.com/ns/OrderBookingService">
+        <serviceConfig service="orderprocessor_client_ep" expression="$in.fault/client:orderProcessFault/client:code" operation="processFault" outputDataType="string" outputNamespace="http://www.w3.org/2001/XMLSchema"/>
+    </sensor>
+    <sensor sensorName="CustomerForOrder" kind="reference" target="undefined" filter="" xmlns:types="www.globalcompany.example.com/types/" xmlns:ns5="/oracle/fodemo/storefront/store/queries/common/">
+        <referenceConfig reference="StoreFrontService" expression="$out.parameters/types:findCustomerInfoVO1Response/types:result/ns5:LastName" operation="findCustomerInfoVO1" outputDataType="string" outputNamespace="http://www.w3.org/2001/XMLSchema"/>
+    </sensor>
+    <sensor sensorName="FulfillmentBatchInsert" kind="reference" target="undefined" filter="" xmlns:imp1="http://www.globalcompany.example.com/ns/legacyOrder">
+        <referenceConfig reference="FulfillmentBatch" expression="$in.purchaseOrder/imp1:PurchaseOrder/imp1:ID" operation="Produce_Message" outputDataType="string" outputNamespace="http://www.w3.org/2001/XMLSchema"/>
+    </sensor>
+</sensors>

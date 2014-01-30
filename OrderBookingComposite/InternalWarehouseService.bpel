@@ -1,0 +1,91 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer 
+  
+  Created: Fri Sep 12 14:31:32 PDT 2008
+  Author:  lloywill
+  Purpose: Asynchronous BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<process name="InternalWarehouseService"
+         targetNamespace="http://www.globalcompany.example.com/ns/InternalWarehouse"
+         xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+         xmlns:client="http://www.globalcompany.example.com/ns/InternalWarehouse"
+         xmlns:ora="http://schemas.oracle.com/xpath/extension"
+         xmlns:orcl="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"
+         xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20"
+         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap"
+         xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+         xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+         xmlns:ns6="http://www.oracle.com/XSL/Transform/java/oracle.tip.dvm.LookupValue"
+         xmlns:ns1="http://xmlns.oracle.com/bpel/workflow/xpath"
+         xmlns:ns2="http://schemas.oracle.com/mediator/xpath"
+         xmlns:ns4="http://www.oracle.com/XSL/Transform/java/oracle.tip.mediator.service.common.functions.GetRequestHeaderExtnFunction"
+         xmlns:ns3="http://xmlns.oracle.com/bpel/services/IdentityService/xpath"
+         xmlns:ns7="http://schemas.oracle.com/bpel/extension/xpath/function/xdk"
+         xmlns:ns5="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions">
+
+    <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        PARTNERLINKS                                                      
+        List of services participating in this BPEL process               
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    --> 
+    <partnerLinks>
+        <!-- 
+      The 'client' role represents the requester of this service. It is 
+      used for callback. The location and correlation information associated
+      with the client role are automatically set using WS-Addressing.
+    -->
+        <partnerLink name="internalwarehouseservice_client" partnerLinkType="client:InternalWarehouseService" myRole="InternalWarehouseServiceProvider" partnerRole="InternalWarehouseServiceRequester"/>
+    </partnerLinks>
+
+    <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        VARIABLES                                                        
+        List of messages and XML documents used within this BPEL process 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    -->
+    <variables>
+        <!-- Reference to the message passed as input during initiation -->
+        <variable name="inputVariable" messageType="client:InternalWarehouseServiceRequestMessage"/>
+
+        <!-- Reference to the message that will be sent back to the requester during callback -->
+        <variable name="outputVariable" messageType="client:InternalWarehouseServiceResponseMessage"/>
+    </variables>
+
+    <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+       ORCHESTRATION LOGIC                                               
+       Set of activities coordinating the flow of messages across the    
+       services integrated within this business process                  
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    -->
+    <sequence name="main">
+        <!-- Receive input from requestor. (Note: This maps to operation defined in InternalWarehouseService.wsdl) -->
+        <receive name="receiveInput" partnerLink="internalwarehouseservice_client" portType="client:InternalWarehouseService" operation="process" variable="inputVariable" createInstance="yes"/>
+
+        <!-- 
+          Asynchronous callback to the requester. (Note: the callback location and correlation id is transparently handled using WS-addressing.)
+        -->
+        <assign name="Assign_Defaults">
+            <copy>
+                <from expression="string('InternalWarehouse')"/>
+                <to variable="outputVariable" part="payload"
+                    query="/client:WarehouseResponse/client:warehouse"/>
+            </copy>
+            <copy>
+                <from expression="xp20:current-date()"/>
+                <to variable="outputVariable" part="payload"
+                    query="/client:WarehouseResponse/client:deliveryDate"/>
+            </copy>
+            <copy>
+                <from expression="1000"/>
+                <to variable="outputVariable" part="payload"
+                    query="/client:WarehouseResponse/client:orderTotal"/>
+            </copy>
+        </assign>
+        <invoke name="callbackClient" partnerLink="internalwarehouseservice_client" portType="client:InternalWarehouseServiceCallback" operation="processResponse" inputVariable="outputVariable"/>
+    </sequence>
+</process>

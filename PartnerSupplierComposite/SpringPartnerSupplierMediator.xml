@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:sca="http://xmlns.oracle.com/weblogic/weblogic-sca">
+       
+  <!--
+    The below sca:service(s) corresponds to the services exposed by the 
+    component type file: SpringPartnerSupplierMediator.componentType
+  -->  
+       
+  <!-- expose the InternalPartnerSupplierMediator + EJB as service 
+  
+    <service name="IInternalPartnerSupplier">
+      <interface.java interface="com.otn.sample.fod.soa.internalsupplier.IInternalPartnerSupplier"/>
+    </service>
+
+  -->
+  <sca:service name="IInternalPartnerSupplier"
+        target="InternalPartnerSupplierMediator"
+        type="com.otn.sample.fod.soa.internalsupplier.IInternalPartnerSupplier"/>
+
+  <!-- expose the InternalPartnerSupplierMediator + Mock as service 
+
+    <service name="IInternalPartnerSupplierSimple">
+      <interface.java interface="com.otn.sample.fod.soa.internalsupplier.IInternalPartnerSupplier"/>
+    </service>
+  
+  -->
+  <sca:service name="IInternalPartnerSupplierSimple"
+        target="InternalPartnerSupplierMediatorSimple"
+        type="com.otn.sample.fod.soa.internalsupplier.IInternalPartnerSupplier"/>
+
+  <!-- the partner supplier mediator bean with the mock ep -->               
+  <bean id="InternalPartnerSupplierMediatorSimple" 
+        class="com.otn.sample.fod.soa.internalsupplier.InternalSupplierMediator" 
+        scope="prototype">
+        <!-- inject the external partner supplier bean -->
+        <property name="externalPartnerSupplier" 
+            ref="IExternalPartnerSupplierServiceMock"/>
+        <!-- inject the quoteWriter -->   
+        <property name="quoteWriter" ref="WriteQuoteRequest"/>
+        <!-- context aware logger, globally available bean [ps3] -->
+        <property name="logger" ref="loggerBean"/>        
+        <!-- headerHelper bean -->
+        <property name="headerHelper" ref="headerHelperBean"/>
+  </bean>      
+
+  <!-- the partner supplier mediator bean with the ejb -->               
+  <bean id="InternalPartnerSupplierMediator" 
+        class="com.otn.sample.fod.soa.internalsupplier.InternalSupplierMediator" 
+        scope="prototype">
+        <!-- inject the external partner supplier bean -->
+        <property name="externalPartnerSupplier" 
+            ref="IExternalPartnerSupplierService"/>
+        <!-- inject the quoteWriter -->   
+        <property name="quoteWriter" ref="WriteQuoteRequest"/>
+        <!-- context aware logger, globally available bean [ps3] -->
+        <property name="logger" ref="loggerBean"/>      
+        <!-- headerHelper bean -->
+        <property name="headerHelper" ref="headerHelperBean"/>
+  </bean>      
+
+  <!-- mock bean for the IExternalPartnerSupplierService -->
+  <bean id="IExternalPartnerSupplierServiceMock"
+        class="com.otn.sample.fod.soa.externalps.test.MockExternalPartnerSupplierTest"/>
+        
+  <!-- 
+    Use a reference from the outside world based on the 
+    IExternalPartnerSupplierService interface. 
+    The below is specified on the SpringPartnerSupplierMediator.componentType - 
+    and wired to an external EJB binding.
+    
+    <reference name="IExternalPartnerSupplierService">
+      <interface.java interface="com.otn.sample.fod.soa.externalps.IExternalPartnerSupplierService"/>
+    </reference>  
+  -->               
+  <sca:reference name="IExternalPartnerSupplierService"
+        type="com.otn.sample.fod.soa.externalps.IExternalPartnerSupplierService"/>
+        
+  <!--
+      <reference name="WriteQuoteRequest">
+        <interface.java interface="writequoterequest.partnersuppliercomposite.weblogicfusionorderdemo.file.adapter.pcbpel.com.oracle.xmlns.Write_ptt"/>
+      </reference>  
+  -->
+  <sca:reference type="writequoterequest.partnersuppliercomposite.weblogicfusionorderdemo.file.adapter.pcbpel.com.oracle.xmlns.Write_ptt"
+                 name="WriteQuoteRequest"/>
+</beans>

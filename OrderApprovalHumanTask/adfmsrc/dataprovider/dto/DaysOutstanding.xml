@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.53.80"
+          id="DaysOutstanding" Package="dataprovider.dto"
+          BeanClass="dataprovider.dto.DaysOutstanding" isJavaBased="true">
+  <Attribute Name="groupBy" Type="java.lang.String"/>
+  <Attribute Name="groupDay" Type="java.lang.Integer"/>
+  <ConstructorMethod IsCollection="true" Type="dataprovider.dto.DaysOutstanding"
+                     BeanClass="dataprovider.dto.DaysOutstanding"
+                     id="DaysOutstanding"/>
+</JavaBean>

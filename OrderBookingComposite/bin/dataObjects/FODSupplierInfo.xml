@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<OracleBAMExport Version="2018">
+  <DataObject Version="14" Name="SupplierInfo" ID="_SupplierInfo" Path="/Demos/Fusion Order Demo" External="0">
+    <Layout>
+      <Description><![CDATA[This dataobject will get the information from the JMS topic - JMS/DemoSupplier in the Fusion Order Demo]]></Description>
+      <Column Name="SupplierName" ID="_SupplierName" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Column Name="CustID" ID="_OrderID" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Column Name="PurchaseOrderID" ID="_PurchaseOrderID" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Column Name="SupplierPrice" ID="_SupplierPrice" Type="float" Nullable="1" Public="1"/>
+      <Indexes/>
+      <Dimensions><Dimensions><Dimension ID="2093d1809f8c48895ad84eca11e23951cff-6536" name="OrderID--&gt;SupplierPrice"><Description> </Description><Fields><Field ID="_SupplierPrice"/><Field ID="_SupplierName"/><Field ID="_PurchaseOrderID"/><Field ID="_OrderID"/></Fields><Hierarchy ID="2093d1809f8c48895ad84eca11e23951cff-64e7" name="SupplierName--&gt;PurchaseOrderID"><Description/><Level ID="_SupplierName" number="0"/><Level ID="_PurchaseOrderID" number="1"/></Hierarchy><Hierarchy ID="8115c857383e9c24-1e30432a11e4639f1f1-70f3" name="SupplierName--&gt;CustID--&gt;PurchaseOrderID"><Description>  Drill-down from Supplier Name to Customer ID to Purchase Order ID.</Description><Level ID="_SupplierName" number="0"/><Level ID="_OrderID" number="1"/><Level ID="_PurchaseOrderID" number="2"/></Hierarchy></Dimension></Dimensions></Dimensions>
+    </Layout>
+    <Contents>
+      <Row ID="363">
+        <Column ID="_SupplierName" Value="Everyday"/>
+        <Column ID="_OrderID" Value="C16384"/>
+        <Column ID="_PurchaseOrderID" Value="PO4849231"/>
+        <Column ID="_SupplierPrice" Value="1220.98"/>
+      </Row>
+      <Row ID="364">
+        <Column ID="_SupplierName" Value="WhatUNeed"/>
+        <Column ID="_OrderID" Value="C13646"/>
+        <Column ID="_PurchaseOrderID" Value="PO4849232"/>
+        <Column ID="_SupplierPrice" Value="2109.99"/>
+      </Row>
+      <Row ID="365">
+        <Column ID="_SupplierName" Value="ABC"/>
+        <Column ID="_OrderID" Value="C16384"/>
+        <Column ID="_PurchaseOrderID" Value="PO4849233"/>
+        <Column ID="_SupplierPrice" Value="1099.13"/>
+      </Row>
+      <Row ID="366">
+        <Column ID="_SupplierName" Value="XYZ"/>
+        <Column ID="_OrderID" Value="C16384"/>
+        <Column ID="_PurchaseOrderID" Value="PO4849234"/>
+        <Column ID="_SupplierPrice" Value="1620.98"/>
+      </Row>
+      <Row ID="367">
+        <Column ID="_SupplierName" Value="XYZ"/>
+        <Column ID="_OrderID" Value="C13646"/>
+        <Column ID="_PurchaseOrderID" Value="PO4849235"/>
+        <Column ID="_SupplierPrice" Value="1620.98"/>
+      </Row>
+      <Row ID="368">
+        <Column ID="_SupplierName" Value="WhatUNeed"/>
+        <Column ID="_OrderID" Value="C23447"/>
+        <Column ID="_PurchaseOrderID" Value="PO4849236"/>
+        <Column ID="_SupplierPrice" Value="2109.99"/>
+      </Row>
+      <Row ID="369">
+        <Column ID="_SupplierName" Value="ABC"/>
+        <Column ID="_OrderID" Value="C16384"/>
+        <Column ID="_PurchaseOrderID" Value="PO4849237"/>
+        <Column ID="_SupplierPrice" Value="1099.13"/>
+      </Row>
+    </Contents>
+  </DataObject>
+</OracleBAMExport>

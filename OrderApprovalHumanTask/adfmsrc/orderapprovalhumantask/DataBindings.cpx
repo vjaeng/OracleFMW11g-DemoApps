@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Application xmlns="http://xmlns.oracle.com/adfm/application"
+             version="11.1.1.50.95" id="DataBindings" SeparateXMLFiles="false"
+             Package="orderapprovalhumantask" ClientType="Generic">
+  <definitionFactories>
+    <factory nameSpace="http://xmlns.oracle.com/adfm/dvt"
+             className="oracle.adfinternal.view.faces.dvt.model.binding.FacesBindingFactory"/>
+  </definitionFactories>
+  <pageMap>
+    <page path="/taskDetails1.jspx"
+          usageId="orderapprovalhumantask_taskDetails1PageDef"/>
+  </pageMap>
+  <pageDefinitionUsages>
+    <page id="orderapprovalhumantask_taskDetails1PageDef"
+          path="orderapprovalhumantask.pageDefs.taskDetails1PageDef"/>
+  </pageDefinitionUsages>
+  <dataControlUsages>
+    <dc id="Orders" path="orderapprovalhumantask.Orders"/>
+    <dc id="StoreFrontService" path="orderapprovalhumantask.StoreFrontService"/>
+    <dc id="OrderApprovalHumanTask_ApprovalHumanTask"
+        path="orderapprovalhumantask.OrderApprovalHumanTask_ApprovalHumanTask"/>
+  </dataControlUsages>
+</Application>

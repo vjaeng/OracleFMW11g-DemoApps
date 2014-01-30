@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<definitions xmlns="http://schemas.oracle.com/events/edl" targetNamespace="/oracle/fodemo/storefront/entities/events/edl/OrderEO">
+<schema-import namespace="/oracle/fodemo/storefront/entities/events/schema/OrderEO" location="OrderEO.xsd"/>
+    <event-definition name="NewOrderSubmitted">
+        <content xmlns:ns0="/oracle/fodemo/storefront/entities/events/schema/OrderEO" element="ns0:NewOrderSubmittedInfo"/>
+    </event-definition>
+    <event-definition name="OrderCompleted">
+        <content xmlns:ns0="/oracle/fodemo/storefront/entities/events/schema/OrderEO" element="ns0:OrderCompletedInfo"/>
+    </event-definition>
+    <event-definition name="OrderFaulted">
+        <content xmlns:ns0="/oracle/fodemo/storefront/entities/events/schema/OrderEO" element="ns0:OrderFaultedInfo"/>
+    </event-definition>
+</definitions>

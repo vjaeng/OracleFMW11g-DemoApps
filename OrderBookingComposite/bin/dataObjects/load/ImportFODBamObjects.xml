@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<OracleBAMCommands>
+    <!-- import dataobjects -->
+    <Import file="$BAM_ROOT$/dataObjects/FODAssignee.xml" />
+    <Import file="$BAM_ROOT$/dataObjects/FODConfirmation.xml" />
+    <Import file="$BAM_ROOT$/dataObjects/FODCustomer.xml" />
+    <Import file="$BAM_ROOT$/dataObjects/FODOrder.xml" />
+    <Import file="$BAM_ROOT$/dataObjects/FODSupplierInfo.xml" />
+    <Import file="$BAM_ROOT$/dataObjects/FODProcessTime.xml" />
+    <!-- import dashboard / reassignment action page -->
+    <Import file="$BAM_ROOT$/dataObjects/reports/Re-AssignmentActionv2.xml" />
+    <Import file="$BAM_ROOT$/dataObjects/reports/FusionOrderBookingDemoDashboardv2.xml" />
+    <!-- alerts -->
+    <Import file="$BAM_ROOT$/dataObjects/alerts/FODAtViolationRisk.xml" />
+    <Import file="$BAM_ROOT$/dataObjects/alerts/SupplierAlertv2.xml" />
+</OracleBAMCommands>

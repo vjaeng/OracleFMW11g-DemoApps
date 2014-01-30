@@ -1,0 +1,1064 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="systemMessageAttributesType"
+          Package="OrderApprovalHumanTask_ApprovalHumanTask"
+          BeanClass="OrderApprovalHumanTask_ApprovalHumanTask.systemMessageAttributesType"
+          isJavaBased="false">
+  <Attribute Name="textAttribute1" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="textAttribute2"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Text Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="textAttribute2" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="textAttribute3"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Text Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="textAttribute3" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="textAttribute4"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Text Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="textAttribute4" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="textAttribute5"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Text Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="textAttribute5" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="textAttribute6"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Text Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="textAttribute6" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="textAttribute7"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Text Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="textAttribute7" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="textAttribute8"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Text Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="textAttribute8" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="textAttribute9"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Text Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="textAttribute9" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="textAttribute10"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Text Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="textAttribute10" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="formAttribute1"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Text Attribute 10"/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="formAttribute1" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="formAttribute2"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Form Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="formAttribute2" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="formAttribute3"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Form Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="formAttribute3" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="formAttribute4"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Form Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="formAttribute4" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="formAttribute5"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Form Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="formAttribute5" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="urlAttribute1"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Form Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="urlAttribute1" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="urlAttribute2"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Url Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="urlAttribute2" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="urlAttribute3"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Url Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="urlAttribute3" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="urlAttribute4"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Url Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="urlAttribute4" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="urlAttribute5"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Url Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="urlAttribute5" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="dateAttribute1"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Url Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="dateAttribute1"
+             Type="oracle.bpel.services.datacontrol.types.Calendar">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="dateAttribute2"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Date Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type"
+                  Value="oracle.bpel.services.datacontrol.types.Calendar"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="dateAttribute2"
+             Type="oracle.bpel.services.datacontrol.types.Calendar">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="dateAttribute3"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Date Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type"
+                  Value="oracle.bpel.services.datacontrol.types.Calendar"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="dateAttribute3"
+             Type="oracle.bpel.services.datacontrol.types.Calendar">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="dateAttribute4"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Date Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type"
+                  Value="oracle.bpel.services.datacontrol.types.Calendar"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="dateAttribute4"
+             Type="oracle.bpel.services.datacontrol.types.Calendar">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="dateAttribute5"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Date Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type"
+                  Value="oracle.bpel.services.datacontrol.types.Calendar"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="dateAttribute5"
+             Type="oracle.bpel.services.datacontrol.types.Calendar">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="numberAttribute1"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Date Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type"
+                  Value="oracle.bpel.services.datacontrol.types.Calendar"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="numberAttribute1"
+             Type="oracle.bpel.services.datacontrol.types.Number">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="numberAttribute2"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Number Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type"
+                  Value="oracle.bpel.services.datacontrol.types.Number"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="numberAttribute2"
+             Type="oracle.bpel.services.datacontrol.types.Number">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="numberAttribute3"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Number Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type"
+                  Value="oracle.bpel.services.datacontrol.types.Number"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="numberAttribute3"
+             Type="oracle.bpel.services.datacontrol.types.Number">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="numberAttribute4"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Number Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type"
+                  Value="oracle.bpel.services.datacontrol.types.Number"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="numberAttribute4"
+             Type="oracle.bpel.services.datacontrol.types.Number">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="numberAttribute5"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Number Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type"
+                  Value="oracle.bpel.services.datacontrol.types.Number"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="numberAttribute5"
+             Type="oracle.bpel.services.datacontrol.types.Number">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedTextAttribute1"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Number Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type"
+                  Value="oracle.bpel.services.datacontrol.types.Number"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedTextAttribute1" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedTextAttribute2"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Text Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedTextAttribute2" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedTextAttribute3"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Text Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedTextAttribute3" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedTextAttribute4"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Text Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedTextAttribute4" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedTextAttribute5"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Text Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedTextAttribute5" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedTextAttribute6"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Text Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedTextAttribute6" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedTextAttribute7"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Text Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedTextAttribute7" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedTextAttribute8"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Text Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedTextAttribute8" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedTextAttribute9"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Text Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedTextAttribute9" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedTextAttribute10"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Text Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedTextAttribute10" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedFormAttribute1"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Text Attribute 10"/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedFormAttribute1" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedFormAttribute2"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Form Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedFormAttribute2" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedFormAttribute3"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Form Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedFormAttribute3" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedFormAttribute4"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Form Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedFormAttribute4" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedFormAttribute5"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Form Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedFormAttribute5" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedURLAttribute1"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Form Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedURLAttribute1" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedURLAttribute2"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected URL Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedURLAttribute2" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedURLAttribute3"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected URL Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedURLAttribute3" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedURLAttribute4"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected URL Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedURLAttribute4" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedURLAttribute5"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected URL Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedURLAttribute5" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedDateAttribute1"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected URL Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedDateAttribute1"
+             Type="oracle.bpel.services.datacontrol.types.Calendar">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedDateAttribute2"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Date Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type"
+                  Value="oracle.bpel.services.datacontrol.types.Calendar"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedDateAttribute2"
+             Type="oracle.bpel.services.datacontrol.types.Calendar">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedDateAttribute3"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Date Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type"
+                  Value="oracle.bpel.services.datacontrol.types.Calendar"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedDateAttribute3"
+             Type="oracle.bpel.services.datacontrol.types.Calendar">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedDateAttribute4"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Date Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type"
+                  Value="oracle.bpel.services.datacontrol.types.Calendar"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedDateAttribute4"
+             Type="oracle.bpel.services.datacontrol.types.Calendar">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedDateAttribute5"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Date Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type"
+                  Value="oracle.bpel.services.datacontrol.types.Calendar"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedDateAttribute5"
+             Type="oracle.bpel.services.datacontrol.types.Calendar">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedNumberAttribute1"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Date Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type"
+                  Value="oracle.bpel.services.datacontrol.types.Calendar"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedNumberAttribute1"
+             Type="oracle.bpel.services.datacontrol.types.Number">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedNumberAttribute2"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Number Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type"
+                  Value="oracle.bpel.services.datacontrol.types.Number"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedNumberAttribute2"
+             Type="oracle.bpel.services.datacontrol.types.Number">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedNumberAttribute3"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Number Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type"
+                  Value="oracle.bpel.services.datacontrol.types.Number"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedNumberAttribute3"
+             Type="oracle.bpel.services.datacontrol.types.Number">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedNumberAttribute4"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Number Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type"
+                  Value="oracle.bpel.services.datacontrol.types.Number"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedNumberAttribute4"
+             Type="oracle.bpel.services.datacontrol.types.Number">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="protectedNumberAttribute5"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Number Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type"
+                  Value="oracle.bpel.services.datacontrol.types.Number"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="protectedNumberAttribute5"
+             Type="oracle.bpel.services.datacontrol.types.Number">
+    <Properties>
+      <CustomProperties>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Protected Number Attribute "/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type"
+                  Value="oracle.bpel.services.datacontrol.types.Number"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+</JavaBean>

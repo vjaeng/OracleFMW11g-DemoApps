@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="group"
+          Package="StoreFrontService.findCustomerInfoVO1CustomerInfoVOCriteria.params.findCriteria.filter"
+          BeanClass="StoreFrontService.findCustomerInfoVO1CustomerInfoVOCriteria.params.findCriteria.filter.group"
+          isJavaBased="false">
+  <Attribute Name="conjunction" Type="java.lang.String"/>
+  <Attribute Name="upperCaseCompare" Type="java.lang.Boolean"/>
+  <AccessorAttribute id="item" IsCollection="true"
+                     BeanClass="StoreFrontService.findCustomerInfoVO1CustomerInfoVOCriteria.params.findCriteria.filter.group.item"
+                     CollectionBeanClass="StoreFrontService.findCustomerInfoVO1CustomerInfoVOCriteria.params.findCriteria.filter.group_Operations"/>
+</JavaBean>

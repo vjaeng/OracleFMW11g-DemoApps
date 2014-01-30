@@ -1,0 +1,50 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<sensors targetNamespace="http://www.globalcompany.example.com/ns/OrderBookingService" xmlns="http://xmlns.oracle.com/bpel/sensor" xmlns:tns="http://www.globalcompany.example.com/ns/OrderBookingService" xmlns:pc="http://xmlns.oracle.com/bpel/sensor" xmlns:ns4="/oracle/fodemo/storefront/store/queries/common/" xmlns:ns1="http://www.globalcompany.example.com/ns/InternalWarehouse">
+   <sensor sensorName="ActivitySensor_ReceiveInput" classname="oracle.tip.pc.services.reports.dca.agents.BpelActivitySensorAgent" kind="activity" target="receiveInput">
+      <activityConfig evalTime="activation"/>
+   </sensor>
+   <sensor sensorName="ActivitySensor_FindOrderById" classname="oracle.tip.pc.services.reports.dca.agents.BpelActivitySensorAgent" kind="activity" target="Scope_RetrieveOrder">
+      <activityConfig evalTime="completion">
+         <variable outputDataType="OrderInfoVOSDO" outputNamespace="/oracle/fodemo/storefront/store/queries/common/" target="$lTmpOrderInfoVariable/ns4:orderInfoVOSDO"/>
+      </activityConfig>
+   </sensor>
+   <sensor sensorName="ActivitySensor_RetrieveCustomerForOrder" classname="oracle.tip.pc.services.reports.dca.agents.BpelActivitySensorAgent" kind="activity" target="Scope_RetrieveCustomerForOrder">
+      <activityConfig evalTime="completion">
+         <variable outputDataType="StoreFrontService_findCustomerInfoVO1CustomerInfoVOCriteriaResponse" outputNamespace="www.globalcompany.example.com" target="$gCustomerInfoVariable"/>
+      </activityConfig>
+   </sensor>
+   <sensor sensorName="ActivitySensor_AuthorizeCreditCard" classname="oracle.tip.pc.services.reports.dca.agents.BpelActivitySensorAgent" kind="activity" target="Scope_AuthorizeCreditCard">
+      <activityConfig evalTime="activation"/>
+   </sensor>
+   <sensor sensorName="ActivitySensor_OrderApproval_Start" classname="oracle.tip.pc.services.reports.dca.agents.BpelActivitySensorAgent" kind="activity" target="ApprovalHumanTask_1">
+      <activityConfig evalTime="activation"/>
+   </sensor>
+   <sensor sensorName="ActivitySensor_OrderApproval_End" classname="oracle.tip.pc.services.reports.dca.agents.BpelActivitySensorAgent" kind="activity" target="ApprovalHumanTask_1">
+      <activityConfig evalTime="completion"/>
+   </sensor>
+   <sensor sensorName="ActivitySensor_InvokeInternalWarehouse_Start" classname="oracle.tip.pc.services.reports.dca.agents.BpelActivitySensorAgent" kind="activity" target="Invoke_InternalWarehouse">
+      <activityConfig evalTime="activation"/>
+   </sensor>
+   <sensor sensorName="ActivitySensor_InvokeInternalWarehouse_End" classname="oracle.tip.pc.services.reports.dca.agents.BpelActivitySensorAgent" kind="activity" target="Assign_InterWHResponse">
+      <activityConfig evalTime="completion">
+         <variable outputDataType="WarehouseResponse" outputNamespace="http://www.globalcompany.example.com/ns/InternalWarehouse" target="$lInternalWarehouseResponseVariable/payload/ns1:WarehouseResponse"/>
+      </activityConfig>
+   </sensor>
+   <sensor sensorName="ActivitySensor_InvokePartnerSupplier_Start" classname="oracle.tip.pc.services.reports.dca.agents.BpelActivitySensorAgent" kind="activity" target="Invoke_PartnerSupplier">
+      <activityConfig evalTime="all"/>
+   </sensor>
+   <sensor sensorName="ActivitySensor_InvokePartnerSupplier_End" classname="oracle.tip.pc.services.reports.dca.agents.BpelActivitySensorAgent" kind="activity" target="Assign_PartnerWHResponse">
+      <activityConfig evalTime="all">
+         <variable outputDataType="WarehouseResponse" outputNamespace="http://www.globalcompany.example.com/ns/InternalWarehouse" target="$lPartnerResponseVariable/callback/ns1:WarehouseResponse"/>
+      </activityConfig>
+   </sensor>
+   <sensor sensorName="ActivitySensor_SelectPreferredSupplier" classname="oracle.tip.pc.services.reports.dca.agents.BpelActivitySensorAgent" kind="activity" target="Scope_SelectPreferredSupplier">
+      <activityConfig evalTime="activation"/>
+   </sensor>
+   <sensor sensorName="ActivitySensor_FulfillOrder" classname="oracle.tip.pc.services.reports.dca.agents.BpelActivitySensorAgent" kind="activity" target="Scope_FulfillOrder">
+      <activityConfig evalTime="activation"/>
+   </sensor>
+   <sensor sensorName="ActivitySensor_Callback" classname="oracle.tip.pc.services.reports.dca.agents.BpelActivitySensorAgent" kind="activity" target="callbackClient">
+      <activityConfig evalTime="all"/>
+   </sensor>
+</sensors>

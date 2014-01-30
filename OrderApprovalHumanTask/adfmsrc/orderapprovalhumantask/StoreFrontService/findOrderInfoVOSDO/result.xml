@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="result"
+          Package="orderapprovalhumantask.StoreFrontService.findOrderInfoVOSDO"
+          BeanClass="orderapprovalhumantask.StoreFrontService.findOrderInfoVOSDO.result"
+          isJavaBased="false">
+  <Attribute Name="OrderId" IsUpdateable="0" Type="java.lang.Integer"/>
+  <Attribute Name="OrderDate" IsUpdateable="0" Type="java.sql.Date"/>
+  <Attribute Name="OrderShippedDate" IsUpdateable="0" Type="java.sql.Date"/>
+  <Attribute Name="OrderStatusCode" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="OrderTotal" IsUpdateable="0" Type="java.math.BigDecimal"/>
+  <Attribute Name="CustomerId" IsUpdateable="0" Type="java.lang.Long"/>
+  <Attribute Name="ShipToName" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="ShipToPhoneNumber" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="AddressId" IsUpdateable="0" Type="java.lang.Integer"/>
+  <Attribute Name="Address1" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="Address2" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="City" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="PostalCode" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="StateProvince" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="CountryId" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="PaymentOptionId" IsUpdateable="0" Type="java.lang.Long"/>
+  <Attribute Name="BillingAddressId" IsUpdateable="0" Type="java.lang.Integer"/>
+  <Attribute Name="AccountNumber" IsUpdateable="0" Type="java.lang.Integer"/>
+  <Attribute Name="CardTypeCode" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="ExpireDate" IsUpdateable="0" Type="java.sql.Date"/>
+  <Attribute Name="CheckDigits" IsUpdateable="0" Type="java.lang.Integer"/>
+  <Attribute Name="RoutingIdentifier" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="InstitutionName" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="ShipToAddressId" IsUpdateable="0" Type="java.lang.Long"/>
+  <Attribute Name="ObjectVersionId" IsUpdateable="0" Type="java.lang.Long"/>
+  <Attribute Name="ShippingOptionId" IsUpdateable="0" Type="java.lang.Long"/>
+  <Attribute Name="ObjectVersionId1" IsUpdateable="0" Type="java.lang.Long"/>
+  <Attribute Name="FreeShippingFlag" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="ObjectVersionId2" IsUpdateable="0" Type="java.lang.Long"/>
+  <Attribute Name="CustomerCollectFlag" IsUpdateable="0"
+             Type="java.lang.String"/>
+  <Attribute Name="GiftwrapFlag" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="PaymentOptionId1" IsUpdateable="0" Type="java.lang.Integer"/>
+  <AccessorAttribute id="OrderItemsInfoVO" IsCollection="true"
+                     BeanClass="orderapprovalhumantask.StoreFrontService.findOrderInfoVOSDO.result.OrderItemsInfoVO"
+                     CollectionBeanClass="orderapprovalhumantask.StoreFrontService.findOrderInfoVOSDO.result_Operations"/>
+</JavaBean>

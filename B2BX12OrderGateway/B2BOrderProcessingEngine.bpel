@@ -1,0 +1,354 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer 
+  
+  Created: Wed Nov 19 20:14:51 PST 2008
+  Author:  cutschig
+  Purpose: Empty BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<process xml:id="id1" name="B2BOrderProcessingEngine"
+         targetNamespace="http://xmlns.oracle.com/CompositeServices11gMain/B2BX12OrderGateway/B2BOrderProcessingEngine"
+         xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+         xmlns:client="http://xmlns.oracle.com/CompositeServices11gMain/B2BX12OrderGateway/B2BOrderProcessingEngine"
+         xmlns:ora="http://schemas.oracle.com/xpath/extension"
+         xmlns:oraext="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"
+         xmlns:xpath20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20"
+         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap"
+         xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+         xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+         xmlns:ns1="http://www.oracle.com/integration/b2b/B2B_po_X12_inbound/"
+         xmlns:ns2="www.globalcompany.example.com"
+         xmlns:ns3="http://www.oracle.com/integration/b2b/B2B_orderconfirmation_x12/"
+         xmlns:ns4="http://www.globalcompany.example.com/ns/OrderBookingService"
+         xmlns:ns5="/oracle/fodemo/storefront/store/queries/common/"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:dvm="http://www.oracle.com/XSL/Transform/java/oracle.tip.dvm.LookupValue"
+         xmlns:xdk="http://schemas.oracle.com/bpel/extension/xpath/function/xdk"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+         xmlns:xref="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions"
+         xmlns:ns6="www.globalcompany.example.com/types/"
+         xmlns:ns7="http://www.globalcompany.example.com/b2b/utils"
+         xmlns:hwf="http://xmlns.oracle.com/bpel/workflow/xpath"
+         xmlns:mhdr="http://www.oracle.com/XSL/Transform/java/oracle.tip.mediator.service.common.functions.GetRequestHeaderExtnFunction"
+         xmlns:med="http://schemas.oracle.com/mediator/xpath"
+         xmlns:ids="http://xmlns.oracle.com/bpel/services/IdentityService/xpath"
+         xmlns:socket="http://www.oracle.com/XSL/Transform/java/oracle.tip.adapter.socket.ProtocolTranslator"
+         xmlns:ns8="/oracle/fodemo/storefront/entities/events/edl/OrderEO"
+         xmlns:ns9="/oracle/fodemo/storefront/entities/events/schema/OrderEO"
+         xmlns:ns10="http://xmlns.oracle.com/CompositeServices11gMain/B2BX12OrderGateway/B2BOrderProcessingEngine/correlationset">
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      PARTNERLINKS                                                      
+      List of services participating in this BPEL process               
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <partnerLinks xml:id="id2">
+    <partnerLink xml:id="id5" myRole="receive_role" name="B2B_po_X12_inbound"
+                 partnerLinkType="ns1:B2B_receive_plt"/>
+    <partnerLink xml:id="id6" name="StoreFrontService"
+                 partnerRole="StoreFrontService"
+                 partnerLinkType="ns2:StorefrontService"/>
+    <partnerLink xml:id="id7" name="B2B_orderconfirmation_x12"
+                 partnerRole="send_role" partnerLinkType="ns3:B2B_send_plt"/>
+    <partnerLink xml:id="id8" myRole="OrderProcessorRequester"
+                 name="OrderBookingService" partnerRole="OrderProcessorProvider"
+                 partnerLinkType="ns4:OrderProcessor"/>
+  </partnerLinks>
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      VARIABLES                                                        
+      List of messages and XML documents used within this BPEL process 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <variables xml:id="id3">
+    <variable xml:id="id10" name="gX12OrderVariable" messageType="ns1:B2BMsg"/>
+    <variable xml:id="id20" name="gX12OrderOrderConfirmationGeneration"
+              messageType="ns3:B2BMsg"/>
+    <variable name="Variable_docProtVersion" type="xsd:string"/>
+    <variable name="Variable_docTypeName" type="xsd:string"/>
+    <variable name="Variable_fromTP" type="xsd:string"/>
+    <variable name="Variable_tpTP" type="xsd:string"/>
+    <variable name="Variable_msgID" type="xsd:string"/>
+    <variable name="Variable_msgType" type="xsd:string"/>
+    <variable xml:id="id56" name="gOrderVariable"
+              messageType="ns2:StoreFrontService_createOrderInfoVOSDO"/>
+    <variable xml:id="id61" name="gFaultVariable"
+              messageType="ns7:B2BOrderProcessorFault"/>
+  </variables>
+  <faultHandlers xml:id="id59">
+    <catchAll xml:id="id60">
+      <assign xml:id="id62" name="Assign_ProcessingFault">
+        <copy xml:id="id63">
+          <from xml:id="id64" expression="ora:getFaultName()"/>
+          <to xml:id="id65" variable="gFaultVariable" part="code"/>
+        </copy>
+        <copy xml:id="id66">
+          <from xml:id="id67" expression="ora:getFaultAsString()"/>
+          <to xml:id="id68" variable="gFaultVariable" part="summary"/>
+        </copy>
+      </assign>
+    </catchAll>
+  </faultHandlers>
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     ORCHESTRATION LOGIC                                               
+     Set of activities coordinating the flow of messages across the    
+     services integrated within this business process                  
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <sequence xml:id="id4" name="main">
+    <receive xml:id="id9" name="Receive_X12Order" createInstance="yes"
+             variable="gX12OrderVariable" partnerLink="B2B_po_X12_inbound"
+             portType="ns1:B2B_receive_ptt" operation="receive"/>
+    <scope xml:id="id25" name="Scope_CreateOrder">
+      <variables xml:id="id57">
+        <variable xml:id="id58" name="lOrderCreationResponse"
+                  messageType="ns2:StoreFrontService_createOrderInfoVOSDOResponse"/>
+      </variables>
+      <sequence xml:id="id51">
+        <assign xml:id="id50" name="Transform_850ToCanicalOrder">
+          <bpelx:annotation>
+            <bpelx:pattern>transformation</bpelx:pattern>
+          </bpelx:annotation>
+          <copy xml:id="id52">
+            <from xml:id="id53"
+                  expression="ora:processXSLT('xsl/Transformation_From850X12_To_CanonicalOrderSchema.xsl',bpws:getVariableData('gX12OrderVariable','body'))"/>
+            <to xml:id="id54" variable="gOrderVariable" part="parameters"/>
+          </copy>
+        </assign>
+        <invoke xml:id="id55" name="Invoke_CreateOrder"
+                inputVariable="gOrderVariable"
+                outputVariable="lOrderCreationResponse"
+                partnerLink="StoreFrontService"
+                portType="ns2:StoreFrontService"
+                operation="createOrderInfoVOSDO"/>
+      </sequence>
+    </scope>
+    <bpelx:exec name="setTitleOfComposite" version="1.5" language="java">
+      <![CDATA[try  
+{ 
+
+    // variable="gOrderVariable" query="/ns6:createOrderInfoVOSDO/ns6:orderInfoVO1/ns5:OrderId" part="parameters"
+    String orderId = ((oracle.xml.parser.v2.XMLElement)getVariableData("gOrderVariable","parameters","/ns6:createOrderInfoVOSDO/ns6:orderInfoVO1/ns5:OrderId")).getFirstChild().getNodeValue(); 
+    setCompositeInstanceTitle("B2B OrderGateway, processing order: " + orderId); 
+} 
+catch (Exception e)  
+{ 
+    addAuditTrailEntry("Could not set title: " + e.getMessage()); 
+}]]>
+    </bpelx:exec>
+    <scope xml:id="id12" name="Scope_FulfillOrderRequest">
+      <variables xml:id="id17">
+        <variable xml:id="id18" name="lProcessingResponse"
+                  messageType="ns4:OrderProcessorResponseMessage"/>
+        <variable xml:id="id21" name="lOrderIdForProcessing"
+                  messageType="ns4:OrderProcessorRequestMessage"/>
+        <variable xml:id="id23" name="lOrderProcessingFault"
+                  messageType="ns4:OrderProcessorFault"/>
+        <variable xml:id="id76" name="lNewOrderSubmittedEvent"
+                  element="ns9:NewOrderSubmittedInfo"/>
+        <variable xml:id="id81" name="lOrderCompletedEventInfo"
+                  element="ns9:OrderCompletedInfo"/>
+      </variables>
+      <correlationSets xml:id="id82">
+        <correlationSet xml:id="id83" name="CorrelationSet_OrderIdForEvent"
+                        properties="ns10:orderId"/>
+      </correlationSets>
+      <sequence xml:id="id16">
+        <switch xml:id="id69" name="Switch_EventBased">
+          <case xml:id="id70"
+                condition="ora:getConfigProperty('use.events') = 'true'">
+            <bpelx:annotation>
+              <bpelx:pattern>use.events property = true is set on the composite's component</bpelx:pattern>
+            </bpelx:annotation>
+            <sequence xml:id="id75">
+              <assign name="Assign_OrderIdIntoEvent">
+                <copy>
+                  <from variable="gOrderVariable" part="parameters"
+                        query="/ns6:createOrderInfoVOSDO/ns6:orderInfoVO1/ns5:OrderId"/>
+                  <to variable="lNewOrderSubmittedEvent"
+                      query="/ns9:NewOrderSubmittedInfo/ns9:OrderId/ns9:newValue/@value"/>
+                </copy>
+              </assign>
+              <invoke xml:id="id74" name="Invoke_SendEventForProcessor"
+                      bpelx:eventName="ns8:NewOrderSubmitted"
+                      inputVariable="lNewOrderSubmittedEvent">
+                <correlations>
+                  <correlation xml:id="id85" initiate="yes"
+                               set="CorrelationSet_OrderIdForEvent"
+                               pattern="out"/>
+                </correlations>
+              </invoke>
+            </sequence>
+          </case>
+          <otherwise xml:id="id71">
+            <sequence xml:id="id72">
+              <assign xml:id="id33" name="Assign_OrderId">
+                <copy xml:id="id34">
+                  <from xml:id="id35" variable="gOrderVariable"
+                        query="/ns6:createOrderInfoVOSDO/ns6:orderInfoVO1/ns5:OrderId"
+                        part="parameters"/>
+                  <to xml:id="id36" variable="lOrderIdForProcessing"
+                      part="payload" query="/ns4:process/ns4:orderId"/>
+                </copy>
+              </assign>
+              <invoke xml:id="id11" name="Invoke_ProcessOrder"
+                      inputVariable="lOrderIdForProcessing"
+                      partnerLink="OrderBookingService"
+                      portType="ns4:OrderProcessor" operation="process"/>
+            </sequence>
+          </otherwise>
+        </switch>
+        <switch xml:id="id92" name="Switch_isEventBased">
+          <case xml:id="id93"
+                condition="ora:getConfigProperty('use.events') = 'true'">
+            <bpelx:annotation>
+              <bpelx:pattern>in case event is set to true</bpelx:pattern>
+            </bpelx:annotation>
+            <sequence xml:id="id100">
+              <receive xml:id="id95" name="Receive_CompletedEvent"
+                       createInstance="no" bpelx:eventName="ns8:OrderCompleted"
+                       variable="lOrderCompletedEventInfo">
+                <correlations>
+                  <correlation xml:id="id97" initiate="no"
+                               set="CorrelationSet_OrderIdForEvent"/>
+                </correlations>
+              </receive>
+                  <assign name="Transform_CreateAck">
+                    <bpelx:annotation>
+                      <bpelx:pattern>transformation</bpelx:pattern>
+                    </bpelx:annotation>
+                    <copy >
+                      <from expression="ora:processXSLT('xsl/transform_x12OrderToX12Ack.xsl',bpws:getVariableData('gX12OrderVariable','body'))"/>
+                      <to variable="gX12OrderOrderConfirmationGeneration"
+                          part="body"/>
+                    </copy>
+                  </assign>
+                  <assign name="Assign_Types">
+                <copy>
+                  <from expression='"4010"'/>
+                  <to variable="Variable_docProtVersion"/>
+                </copy>
+                <copy>
+                  <from expression='"855"'/>
+                  <to variable="Variable_docTypeName"/>
+                </copy>
+                <copy>
+                  <from expression='"OracleServices"'/>
+                  <to variable="Variable_fromTP"/>
+                </copy>
+                <copy>
+                  <from expression='"MarketInc"'/>
+                  <to variable="Variable_tpTP"/>
+                </copy>
+                <copy>
+                  <from expression="oraext:generate-guid()"/>
+                  <to variable="Variable_msgID"/>
+                </copy>
+                <copy>
+                  <from expression='"1"'/>
+                  <to variable="Variable_msgType"/>
+                </copy>
+              </assign>
+                  <invoke name="Invoke_OrderOrderConfirmationGeneration"
+                          inputVariable="gX12OrderOrderConfirmationGeneration"
+                          partnerLink="B2B_orderconfirmation_x12"
+                          portType="ns3:B2B_send_ptt" operation="send">
+                    <bpelx:inputProperty name="b2b.documentProtocolVersion"
+                                         variable="Variable_docProtVersion"/>
+                    <bpelx:inputProperty name="b2b.documentTypeName"
+                                         variable="Variable_docTypeName"/>
+                    <bpelx:inputProperty name="b2b.fromTradingPartnerId"
+                                         variable="Variable_fromTP"/>
+                    <bpelx:inputProperty name="b2b.messageId"
+                                         variable="Variable_msgID"/>
+                    <bpelx:inputProperty name="b2b.messageType"
+                                         variable="Variable_msgType"/>
+                    <bpelx:inputProperty name="b2b.toTradingPartnerId"
+                                         variable="Variable_tpTP"/>
+                  </invoke>
+            </sequence>
+          </case>
+          <otherwise xml:id="id94">
+            <pick xml:id="id13" name="Pick_OrderProcessingresult">
+              <onMessage xml:id="id15" variable="lProcessingResponse"
+                         partnerLink="OrderBookingService"
+                         portType="ns4:OrderProcessorCallback"
+                         operation="processResponse">
+                <sequence xml:id="id45">
+                  <assign xml:id="id44" name="Transform_CreateAck">
+                    <bpelx:annotation>
+                      <bpelx:pattern>transformation</bpelx:pattern>
+                    </bpelx:annotation>
+                    <copy xml:id="id46">
+                      <from xml:id="id47"
+                            expression="ora:processXSLT('xsl/transform_x12OrderToX12Ack.xsl',bpws:getVariableData('gX12OrderVariable','body'))"/>
+                      <to xml:id="id48"
+                          variable="gX12OrderOrderConfirmationGeneration"
+                          part="body"/>
+                    </copy>
+                  </assign>
+                  <assign name="Assign_Types">
+                    <copy>
+                      <from expression='"4010"'/>
+                      <to variable="Variable_docProtVersion"/>
+                    </copy>
+                    <copy>
+                      <from expression='"855"'/>
+                      <to variable="Variable_docTypeName"/>
+                    </copy>
+                    <copy>
+                      <from expression='"OracleServices"'/>
+                      <to variable="Variable_fromTP"/>
+                    </copy>
+                    <copy>
+                      <from expression='"MarketInc"'/>
+                      <to variable="Variable_tpTP"/>
+                    </copy>
+                    <copy>
+                      <from expression="oraext:generate-guid()"/>
+                      <to variable="Variable_msgID"/>
+                    </copy>
+                    <copy>
+                      <from expression='"1"'/>
+                      <to variable="Variable_msgType"/>
+                    </copy>
+                  </assign>
+                  <invoke xml:id="id19"
+                          name="Invoke_OrderOrderConfirmationGeneration"
+                          inputVariable="gX12OrderOrderConfirmationGeneration"
+                          partnerLink="B2B_orderconfirmation_x12"
+                          portType="ns3:B2B_send_ptt" operation="send">
+                    <bpelx:inputProperty name="b2b.documentProtocolVersion"
+                                         variable="Variable_docProtVersion"/>
+                    <bpelx:inputProperty name="b2b.documentTypeName"
+                                         variable="Variable_docTypeName"/>
+                    <bpelx:inputProperty name="b2b.fromTradingPartnerId"
+                                         variable="Variable_fromTP"/>
+                    <bpelx:inputProperty name="b2b.messageId"
+                                         variable="Variable_msgID"/>
+                    <bpelx:inputProperty name="b2b.messageType"
+                                         variable="Variable_msgType"/>
+                    <bpelx:inputProperty name="b2b.toTradingPartnerId"
+                                         variable="Variable_tpTP"/>
+                  </invoke>
+                </sequence>
+              </onMessage>
+              <onMessage xml:id="id22" variable="lOrderProcessingFault"
+                         partnerLink="OrderBookingService"
+                         portType="ns4:OrderProcessorCallback"
+                         operation="processFault">
+                <bpelx:annotation>
+                  <bpelx:pattern></bpelx:pattern>
+                </bpelx:annotation>
+                <terminate xml:id="id24" name="Terminate_Instance"/>
+              </onMessage>
+            </pick>
+          </otherwise>
+        </switch>
+      </sequence>
+    </scope>
+  </sequence>
+</process>

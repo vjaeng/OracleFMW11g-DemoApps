@@ -1,0 +1,21 @@
+<?binding.jca BAM_OrderDO_bam.jca?>
+<wsdl:definitions name="BAM_OrderDO" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/bam/WebLogicFusionOrderDemo/OrderBookingComposite/BAM_OrderDO/" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/bam/WebLogicFusionOrderDemo/OrderBookingComposite/BAM_OrderDO/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:imp1="http://xmlns.oracle.com/bam" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://xmlns.oracle.com/bam" schemaLocation="xsd/sta00751_Demos_Fusion_Order_Demo_Order.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="_OrderCollection_msg">
+        <wsdl:part name="_OrderCollection" element="imp1:_OrderCollection"/>
+    </wsdl:message>
+    <wsdl:portType name="writetoBAM_ptt">
+        <wsdl:operation name="writetoBAM">
+            <wsdl:input message="tns:_OrderCollection_msg"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <plt:partnerLinkType name="writetoBAM_plt">
+        <plt:role name="writetoBAM_role">
+            <plt:portType name="tns:writetoBAM_ptt"/>
+        </plt:role>
+    </plt:partnerLinkType>
+</wsdl:definitions>

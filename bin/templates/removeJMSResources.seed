@@ -1,0 +1,50 @@
+"""
+   WLST Python script that removes the jms resources for fusion order demo
+"""   
+import sys
+from java.lang import System
+
+print "Removing JMS resources .."
+connect('@server.user@','@server.password@','t3://@admin.server.host@:@admin.server.port@') 
+edit()
+startEdit()
+
+# get the server mbean to lookup the jms resources
+servermb=getMBean("Servers/@server.target@")
+if servermb is None:
+    print 'Could not find a reference to Servers/@server.target@'
+
+else:
+    # lookup the SOAJMSModule - it's a system resource
+    jmsSOASystemResource = lookup("SOAJMSModule","JMSSystemResource")
+        
+    jmsResource = jmsSOASystemResource.getJMSResource()
+
+    # try to find the factory
+    cfbean = jmsResource.lookupConnectionFactory('DemoSupplierTopicCF')
+    if cfbean is not None:
+        print "Removing DemoSupplierTopicCF connection factory"
+        jmsResource.destroyConnectionFactory(cfbean)
+    else:
+        print "Could not find DemoSupplierTopicCF connection factory"
+      
+
+    # try to find the topic
+    topicbean = jmsResource.lookupUniformDistributedTopic('DemoSupplierTopic_UDD')
+    if topicbean is not None:
+        print "Removing DemoSupplierTopic jms topic"
+        jmsResource.destroyUniformDistributedTopic (topicbean)        
+    else:
+        print "Could not find DemoSupplierTopic_UDD topic"
+    
+try:
+    save()
+    # activate the changes
+    activate(block="true")
+    print "jms topic and factory for SOA Fusion Order Demo successfully removed"   
+except:
+    print "Error while trying to save and/or activate!!!"
+    dumpStack()
+    print "undoing all changes to avoid deployment-lock .."
+    # undo all changes
+    undo ('true')

@@ -1,0 +1,75 @@
+#------------------------------------------------------------------------------
+# WSADMIN Python script that seeds jms adapter resources for fusion order demo
+#------------------------------------------------------------------------------
+
+cellName = '@was.cell@'
+nodeName = '@was.node@'
+serverName = '@server.targets@'
+jmsTCFjndi = 'jms/DemoSupplierTopicCF'
+jmsTopicJndi = '@jms.topic.jndi@'
+
+# --------------------FOD TCF Creation--------------------
+server = AdminConfig.getid("/Node:"+nodeName+"/Server:"+serverName)
+cfs = AdminTask.listSIBJMSConnectionFactories(server, "-type all").split("\n")
+for cf in cfs:
+    #print cf
+    cfname = AdminConfig.showAttribute(cf, 'name')
+    #print cfname
+    if cfname == "DemoSupplierTopicCF":
+        AdminConfig.remove(cf)
+	print "removed old TCF "+cfname
+print "Creating new TCF DemoSupplierTopicCF "
+newTcf = AdminJMS.createSIBJMSTopicConnectionFactory(server,  "DemoSupplierTopicCF", jmsTCFjndi, "SoaJmsBus", "providerEndPoints=*:7277:BootstrapBasicMessaging")
+print newTcf
+
+# --------------------FOD Topic Creation-----------------------
+topics = AdminTask.listSIBJMSTopics(server).split("\n")
+for topic in topics:
+    #print topic
+    tName = AdminConfig.showAttribute(topic, 'name')
+    #print tName
+    if tName == "DemoSupplierTopic":
+        AdminConfig.remove(topic)
+	print "removed old Topic "+tName
+print "Creating new Topic DemoSupplierTopic "
+newTopic = AdminJMS.createSIBJMSTopic(server, "DemoSupplierTopic", jmsTopicJndi, "busName=SoaJmsBus")
+print newTopic
+
+# --------------------------------------------------------------
+
+print "Removing FODJmsAdapterJ2C if it exists" 
+oldcf = AdminConfig.getid('/J2CConnectionFactory:FODJmsAdapterJ2C/')
+if oldcf != "":
+	AdminConfig.remove(oldcf)
+
+AdminConfig.create('J2CConnectionFactory', 
+	AdminConfig.getid("/Cell:" + cellName + "/Node: " +nodeName+ "/Server: " +serverName+ "/J2CResourceAdapter:JmsAdapter/") , 
+		[['name', 'FODJmsAdapterJ2C'],['jndiName','eis/Jms/TopicConnectionFactory']])
+print "Done Creating new FODJmsAdapterJ2C"
+
+newcf = AdminConfig.getid('/J2CConnectionFactory:FODJmsAdapterJ2C/')
+#print newcf
+
+propSet = AdminConfig.showAttribute(newcf, 'propertySet')
+#print propSet
+
+custProps = AdminConfig.list('J2EEResourceProperty', propSet).split("\n")
+#print custProps
+
+for cust in custProps:
+	customName = AdminConfig.showAttribute(cust, 'name')
+	print customName
+	if customName == "connectionFactoryLocation":
+		AdminConfig.modify(cust, [['value', 'jms/DemoSupplierTopicCF']])
+	if customName == "isTopic":
+		AdminConfig.modify(cust, [['value', 'true']])
+	if customName == "isTransacted":
+		AdminConfig.modify(cust, [['value', 'false']])		
+	if customName == "password":
+		AdminConfig.modify(cust, [['value', '@server.password@']])
+	if customName == "username":
+		AdminConfig.modify(cust, [['value', '@server.username@']])
+	continue
+
+print "Done setting custom props for FODJmsAdapterJ2C"
+AdminConfig.save()

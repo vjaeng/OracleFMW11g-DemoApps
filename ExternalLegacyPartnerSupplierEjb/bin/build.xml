@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<project name="ExternalPartnerSupplierEjb" default="all" basedir=".">
+  <!-- use the global build props for the deployment information -->
+  <property file="../../bin/build.properties"/>
+  <!-- local build properties -->
+  <property file="build.properties"/>
+  
+  <!-- 
+    depending if someone wants to deploy the ejb or the bean exposed through
+    JSCA 
+  -->
+  <condition property="use.jsca" value="true">
+    <equals arg1="${use.jsca.ejb.impl}" arg2="true"/>
+  </condition>    
+  <condition property="use.ejb" value="true">
+    <or>
+        <equals arg1="${use.jsca.ejb.impl}" arg2="false"/>
+        <not>
+            <isset property="use.jsca.ejb.impl"/>
+        </not>
+    </or>
+  </condition>    
+
+  <condition property="deploy.jsca.lib" value="true">
+    <and>
+        <equals arg1="${use.jsca}" arg2="true"/>
+        <and>
+            <isset property="deploy.jsca.library"></isset>
+            <equals arg1="${deploy.jsca.library}" arg2="true"/>
+        </and>    
+    </and>
+  </condition>    
+  <echo>Deploying jsca shared lib? ${deploy.jsca.lib}</echo>
+
+  <property name="wls.home" value="${oracle.home}/../wlserver_10.3"/>
+  <echo>Wls home: ${wls.home}</echo>
+  <echo>Oracle home: ${oracle.home}</echo>
+  <!-- weblogic deployer task -->
+  <taskdef name="wldeploy" classname="weblogic.ant.taskdefs.management.WLDeploy" 
+     classpath="${wls.home}/server/lib/weblogic.jar:${oracle.common.home}/modules/oracle.jps_11.1.1/jps-common.jar:${oracle.common.home}/modules/oracle.jps_11.1.1/jps-api.jar:${oracle.common.home}/modules/oracle.jps_11.1.1/jps-internal.jar"/>
+  <property name="wls.user"      value="${server.user}"/>
+  <property name="wls.password"  value="${server.password}"/>
+  <property name="deploy.ear.source"  value="${deploy.dir}/${ear.name}.ear"/>
+  
+  <path id="classpath">
+    <pathelement location="${wls.home}/server/lib/weblogic.jar"/>
+    <pathelement location="${oracle.home}/../modules/javax.ejb_3.0.1.jar"/>
+    <pathelement location="${output.dir}"/>
+  </path>
+ 
+  <target name="init">
+    <tstamp/>
+    <mkdir dir="${output.dir}"/>
+  </target>
+  <target name="all" description="Build the project" depends="compile,copy"/>
+  
+  <target name="clean" description="Clean the project">
+    <echo>Cleaning up external partner supplier ejb project ${output.dir}/${deploy.dir}</echo>
+    <mkdir dir="${output.dir}"/>
+    <mkdir dir="${appinf.dir}"/>
+    <delete includeemptydirs="true" >
+      <fileset dir="${output.dir}" includes="**/*"/>
+      <fileset dir="${appinf.dir}" includes="**/*"/>
+    </delete>
+    <delete file="${deploy.dir}/${deploy.ear.source}"/>
+    <delete file="${deploy.dir}/${ear.name}.jar"/>
+    <delete file="${deploy.dir}/${jsca.name}.jar"/>    
+  </target>
+  
+  <target name="compile" description="Compile Java source files" depends="init">
+    <javac destdir="${output.dir}" classpathref="classpath"
+           debug="${javac.debug}" nowarn="${javac.nowarn}"
+           deprecation="${javac.deprecation}" encoding="Cp1252" source="1.6"
+           target="1.6">
+      <src path="${src.dir}"/>
+    </javac>
+  </target>
+  <target name="copy" description="Copy files to output directory"
+          depends="init">
+    <patternset id="copy.patterns">
+      <include name="**/*.xml"/>
+    </patternset>
+    <copy todir="${output.dir}">
+      <fileset dir="../src">
+        <patternset refid="copy.patterns"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="create-ear" description="creates the ear, either based on
+    the ejb or based on Spring CI implementation, this is controlled via the 
+    use.jsca.impl property in bin/build.xml">
+    <echo>global: ${use.jsca.ejb.impl} > ejb: ${use.ejb} jsca: ${use.jsca}</echo>
+    <antcall target="clean"/>
+    <antcall target="create-ejb-ear"/>
+    <antcall target="create-jsca-ear"/>
+  </target>  
+  
+  <!-- create the normal ejb based ear. -->
+  <target name="create-ejb-ear" depends="copy, compile" 
+    description="Create deployable external partner supplier ear file"
+    unless="use.jsca">
+    <mkdir dir="${deploy.dir}" />
+    <delete includeemptydirs="true" >
+      <fileset dir="${deploy.dir}" includes="**/*"/>
+    </delete>
+    <jar compress="true" destfile="${deploy.dir}/${ear.name}.jar">
+        <fileset dir="${output.dir}">
+            <!-- jdev compiler junk -->
+            <exclude name="*/**/*jdb"/>
+            <exclude name="*/**/*lck"/>
+            <!-- app descriptors -->
+            <exclude name="META-INF/application-*.xml"/>
+            <exclude name="META-INF/weblogic-application.xml"/>
+            <exclude name="META-INF/jsca/spring-context.xml"/>        
+        </fileset>    
+    </jar>
+    <ear appxml="${src.dir}/META-INF/application-ejb.xml" basedir="${deploy.dir}"
+        destfile="${deploy.dir}/${deploy.ear.source}">
+    </ear>
+  </target>
+  <!-- create the ear with the jsca spring context exposed bean -->
+  <target name="create-jsca-ear" depends="copy, compile" 
+    description="Create deployable external partner supplier jsca based ear file"
+    unless="use.ejb">
+    <delete includeemptydirs="true" >
+      <fileset dir="${deploy.dir}" includes="**/*"/>
+    </delete>  
+    <mkdir dir="${appinf.dir}/lib" />
+    <copy todir="${appinf.dir}/lib">
+        <fileset dir="${oracle.common.home}/modules">
+            <include name="org.springframework_2.0.jar"/>
+            <include name="org.apache.commons.logging_1.0.4.jar"/>
+        </fileset>
+    </copy>   
+    <echo>${output.dir}/meta-inf/</echo>
+    <jar compress="true" destfile="${appinf.dir}/lib/${jsca.name}.jar">
+        <fileset dir="${output.dir}">
+            <!-- jdev compiler junk -->
+            <exclude name="*/**/*jdb"/>
+            <exclude name="*/**/*lck"/>
+            <!-- app descriptors -->
+            <exclude name="META-INF/application-*.xml"/>
+            <exclude name="META-INF/weblogic-application.xml"/>
+            <exclude name="META-INF/weblogic-ejb-jar.xml"/>
+        </fileset>
+    </jar>
+    <!-- 
+        this is unfortunately needed to make sure that deployment goes not wild
+    -->
+    <jar compress="true" destfile="${deploy.dir}/empty.jar"/> 
+    <ear appxml="${src.dir}/META-INF/application-jsca.xml" basedir="${deploy.dir}"
+        destfile="${deploy.dir}/${deploy.ear.source}">
+        <fileset dir="${output.dir}" >
+            <include name="META-INF/weblogic-application.xml"/>
+        </fileset>
+    </ear>
+  </target>
+
+  <!-- deploy the app ear -->
+  <target name="deploy-application" 
+    description="Deploy the External PartnerSupplier Composite Service">
+    <antcall target="deploy-jsca-library"/>
+    <wldeploy action="deploy" name="${ear.name}" 
+      source="${deploy.ear.source}" library="false"
+      user="${wls.user}" password="${wls.password}"
+      verbose="false" adminurl="${wls.url}"
+      remote="true" upload="true"
+      targets="${server.targets}" />
+  </target>
+
+  <!-- deploy the jsca container (only triggers in if both props set to true -->
+  <target name="deploy-jsca-library" if="deploy.jsca.lib"
+    description="Deploy the weblogic sca shared lib">
+    <wldeploy action="deploy" 
+      source="${soa.server.oracle.home}/../wlserver_10.3/common/deployable-libraries/weblogic-sca-1.1.war" 
+      library="true" nostage="external_stage" name="weblogic-sca"
+      failonerror="false" user="${wls.user}" password="${wls.password}"
+      verbose="false" adminurl="${wls.url}"
+      remote="true" upload="false"
+      targets="${server.targets}" />
+  </target>
+
+  <!-- undeploy the jsca container (only triggers in if both props set to true -->
+  <target name="undeploy-jsca-library" if="deploy.jsca.lib"
+    description="Deploy the weblogic sca shared lib">
+    <wldeploy action="undeploy" name="weblogic-sca"
+      user="${wls.user}" password="${wls.password}"
+      verbose="false" adminurl="${wls.url}"
+      remote="true" upload="false" failonerror="false" 
+      targets="${server.targets}" />
+  </target>
+
+  <!-- undeploy application -->
+  <target name="undeploy-application" description="Undeploy the service">
+    <wldeploy action="undeploy" name="${ear.name}" 
+      user="${wls.user}" password="${wls.password}"
+      adminurl="${wls.url}"
+      remote="true" targets="${server.targets}" />
+    <antcall target="undeploy-jsca-library"/>
+  </target>
+
+  <!-- test the ejb -->
+  <target name="test-remote-ejb" description="test the remote ejb via client stub"
+    depends="compile" >
+    <!-- local test task -->
+    <java classname="com.otn.sample.fod.soa.externalps.test.EpsSessionEJBClient"
+        dir="../." fork="true" failonerror="true">
+        <classpath refid="classpath"/>
+    </java>    
+  </target>
+
+</project>

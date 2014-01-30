@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="StoreFrontService" Package="orderapprovalhumantask"
+          BeanClass="orderapprovalhumantask.StoreFrontService"
+          isJavaBased="false">
+  <AccessorAttribute id="findOrderInfoVOSDO_parameters" IsCollection="false"
+                     BeanClass="StoreFrontService.Types.findOrderInfoVOSDO"/>
+  <AccessorAttribute id="processCSOrderInfoVOSDO_parameters"
+                     IsCollection="false"
+                     BeanClass="StoreFrontService.Types.processCSOrderInfoVOSDO"/>
+  <AccessorAttribute id="deleteOrderInfoVOSDO_parameters" IsCollection="false"
+                     BeanClass="StoreFrontService.Types.deleteOrderInfoVOSDO"/>
+  <AccessorAttribute id="updateOrderInfoVOSDO_parameters" IsCollection="false"
+                     BeanClass="StoreFrontService.Types.updateOrderInfoVOSDO"/>
+  <AccessorAttribute id="findCustomerInfoVO1CustomerInfoVOCriteria_parameters"
+                     IsCollection="false"
+                     BeanClass="StoreFrontService.Types.findCustomerInfoVO1CustomerInfoVOCriteria"/>
+  <AccessorAttribute id="findCustomerInfoVO1_parameters" IsCollection="false"
+                     BeanClass="StoreFrontService.Types.findCustomerInfoVO1"/>
+  <AccessorAttribute id="mergeOrderInfoVOSDO_parameters" IsCollection="false"
+                     BeanClass="StoreFrontService.Types.mergeOrderInfoVOSDO"/>
+  <AccessorAttribute id="processOrderInfoVOSDO_parameters" IsCollection="false"
+                     BeanClass="StoreFrontService.Types.processOrderInfoVOSDO"/>
+  <AccessorAttribute id="createOrderInfoVOSDO_parameters" IsCollection="false"
+                     BeanClass="StoreFrontService.Types.createOrderInfoVOSDO"/>
+  <MethodAccessor IsCollection="true"
+                  Type="orderapprovalhumantask.StoreFrontService.findOrderInfoVOSDO"
+                  BeanClass="orderapprovalhumantask.StoreFrontService.findOrderInfoVOSDO"
+                  id="findOrderInfoVOSDO" ReturnNodeName="Return"
+                  CollectionBeanClass="orderapprovalhumantask.StoreFrontService.findOrderInfoVOSDO_Operations">
+    <ParameterInfo id="findCriteria" Type="java.lang.Object"
+                   isStructured="false"/>
+    <ParameterInfo id="findControl" Type="java.lang.Object"
+                   isStructured="false"/>
+  </MethodAccessor>
+  <MethodAccessor IsCollection="false"
+                  Type="orderapprovalhumantask.StoreFrontService.processCSOrderInfoVOSDO"
+                  BeanClass="orderapprovalhumantask.StoreFrontService.processCSOrderInfoVOSDO"
+                  id="processCSOrderInfoVOSDO" ReturnNodeName="Return">
+    <ParameterInfo id="processData" Type="java.lang.Object"
+                   isStructured="false"/>
+    <ParameterInfo id="processControl" Type="java.lang.Object"
+                   isStructured="false"/>
+  </MethodAccessor>
+  <MethodAccessor IsCollection="false"
+                  Type="orderapprovalhumantask.StoreFrontService.getOrderInfoVOSDO"
+                  BeanClass="orderapprovalhumantask.StoreFrontService.getOrderInfoVOSDO"
+                  id="getOrderInfoVOSDO" ReturnNodeName="Return">
+    <ParameterInfo id="orderId" Type="java.lang.Integer" isStructured="false"/>
+  </MethodAccessor>
+  <MethodAccessor id="deleteOrderInfoVOSDO">
+    <ParameterInfo id="orderInfoVO1" Type="java.lang.Object"
+                   isStructured="false"/>
+  </MethodAccessor>
+  <MethodAccessor IsCollection="false"
+                  Type="orderapprovalhumantask.StoreFrontService.updateOrderInfoVOSDO"
+                  BeanClass="orderapprovalhumantask.StoreFrontService.updateOrderInfoVOSDO"
+                  id="updateOrderInfoVOSDO" ReturnNodeName="Return">
+    <ParameterInfo id="orderInfoVO1" Type="java.lang.Object"
+                   isStructured="false"/>
+  </MethodAccessor>
+  <MethodAccessor IsCollection="true"
+                  Type="orderapprovalhumantask.StoreFrontService.findCustomerInfoVO1CustomerInfoVOCriteria"
+                  BeanClass="orderapprovalhumantask.StoreFrontService.findCustomerInfoVO1CustomerInfoVOCriteria"
+                  id="findCustomerInfoVO1CustomerInfoVOCriteria"
+                  ReturnNodeName="Return"
+                  CollectionBeanClass="orderapprovalhumantask.StoreFrontService.findCustomerInfoVO1CustomerInfoVOCriteria_Operations">
+    <ParameterInfo id="findCriteria" Type="java.lang.Object"
+                   isStructured="false"/>
+    <ParameterInfo id="CustId" Type="java.lang.String" isStructured="false"/>
+    <ParameterInfo id="findControl" Type="java.lang.Object"
+                   isStructured="false"/>
+  </MethodAccessor>
+  <MethodAccessor IsCollection="true"
+                  Type="orderapprovalhumantask.StoreFrontService.findCustomerInfoVO1"
+                  BeanClass="orderapprovalhumantask.StoreFrontService.findCustomerInfoVO1"
+                  id="findCustomerInfoVO1" ReturnNodeName="Return"
+                  CollectionBeanClass="orderapprovalhumantask.StoreFrontService.findCustomerInfoVO1_Operations">
+    <ParameterInfo id="findCriteria" Type="java.lang.Object"
+                   isStructured="false"/>
+    <ParameterInfo id="findControl" Type="java.lang.Object"
+                   isStructured="false"/>
+  </MethodAccessor>
+  <MethodAccessor IsCollection="false"
+                  Type="orderapprovalhumantask.StoreFrontService.mergeOrderInfoVOSDO"
+                  BeanClass="orderapprovalhumantask.StoreFrontService.mergeOrderInfoVOSDO"
+                  id="mergeOrderInfoVOSDO" ReturnNodeName="Return">
+    <ParameterInfo id="orderInfoVO1" Type="java.lang.Object"
+                   isStructured="false"/>
+  </MethodAccessor>
+  <MethodAccessor IsCollection="true"
+                  Type="orderapprovalhumantask.StoreFrontService.processOrderInfoVOSDO"
+                  BeanClass="orderapprovalhumantask.StoreFrontService.processOrderInfoVOSDO"
+                  id="processOrderInfoVOSDO" ReturnNodeName="Return"
+                  CollectionBeanClass="orderapprovalhumantask.StoreFrontService.processOrderInfoVOSDO_Operations">
+    <ParameterInfo id="changeOperation" Type="java.lang.String"
+                   isStructured="false"/>
+    <ParameterInfo id="orderInfoVO1" Type="java.lang.Object[]"
+                   isStructured="false"/>
+    <ParameterInfo id="processControl" Type="java.lang.Object"
+                   isStructured="false"/>
+  </MethodAccessor>
+  <MethodAccessor IsCollection="false"
+                  Type="orderapprovalhumantask.StoreFrontService.createOrderInfoVOSDO"
+                  BeanClass="orderapprovalhumantask.StoreFrontService.createOrderInfoVOSDO"
+                  id="createOrderInfoVOSDO" ReturnNodeName="Return">
+    <ParameterInfo id="orderInfoVO1" Type="java.lang.Object"
+                   isStructured="false"/>
+  </MethodAccessor>
+</JavaBean>

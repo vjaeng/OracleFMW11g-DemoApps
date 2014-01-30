@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="processControl"
+          Package="StoreFrontService.processCSOrderInfoVOSDO.params"
+          BeanClass="StoreFrontService.processCSOrderInfoVOSDO.params.processControl"
+          isJavaBased="false">
+  <Attribute Name="exceptionReturnMode" Type="java.lang.String"/>
+  <Attribute Name="partialFailureAllowed" Type="java.lang.Boolean"/>
+</JavaBean>

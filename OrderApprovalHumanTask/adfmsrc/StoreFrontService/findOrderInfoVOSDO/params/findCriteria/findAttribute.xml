@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="findAttribute"
+          Package="StoreFrontService.findOrderInfoVOSDO.params.findCriteria"
+          BeanClass="StoreFrontService.findOrderInfoVOSDO.params.findCriteria.findAttribute"
+          isJavaBased="false">
+  <Attribute Name="item" Type="java.lang.String"/>
+</JavaBean>

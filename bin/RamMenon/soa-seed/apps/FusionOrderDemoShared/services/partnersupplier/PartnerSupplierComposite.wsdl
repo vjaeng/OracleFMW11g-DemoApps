@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<wsdl:definitions
+     name="ExternalPartnerSupplier"
+     targetNamespace="http://www.partnersupplier.example.com/ns/warehouse"
+     xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+     xmlns:client="http://www.partnersupplier.example.com/ns/warehouse"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    >
+    <wsdl:types>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+             xmlns:client="http://www.partnersupplier.example.com/ns/warehouse" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+            <xsd:import namespace="http://www.partnersupplier.example.com/ns/warehouse" schemaLocation="Warehouse.xsd"/>
+        </xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="ExternalPartnerSupplierRequestMessage">
+        <wsdl:part name="payload" element="client:WarehouseProcessRequest"/>
+    </wsdl:message>
+    <wsdl:message name="ExternalPartnerSupplierResponseMessage">
+        <wsdl:part name="payload" element="client:WarehouseProcessResponse"/>
+    </wsdl:message>
+    <wsdl:message name="ExternalPartnerSupplierFaultMessage">
+        <wsdl:part name="payload" element="client:PartnerSupplierException"/>
+    </wsdl:message>
+    <wsdl:portType name="ExternalPartnerSupplier">
+        <wsdl:operation name="process">
+            <wsdl:input message="client:ExternalPartnerSupplierRequestMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:portType name="ExternalPartnerSupplierCallback">
+        <wsdl:operation name="processResponse">
+            <wsdl:input message="client:ExternalPartnerSupplierResponseMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="processSupplierFault">
+            <wsdl:input message="client:ExternalPartnerSupplierFaultMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <plnk:partnerLinkType name="ExternalPartnerSupplier">
+        <plnk:role name="ExternalPartnerSupplierRequester">
+            <plnk:portType name="client:ExternalPartnerSupplierCallback"/>
+        </plnk:role>
+        <plnk:role name="ExternalPartnerSupplierProvider">
+            <plnk:portType name="client:ExternalPartnerSupplier"/>
+        </plnk:role>
+    </plnk:partnerLinkType>
+</wsdl:definitions>

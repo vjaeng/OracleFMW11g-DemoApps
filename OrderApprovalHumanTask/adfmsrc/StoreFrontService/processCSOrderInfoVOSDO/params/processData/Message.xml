@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="Message"
+          Package="StoreFrontService.processCSOrderInfoVOSDO.params.processData"
+          BeanClass="StoreFrontService.processCSOrderInfoVOSDO.params.processData.Message"
+          isJavaBased="false">
+  <Attribute Name="code" Type="java.lang.String"/>
+  <Attribute Name="message" Type="java.lang.String"/>
+  <Attribute Name="severity" Type="java.lang.String"/>
+  <AccessorAttribute id="detail" IsCollection="true"
+                     BeanClass="StoreFrontService.processCSOrderInfoVOSDO.params.processData.Message"
+                     CollectionBeanClass="StoreFrontService.processCSOrderInfoVOSDO.params.processData.Message_Operations"/>
+</JavaBean>

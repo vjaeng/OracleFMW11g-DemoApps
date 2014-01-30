@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="findCustomerInfoVO1CustomerInfoVOCriteria"
+          Package="StoreFrontService.Types"
+          BeanClass="StoreFrontService.Types.findCustomerInfoVO1CustomerInfoVOCriteria"
+          isJavaBased="false">
+  <AccessorAttribute id="findCriteria" IsCollection="false"
+                     BeanClass="StoreFrontService.findCustomerInfoVO1CustomerInfoVOCriteria.params.findCriteria"/>
+  <AccessorAttribute id="findControl" IsCollection="false"
+                     BeanClass="StoreFrontService.findCustomerInfoVO1CustomerInfoVOCriteria.params.findControl"/>
+</JavaBean>

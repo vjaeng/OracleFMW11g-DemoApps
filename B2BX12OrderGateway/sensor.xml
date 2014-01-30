@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sensors xmlns="http://xmlns.oracle.com/bpel/sensor">
+    <sensor sensorName="B2bIncomingOrderSensor" kind="service" target="undefined" filter="" xmlns:ns1="urn:oracle:integration:b2b:X12/4010/850">
+        <serviceConfig service="B2B_po_X12_inbound" expression="$in.body/ns1:Transaction-850/ns1:Segment-BEG/ns1:Element-324" operation="receive" outputDataType="Element-324" outputNamespace="urn:oracle:integration:b2b:X12/4010/850"/>
+    </sensor>
+</sensors>

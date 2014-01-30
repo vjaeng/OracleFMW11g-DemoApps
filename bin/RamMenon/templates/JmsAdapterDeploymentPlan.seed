@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<deployment-plan xmlns="http://xmlns.oracle.com/weblogic/deployment-plan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.oracle.com/weblogic/deployment-plan http://xmlns.oracle.com/weblogic/deployment-plan/1.0/deployment-plan.xsd" global-variables="false">
+  <application-name>connectors</application-name>
+  <variable-definition>
+    <variable>
+      <name>ConnectionInstance_eis/Jms/TopicConnectionFactory_JNDIName_12315188646730</name>
+      <value>eis/Jms/TopicConnectionFactory</value>
+    </variable>
+    <variable>
+      <name>ConfigProperty_ConnectionFactoryLocation_Value_12315208926610</name>
+      <value>jms/DemoSupplierTopicCF</value>
+    </variable>
+    <variable>
+      <name>ConfigProperty_isTopic_Value_12315208926612</name>
+      <value>true</value>
+    </variable>
+    <variable>
+      <name>ConfigProperty_Password_Value_12315209065521</name>
+      <value>@server.password@</value>
+    </variable>
+    <variable>
+      <name>ConfigProperty_Username_Value_12315209106392</name>
+      <value>@server.username@</value>
+    </variable>
+  </variable-definition>
+  <module-override>
+    <module-name>JmsAdapter.rar</module-name>
+    <module-type>rar</module-type>
+    <module-descriptor external="false">
+      <root-element>weblogic-connector</root-element>
+      <uri>META-INF/weblogic-ra.xml</uri>
+      <variable-assignment>
+        <name>ConnectionInstance_eis/Jms/TopicConnectionFactory_JNDIName_12315188646730</name>
+        <xpath>/weblogic-connector/outbound-resource-adapter/connection-definition-group/[connection-factory-interface="oracle.tip.adapter.jms.IJmsConnectionFactory"]/connection-instance/[jndi-name="eis/Jms/TopicConnectionFactory"]/jndi-name</xpath>
+      </variable-assignment>
+      <variable-assignment>
+        <name>ConfigProperty_ConnectionFactoryLocation_Value_12315208926610</name>
+        <xpath>/weblogic-connector/outbound-resource-adapter/connection-definition-group/[connection-factory-interface="oracle.tip.adapter.jms.IJmsConnectionFactory"]/connection-instance/[jndi-name="eis/Jms/TopicConnectionFactory"]/connection-properties/properties/property/[name="ConnectionFactoryLocation"]/value</xpath>
+      </variable-assignment>
+      <variable-assignment>
+        <name>ConfigProperty_Password_Value_12315209065521</name>
+        <xpath>/weblogic-connector/outbound-resource-adapter/connection-definition-group/[connection-factory-interface="oracle.tip.adapter.jms.IJmsConnectionFactory"]/connection-instance/[jndi-name="eis/Jms/TopicConnectionFactory"]/connection-properties/properties/property/[name="Password"]/value</xpath>
+      </variable-assignment>
+      <variable-assignment>
+        <name>ConfigProperty_Username_Value_12315209106392</name>
+        <xpath>/weblogic-connector/outbound-resource-adapter/connection-definition-group/[connection-factory-interface="oracle.tip.adapter.jms.IJmsConnectionFactory"]/connection-instance/[jndi-name="eis/Jms/TopicConnectionFactory"]/connection-properties/properties/property/[name="Username"]/value</xpath>
+      </variable-assignment>
+      <variable-assignment>
+        <name>ConfigProperty_isTopic_Value_12315208926612</name>
+        <xpath>/weblogic-connector/outbound-resource-adapter/connection-definition-group/[connection-factory-interface="oracle.tip.adapter.jms.IJmsConnectionFactory"]/connection-instance/[jndi-name="eis/Jms/TopicConnectionFactory"]/connection-properties/properties/property/[name="isTopic"]/value</xpath>
+      </variable-assignment>
+    </module-descriptor>
+    <module-descriptor external="false">
+      <root-element>connector</root-element>
+      <uri>META-INF/ra.xml</uri>
+    </module-descriptor>
+    <module-descriptor external="true">
+      <root-element>wldf-resource</root-element>
+      <uri>META-INF/weblogic-diagnostics.xml</uri>
+    </module-descriptor>
+  </module-override>
+  <config-root>@soa.oracle.home@/soa/connectors/plan</config-root>
+</deployment-plan>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<project name="B2BX12OrderGateway-WAS">
+
+  <!-- master build.properties -->  
+  <property file="../../bin/build.was.properties"/>
+
+  <!-- import the property file -->
+  <property file="sca-build.properties"/>           
+  <property name="deploy.dir" value="../deploy"/>
+
+  <!-- was specific classpath_was -->
+  <path id="classpath_was">
+    <pathelement location="${oracle.home}/soa/modules/oracle.soa.b2b_11.1.1/b2b.jar"/>
+    <!-- generated b2b ejb was stubs -->
+    <pathelement location="${oracle.home}/soa/modules/oracle.soa.b2b_11.1.1/b2b-was-stub.jar"/>
+    <pathelement location="${oracle.home}/../modules/javax.ejb_3.0.1.jar"/>
+    <pathelement location="${was.home}/runtimes/com.ibm.ws.ejb.thinclient_7.0.0.jar"/>
+    <pathelement location="${was.home}/runtimes/com.ibm.ws.orb_7.0.0.jar"/>
+    <pathelement location="${was.home}/runtimes/com.ibm.ws.admin.client_7.0.0.jar"/>
+    <pathelement location="${output.dir}"/>
+    <pathelement location="."/>
+  </path>
+
+  <!-- import the base version .. -->
+  <import file="build_sca_composite.xml"/>
+
+  <echo>was oh: ${oracle.home}</echo>
+  
+  <!-- install tpas -->
+  <target name="importAndDeployB2BTradingAgreements" 
+    if="seed.b2b.objects">
+    <echo>Importing and deploying b2b trading partner agreements</echo>
+    <property name="args" value="import ../config/OOW08_X12_10.zip"/>
+    <property name="tmp.jndi.properties" value="${basedir}/jndi.properties"/>
+    <!-- api expects a file - so we create one on demand -->
+    <echo file="${tmp.jndi.properties}">java.naming.factory.initial=${java.naming.factory.initial}
+java.naming.provider.url=${wls.mgd.server.url}
+java.naming.security.principal=${server.user}
+java.naming.security.credentials=${server.password}
+    </echo>
+    <!-- import first / then deploy -->
+    <java classname="oracle.tip.b2b.utility.B2BCommandLineUtility"
+        classpathref="classpath_was" fork="yes" >
+            <jvmarg value="-Xms512m" />
+            <jvmarg value="-Xmx512m" />
+            <jvmarg value="-Xmn300m" />
+            <arg line="${args}"/>
+    </java>	
+
+    <java classname="oracle.tip.b2b.utility.B2BCommandLineUtility"
+        classpathref="classpath_was" fork="yes" >
+            <jvmarg value="-Xms512m" />
+            <jvmarg value="-Xmx512m" />
+            <jvmarg value="-Xmn300m" />
+            <arg line="deploy"/>
+    </java>	
+
+    <java classname="oracle.tip.b2b.utility.B2BCommandLineUtility"
+        classpathref="classpath_was" fork="yes" >
+            <jvmarg value="-Xms512m" />
+            <jvmarg value="-Xmx512m" />
+            <jvmarg value="-Xmn300m" />
+            <arg line="restartb2b"/>
+    </java>	
+
+    <!--Delete jndi.properties from the oracle/work/b2b folder-->
+    <delete file="${tmp.jndi.properties}" failonerror="false"/> 
+  </target>
+  
+<target name="purgeB2BTradingAgreements" if="seed.b2b.objects">
+    <echo>Purging b2b trading partner agreements</echo>
+    <property name="args" value="purge"/>
+    <property name="tmp.jndi.properties" value="${basedir}/jndi.properties"/>
+    <!-- api expects a file - so we create one on demand -->
+    <echo file="${tmp.jndi.properties}">java.naming.factory.initial=${java.naming.factory.initial}
+java.naming.provider.url=${wls.mgd.server.url}
+java.naming.security.principal=${server.user}
+java.naming.security.credentials=${server.password}
+dedicated.connection=true
+dedicated.rmicontext=true
+    </echo>
+    
+    <java classname="oracle.tip.b2b.utility.B2BCommandLineUtility"
+        classpathref="classpath_was" fork="yes" >
+            <jvmarg value="-Xms512m" />
+            <jvmarg value="-Xmx512m" />
+            <jvmarg value="-Xmn300m" />
+            <arg line="${args}"/>
+    </java>	
+
+    <!--Delete jndi.properties from the oracle/work/b2b folder-->
+    <delete file="${tmp.jndi.properties}" failonerror="false"/> 
+  </target>  
+    
+</project>

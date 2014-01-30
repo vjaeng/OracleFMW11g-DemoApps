@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<faces-config version="1.2" xmlns="http://java.sun.com/xml/ns/javaee">
+  <application>
+    <default-render-kit-id>oracle.adf.rich</default-render-kit-id>
+    <locale-config>
+      <default-locale>en</default-locale>
+    </locale-config>
+    <message-bundle>oracle.bpel.services.workflow.worklist.resources.worklist</message-bundle>
+  </application>
+  <converter>
+    <converter-for-class>oracle.bpel.services.datacontrol.types.Number</converter-for-class>
+    <converter-class>oracle.bpel.services.datacontrol.types.CustomNumberConverter</converter-class>
+  </converter>
+  <converter>
+    <converter-for-class>oracle.bpel.services.datacontrol.types.Calendar</converter-for-class>
+    <converter-class>oracle.bpel.services.datacontrol.types.CustomDateConverter</converter-class>
+  </converter>
+</faces-config>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.53.80"
+          id="PaymentStatus" Package="dataprovider.dto"
+          BeanClass="dataprovider.dto.PaymentStatus" isJavaBased="true">
+  <Attribute Name="status" Type="java.lang.String"/>
+  <Attribute Name="numInstances" Type="java.lang.Integer"/>
+  <ConstructorMethod IsCollection="true" Type="dataprovider.dto.PaymentStatus"
+                     BeanClass="dataprovider.dto.PaymentStatus"
+                     id="PaymentStatus"/>
+</JavaBean>

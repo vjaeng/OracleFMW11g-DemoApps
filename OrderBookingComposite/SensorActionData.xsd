@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+  This schema contains the sensor definition. Sensors monitor data
+  and execute callbacks appropriately.
+  
+  BPEL designer uses this file as a template to generate to generate
+  SensorActionData.xsd. It does this by replacing special tags.
+  Do not modify these special tags. For details, see comments in the file.
+  The replacement is done using a simple text replacement, so the white
+  spaces too should be preserved as indicated in comments.
+-->
+<xsd:schema blockDefault="#all" elementFormDefault="qualified"
+            targetNamespace="http://xmlns.oracle.com/bpel/sensor"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:sensor="http://xmlns.oracle.com/bpel/sensorDataPlaceHolder"
+            xmlns:nxsd="http://xmlns.oracle.com/pcbpel/nxsd"
+            xmlns:tns="http://xmlns.oracle.com/bpel/sensor"
+            nxsd:encoding="UTF-8">
+
+<!-- The following comment line is a place holder. Do not remove or edit it-->
+<!-- $importSensorVar -->
+  <xsd:simpleType name="tSensorActionPublishType">
+    <xsd:annotation>
+      <xsd:documentation>
+        This enumeration lists the possibe publishing types for probes.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="BpelReportsSchema"/>
+      <xsd:enumeration value="JMSQueue"/>
+      <xsd:enumeration value="JMSTopic"/>
+      <xsd:enumeration value="BAM"/>
+      <xsd:enumeration value="LogFile"/>
+      <xsd:enumeration value="Custom"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  
+  <xsd:complexType name="tSensorActionProperty">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="name" use="required" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+  <!-- 
+    Attributes of a sensor action
+  -->              
+  <xsd:attributeGroup name="tSensorActionAttributes">
+    <xsd:attribute name="name" type="xsd:string" use="optional"/>
+    <xsd:attribute name="enabled" type="xsd:boolean" use="optional" default="true"/>
+    <xsd:attribute name="filter" type="xsd:string"/>
+    <xsd:attribute name="publishName" type="xsd:string" use="required"/>
+    <xsd:attribute name="publishType" type="tns:tSensorActionPublishType" use="required"/>
+    <!-- 
+      the name of the JMS Queue/Topic or custom java API, ignored for other 
+      publishTypes 
+    -->
+    <xsd:attribute name="publishTarget" type="xsd:string" use="optional"/>
+  </xsd:attributeGroup>
+
+  
+  <!-- 
+    The sensor action type. A sensor action consists:
+    + unique name
+    + effective date
+    + expiration date - Optional. If not defined, the probe is active 
+                        indefinitely.
+    + filter (to potentially suppress data publishing even if a sensor marks
+             it as interesting). - Optional. If not defined, no filter is 
+             used.
+    + publishName A name of a publisher
+    + publishType What to do with the sensor data?
+    + publishTarget Name of a JMS Queue/Topic or custom publisher.
+    + potentially many sensors.
+  -->
+  <xsd:complexType name="tSensorAction">
+    <xsd:sequence>
+      <xsd:element name="sensorName" type="xsd:string" minOccurs="1" maxOccurs="unbounded"/>
+      <xsd:element name="property" minOccurs="0" maxOccurs="unbounded" type="tns:tSensorActionProperty"/>
+    </xsd:sequence>
+    <xsd:attributeGroup ref="tns:tSensorActionAttributes"/>
+  </xsd:complexType>
+  
+  <!--
+    define a listing of sensor actions in a single document. It might be a good idea  to 
+    have one sensor action list per business process. 
+  -->
+  <xsd:complexType name="tSensorActionList">
+    <xsd:sequence>
+      <xsd:element name="action" type="tns:tSensorAction" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:simpleType name="tSensorKind">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="fault"/>
+      <xsd:enumeration value="variable"/>
+      <xsd:enumeration value="activity"/>
+      <xsd:enumeration value="service"/>
+      <xsd:enumeration value="reference"/>
+      <xsd:enumeration value="event"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:complexType name="tActivityConfig">
+    <xsd:annotation>
+      <xsd:documentation>
+        The configuration part of an activity sensor comprises of a mandatory 'evalTime' attribute
+        and an optional list of variable configurations 
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="tns:tSensorConfig">
+        <xsd:sequence>
+          <xsd:element name="variable" type="tns:tActivityVariableConfig" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute name="evalTime" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>    
+  </xsd:complexType>
+
+
+  <xsd:complexType name="tVariableConfig">
+    <xsd:complexContent>
+      <xsd:extension base="tns:tSensorConfig">
+        <xsd:attribute name="outputDataType" use="required" type="xsd:string"/>
+        <xsd:attribute name="outputNamespace" use="required" type="xsd:string"/>
+        <xsd:attribute name="queryName" use="optional" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="tActivityVariableConfig">
+    <xsd:complexContent>
+      <xsd:extension base="tns:tVariableConfig">
+        <xsd:attribute name="target" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="tFaultConfig">
+    <xsd:complexContent>
+      <xsd:extension base="tns:tSensorConfig"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+    
+  <xsd:complexType name="tSensorConfig"/>
+  
+  <xsd:complexType name="tExpressionConfig">
+    <xsd:complexContent>
+      <xsd:extension base="tns:tVariableConfig">
+        <xsd:attribute name="expression" use="required" type="xsd:string">
+          <xsd:annotation>
+            <xsd:documentation>
+               expresion="$in/$payload/$partName/xpathExpression |
+                          $in/$header/xpathExpression |
+                          $in/$property/name |
+                          $out/$payload/$partName/xpathExpression |
+                          $out/$header/xpathExpression |
+                          $out/$property/name |
+                          $fault/$payload/$partName/xpathExpression |
+                          $fault/$header/xpathExpression |
+                          $fault/$property/name"
+                          
+                 Where
+                    $in - The input/request message to the operation/event
+                    $out - The output/Response message from the operation
+                    $fault - The fault message from the operation
+             </xsd:documentation>
+          </xsd:annotation>
+        </xsd:attribute>    
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>  
+  
+  <xsd:complexType name="tOperationConfig">
+    <xsd:complexContent>
+      <xsd:extension base="tns:tExpressionConfig">
+        <xsd:attribute name="operation" use="required" type="xsd:string">
+          <xsd:annotation>
+            <xsd:documentation>
+               The name of the operation in the service/reference on which the sensor is defined.
+            </xsd:documentation>
+          </xsd:annotation>  
+        </xsd:attribute>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType> 
+  
+  <xsd:complexType name="tServiceConfig">
+    <xsd:complexContent>
+      <xsd:extension base="tns:tOperationConfig">
+        <xsd:attribute name="service" use="required" type="xsd:string">
+          <xsd:annotation>
+            <xsd:documentation>
+               The name of the service on which the sensor is defined.
+            </xsd:documentation>
+          </xsd:annotation>  
+        </xsd:attribute>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType> 
+ 
+  <xsd:complexType name="tReferenceConfig">
+    <xsd:complexContent>
+      <xsd:extension base="tns:tOperationConfig">
+        <xsd:attribute name="reference" use="required" type="xsd:string">
+          <xsd:annotation>
+            <xsd:documentation>
+               The name of the reference on which the sensor is defined.
+            </xsd:documentation>
+          </xsd:annotation>  
+        </xsd:attribute>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+   
+  <xsd:complexType name="tEventConfig">
+    <xsd:complexContent>
+      <xsd:extension base="tns:tExpressionConfig">       
+        <xsd:attribute name="component" type="xsd:string" use="required">
+          <xsd:annotation>
+            <xsd:documentation>
+               The name of the component which raises or receives the event.
+            </xsd:documentation>
+          </xsd:annotation>  
+        </xsd:attribute>
+        <xsd:attribute name="event" use="required" type="xsd:string">
+          <xsd:annotation>
+            <xsd:documentation>
+               The name of the event that the component raises or receives.
+            </xsd:documentation>
+          </xsd:annotation>  
+        </xsd:attribute>
+        <xsd:attribute name="actionType" use="required">
+          <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+              <xsd:enumeration value="Publish"/>
+              <xsd:enumeration value="Subscribe"/>           
+            </xsd:restriction>
+          </xsd:simpleType>  
+        </xsd:attribute>       
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>  
+
+  <xsd:complexType name="tSensor">
+    <xsd:sequence>
+      <xsd:element name="activityConfig" type="tns:tActivityConfig" minOccurs="0"/>
+      <xsd:element name="faultConfig" type="tns:tFaultConfig" minOccurs="0"/>
+      <xsd:element name="variableConfig" type="tns:tVariableConfig" minOccurs="0"/>
+      <xsd:element name="serviceConfig" type="tns:tServiceConfig" minOccurs="0"/>
+      <xsd:element name="referenceConfig" type="tns:tReferenceConfig" minOccurs="0"/>
+      <xsd:element name="eventConfig" type="tns:tEventConfig" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="sensorName" use="required" type="xsd:string"/>
+    <xsd:attribute name="kind" use="required" type="tns:tSensorKind"/>
+    <xsd:attribute name="target" use="required" type="xsd:string"/>
+    <xsd:attribute name="filter" type="xsd:string"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="tSensorList">
+    <xsd:sequence>
+      <xsd:element name="sensor" type="tns:tSensor" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="tProperty">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="name" use="required" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  
+  <xsd:complexType name="tHeaderInfo">
+    <xsd:sequence>
+      <!--  <xsd:element name="applicationName" type="xsd:string"/>
+      <xsd:element name="compositeName" type="xsd:string"/>
+      <xsd:element name="compositeRevision" type="xsd:string"/>
+      <xsd:element name="compositeLabel" type="xsd:string"/> -->
+      <xsd:element name="compositeDN" type="xsd:string"/>
+      <xsd:element name="compositeInstanceId" type="xsd:string"/>
+      <xsd:element name="componentName" type="xsd:string"/>
+      <xsd:element name="processName" type="xsd:string"/>
+      <xsd:element name="processRevision" type="xsd:string"/>
+      <xsd:element name="domain" type="xsd:string"/>
+      <xsd:element name="instanceId" type="xsd:integer"/>
+      <xsd:element name="midTierInstance" type="xsd:string"/>
+      <xsd:element name="timestamp" type="xsd:dateTime"/>
+      <xsd:element name="sensor" type="tns:tSensor"/>
+      <xsd:element name="property" minOccurs="0" maxOccurs="unbounded" type="tns:tProperty"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="tSensorData">
+      <xsd:sequence>
+        <xsd:element name="activityData" type="tns:tActivityData" minOccurs="0"/>
+      <xsd:element name="faultData" type="tns:tFaultData" minOccurs="0"/>
+        <xsd:element name="variableData" type="tns:tVariableData" minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="serviceData" type="tns:tServiceData" minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="referenceData" type="tns:tReferenceData" minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="eventData" type="tns:tEventData" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="tFaultData">
+    <xsd:sequence>
+      <xsd:element name="activityName" type="xsd:string"/>
+      <xsd:element name="activityType" type="xsd:string"/>
+      <xsd:element name="faultName" type="xsd:QName"/>
+      <!-- The following line syntax must remain as is (including any whitespace).
+      If you change this, please let BAM sensor action developer know -->
+      <xsd:element name="data" type="xsd:anyType" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  
+  <!--
+   xml type that will be provided to sensors for variable Datas. Note the
+      any element represents variable data.
+   -->
+  <xsd:complexType name="tVariableData">
+    <xsd:sequence>
+      <xsd:element name="target" type="xsd:string"/>
+      <xsd:element name="queryName" type="xsd:string"/>
+      <xsd:element name="updaterName" type="xsd:string" minOccurs="1"/>
+      <xsd:element name="updaterType" type="xsd:string" minOccurs="1"/>
+      <!-- The following line syntax must remain as is (including any whitespace).
+      If you change this, please let BAM sensor action developer know -->
+      <xsd:element name="data" type="xsd:anyType"/>
+      <xsd:element name="dataType" type="xsd:integer"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="tServiceData">
+    <xsd:sequence>
+      <xsd:element name="sensorName" type="xsd:string"/> 
+      <xsd:element name="data" type="xsd:anyType"/>
+      <xsd:element name="dataType" type="xsd:integer"/>
+    </xsd:sequence>
+  </xsd:complexType>
+ 
+  <xsd:complexType name="tReferenceData">
+    <xsd:sequence>
+      <xsd:element name="sensorName" type="xsd:string"/>
+      <xsd:element name="data" type="xsd:anyType"/>
+      <xsd:element name="dataType" type="xsd:integer"/>
+    </xsd:sequence>
+  </xsd:complexType>
+ 
+  <xsd:complexType name="tEventData">
+    <xsd:sequence>
+      <xsd:element name="sensorName" type="xsd:string"/>
+      <xsd:element name="data" type="xsd:anyType"/>
+      <xsd:element name="dataType" type="xsd:integer"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="tActivityData">
+    <xsd:sequence>
+      <xsd:element name="activityType" type="xsd:string"/>
+      <xsd:element name="evalPoint" type="xsd:string"/>
+      <xsd:element name="duration" type="xsd:duration" minOccurs="0"/>
+      <xsd:element name="durationInSeconds" minOccurs="0" type="xsd:double"/>
+      <xsd:element name="errorMessage" nillable="true" minOccurs="0" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <!--
+    The header of the document contains some metadata.
+  -->
+              
+  <!--
+    Sensor Action data is presented in the form of a header and potentially many data
+    elements depending on how many sensors associated to the sensor action marked the
+    data as interesting.
+  -->
+  <xsd:complexType name="tSensorActionData">
+    <xsd:sequence>
+      <xsd:element name="header" type="tns:tHeaderInfo"/>
+      <xsd:element name="payload" type="tns:tSensorData" minOccurs="1"
+                   maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+<!--
+  <xsd:simpleType name="tActivityEvalPoint">
+    <xsd:restriction>
+      <xsd:enumeration value="start"/>
+      <xsd:enumeration value="complete"/>
+      <xsd:enumeration value="fault"/>
+      <xsd:enumeration value="compensate"/>
+      <xsd:enumeration value="retry"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+-->
+  
+  <!--
+    The process sensor value header comprises of a timestamp
+    where the sensor was triggered and the sensor metadata
+  -->
+  <xsd:complexType name="tProcessSensorValueHeader">
+    <xsd:sequence>
+      <xsd:element name="timestamp" type="xsd:dateTime"/>
+      <xsd:element ref="tns:sensor"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <!--
+    Extend tActivityData to include more elements
+  -->
+  <xsd:complexType name="tProcessActivityData">
+    <xsd:complexContent>
+      <xsd:extension base="tns:tActivityData">
+        <xsd:sequence>
+          <xsd:element name="creationDate" type="xsd:dateTime" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="modifyDate" type="xsd:dateTime" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="evalTime" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="retryCount" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>      
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <!--
+    Extend tVariableData to include more elements
+  -->
+  <xsd:complexType name="tProcessVariableData">
+    <xsd:complexContent>
+      <xsd:extension base="tns:tVariableData">
+        <xsd:sequence>
+          <xsd:element name="creationDate" type="xsd:dateTime" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="modifyDate" type="xsd:dateTime" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>      
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <!--
+    Extend tFaultData to include more elements
+  -->
+  <xsd:complexType name="tProcessFaultData">
+    <xsd:complexContent>
+      <xsd:extension base="tns:tFaultData">
+        <xsd:sequence>
+          <xsd:element name="creationDate" type="xsd:dateTime" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="modifyDate" type="xsd:dateTime" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>      
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <!--
+    Copy of tSensorData type with some modified types.
+  -->
+  <xsd:complexType name="tProcessSensorData">
+    <xsd:sequence>
+      <xsd:element name="activityData" type="tns:tProcessActivityData" minOccurs="0"/>
+      <xsd:element name="faultData" type="tns:tProcessFaultData" minOccurs="0"/>
+      <xsd:element name="variableData" type="tns:tProcessVariableData" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <!--
+    A single process sensor value comprises of the sensor value metadata
+    (sensor and timestamp) and the payload (the value) of the sensor
+  -->
+  <xsd:complexType name="tProcessSensorValue">
+    <xsd:sequence>
+      <xsd:element name="header" type="tns:tProcessSensorValueHeader"/>
+      <xsd:element name="payload" type="tns:tProcessSensorData"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <!--
+    Process instance header. 
+  -->
+  <xsd:complexType name="tProcessInstanceInfo">
+    <xsd:sequence>
+      <xsd:element name="processName" type="xsd:string"/>
+      <xsd:element name="processRevision" type="xsd:string"/>
+      <xsd:element name="domain" type="xsd:string"/>
+      <xsd:element name="instanceId" type="xsd:integer"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <!--
+    The list of sensor values comprises of a process header describing the 
+    BPEL process with name, cube instance id etc. and a list of sensor values
+    comprising of sensor metadata information and sensor values.
+  -->
+  <xsd:complexType name="tProcessSensorValueList">
+    <xsd:sequence>
+      <xsd:element name="process" type="tns:tProcessInstanceInfo" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="sensorValue" type="tns:tProcessSensorValue" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <!-- The sensor list is the root element of the sensor.xml document in the 
+       bpel process suitcase and is used to define sensors. -->
+  <xsd:element name="sensors" type="tns:tSensorList"/>
+  
+  <!-- A sensor is used to monitor a particular aspect of a bpel process -->
+  <xsd:element name="sensor" type="tns:tSensor"/>
+  
+  <!-- The actions element is the root element of the sensorAction.xml document
+       in the bpel process suitcase and is used to define sensor actions. 
+       Sensor actions define how to publish data captured by sensors -->
+  <xsd:element name="actions" type="tns:tSensorActionList"/>  
+  
+  <!-- actionData elements are produced by the sensor framework and sent to the
+       appropriate data publishers when sensors 'fire' -->
+  <xsd:element name="actionData" type="tns:tSensorActionData"/>  
+  
+  <!-- This element is used when the client API is used to query sensor values 
+       stored in the default reports schema -->
+  <xsd:element name="sensorValues" type="tns:tProcessSensorValueList"/>
+
+</xsd:schema>
+
+

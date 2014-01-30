@@ -1,0 +1,37 @@
+<schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+        targetNamespace="http://www.partnersupplier.example.com/ns/warehouse"
+        xmlns:tns="http://www.partnersupplier.example.com/ns/warehouse"
+        xmlns="http://www.w3.org/2001/XMLSchema">
+ <element name="WarehouseProcessRequest">
+  <complexType>
+   <sequence>
+    <element name="orderTotal" type="double"/>
+    <element name="orderItems" type="tns:orderItem" minOccurs="0"
+             maxOccurs="unbounded"/>
+   </sequence>
+  </complexType>
+ </element>
+ <element name="WarehouseProcessResponse">
+  <complexType>
+   <sequence>
+    <element name="orderTotal" type="double"/>
+    <element name="deliveryDate" type="date"/>
+   </sequence>
+  </complexType>
+ </element>
+ <complexType name="orderItem">
+  <sequence>
+   <element name="price" type="double"/>
+   <element name="quantity" type="integer"/>
+   <element name="productId" type="string"/>
+  </sequence>
+ </complexType>
+ <element name="PartnerSupplierException"
+          type="tns:partnerSupplierExceptionType"/>
+ <complexType name="partnerSupplierExceptionType">
+  <sequence>
+   <element name="Message" type="string"/>
+  </sequence>
+ </complexType>
+</schema>
+

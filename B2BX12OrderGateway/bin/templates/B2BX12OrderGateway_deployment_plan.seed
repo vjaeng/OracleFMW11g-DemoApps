@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+   Deployment plan template for the SOA B2BX12OrderGateway composite
+    - this one is copied to ../ and changed according to the settings in
+    ../../bin build.properties
+-->
+<SOAConfigPlan xmlns:jca="http://platform.integration.oracle/blocks/adapter/fw/metadata" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:orawsp="http://schemas.oracle.com/ws/2006/01/policy" xmlns="http://schemas.oracle.com/soa/configplan">
+   <composite name="B2BX12OrderGateway">
+      <component name="B2BOrderProcessingEngine">
+         <property name="bpel.config.use.events">
+            <replace>@use.events@</replace>
+         </property>
+      </component>
+      <reference name="StoreFrontService">
+         <binding type="ws">
+            <attribute name="location">
+               <replace>http://@storefront.endpoint@?wsdl</replace>
+            </attribute>
+         </binding>
+      </reference>
+      <reference name="OrderBookingService">
+         <binding type="ws">
+            <attribute name="location">
+               <replace>http://@managed.server.host@:@managed.server.port@/soa-infra/services/@soa.partition.name@/OrderBookingComposite!1.0/orderprocessor_client_ep?wsdl</replace>
+            </attribute>
+         </binding>
+      </reference>
+    </composite>
+</SOAConfigPlan>

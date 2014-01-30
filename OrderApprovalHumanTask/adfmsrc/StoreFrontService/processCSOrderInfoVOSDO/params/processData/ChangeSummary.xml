@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="ChangeSummary"
+          Package="StoreFrontService.processCSOrderInfoVOSDO.params.processData"
+          BeanClass="StoreFrontService.processCSOrderInfoVOSDO.params.processData.ChangeSummary"
+          isJavaBased="false">
+  <Attribute Name="create" Type="java.lang.String"/>
+  <Attribute Name="delete" Type="java.lang.String"/>
+  <Attribute Name="logging" Type="java.lang.Boolean"/>
+  <AccessorAttribute id="any" IsCollection="false"/>
+</JavaBean>

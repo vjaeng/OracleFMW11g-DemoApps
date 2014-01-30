@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<DataControlConfigs xmlns="http://xmlns.oracle.com/adfm/configuration"
+                    version="11.1.1.50.95" id="DataControls"
+                    Package="orderapprovalhumantask">
+  <AdapterDataControl id="OrderApprovalHumanTask_ApprovalHumanTask"
+                      FactoryClass="oracle.adf.model.adapter.DataControlFactoryImpl"
+                      ImplDef="oracle.bpel.services.datacontrol.XSDDataControlDefinition"
+                      SupportsTransactions="true" SupportsSortCollection="false"
+                      SupportsResetState="false" SupportsRangesize="false"
+                      SupportsFindMode="false" SupportsUpdates="false"
+                      Definition="OrderApprovalHumanTask_ApprovalHumanTask"
+                      BeanClass="OrderApprovalHumanTask_ApprovalHumanTask"
+                      xmlns="http://xmlns.oracle.com/adfm/datacontrol">
+    <Source>
+      <XSDDataControl xmlns="http://xmlns.oracle.com/bpel/workflow/task"
+                      SchemaLocation="file:/C:/_Business/11g/CompositeServices/OrderBookingComposite/xsd/ApprovalHumanTaskWorkflowTask.xsd"
+                      RootElement="task"
+                      rootelementnamespace="http://xmlns.oracle.com/bpel/workflow/task"
+                      taskLoc="file:/C:/_Business/11g/CompositeServices/OrderBookingComposite/ApprovalHumanTask.task"/>
+    </Source>
+  </AdapterDataControl>
+  <AdapterDataControl id="StoreFrontService"
+                      FactoryClass="oracle.adf.model.adapter.DataControlFactoryImpl"
+                      ImplDef="oracle.adfinternal.model.adapter.webservice.WSDefinition"
+                      SupportsTransactions="false"
+                      SupportsSortCollection="false" SupportsResetState="false"
+                      SupportsRangesize="false" SupportsFindMode="false"
+                      SupportsUpdates="true"
+                      Definition="orderapprovalhumantask.StoreFrontService"
+                      BeanClass="orderapprovalhumantask.StoreFrontService"
+                      xmlns="http://xmlns.oracle.com/adfm/datacontrol">
+    <Source>
+      <definition xmlns="http://xmlns.oracle.com/adfm/adapter/webservice"
+                  name="StoreFrontService" version="1.0"
+                  provider="oracle.adfinternal.model.adapter.webservice.provider.soap.SOAPProvider"
+                  wsdl="file:/C:/_Business/11g/CompositeServices/OrderApprovalHumanTask/services/oracle/fodemo/storefront/store/service/common/serviceinterface/StoreFrontService.wsdl">
+        <service name="StoreFrontService"
+                 namespace="www.globalcompany.example.com"
+                 connection="StoreFrontService">
+          <port name="StoreFrontServiceSoapHttpPort">
+            <operation name="findOrderInfoVOSDO"/>
+            <operation name="processCSOrderInfoVOSDO"/>
+            <operation name="getOrderInfoVOSDO"/>
+            <operation name="deleteOrderInfoVOSDO"/>
+            <operation name="updateOrderInfoVOSDO"/>
+            <operation name="findCustomerInfoVO1CustomerInfoVOCriteria"/>
+            <operation name="findCustomerInfoVO1"/>
+            <operation name="mergeOrderInfoVOSDO"/>
+            <operation name="processOrderInfoVOSDO"/>
+            <operation name="createOrderInfoVOSDO"/>
+          </port>
+        </service>
+      </definition>
+    </Source>
+  </AdapterDataControl>
+  <AdapterDataControl id="Orders"
+                      FactoryClass="oracle.adf.model.adapter.DataControlFactoryImpl"
+                      ImplDef="oracle.adf.model.adapter.bean.BeanDefinition"
+                      SupportsTransactions="false" SupportsSortCollection="true"
+                      SupportsResetState="false" SupportsRangesize="false"
+                      SupportsFindMode="false" SupportsUpdates="true"
+                      Definition="dataprovider.dto.Orders"
+                      BeanClass="dataprovider.dto.Orders"
+                      xmlns="http://xmlns.oracle.com/adfm/datacontrol">
+    <CreatableTypes>
+      <TypeInfo FullName="dataprovider.dto.Spend"/>
+      <TypeInfo FullName="dataprovider.dto.PaymentStatus"/>
+      <TypeInfo FullName="dataprovider.dto.DaysOutstanding"/>
+      <TypeInfo FullName="dataprovider.dto.Item"/>
+      <TypeInfo FullName="dataprovider.dto.OrderHistory"/>
+      <TypeInfo FullName="dataprovider.dto.Orders"/>
+    </CreatableTypes>
+    <Source>
+      <bean-definition BeanClass="dataprovider.dto.Orders"
+                       xmlns="http://xmlns.oracle.com/adfm/adapter/bean"/>
+    </Source>
+  </AdapterDataControl>
+</DataControlConfigs>

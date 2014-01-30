@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<weblogic-application xmlns="http://www.bea.com/ns/weblogic/weblogic-application" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                      xsi:schemaLocation="http://www.bea.com/ns/weblogic/weblogic-application.xsd">
+    <xml>
+        <parser-factory>
+            <saxparser-factory>oracle.xml.jaxp.JXSAXParserFactory</saxparser-factory>
+            <document-builder-factory>oracle.xml.jaxp.JXDocumentBuilderFactory</document-builder-factory>
+            <transformer-factory>oracle.xml.jaxp.JXSAXTransformerFactory</transformer-factory>
+        </parser-factory>
+    </xml>
+    <!--listener>
+        <listener-class>oracle.security.jps.wls.listeners.JpsApplicationLifecycleListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>oracle.security.jps.wls.listeners.JpsAppVersionLifecycleListener</listener-class>
+    </listener-->
+    <listener>
+        <listener-class>oracle.adf.share.weblogic.listeners.ADFApplicationLifecycleListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>oracle.mds.lcm.weblogic.WLLifecycleListener</listener-class>
+    </listener>
+    <library-ref>
+        <library-name>adf.oracle.domain</library-name>
+    </library-ref>
+    <library-ref>
+        <library-name>oracle.soa.workflow</library-name>
+    </library-ref>
+</weblogic-application>

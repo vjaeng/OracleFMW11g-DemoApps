@@ -1,0 +1,45 @@
+<definitions
+     name="B2B_po_X12_inbound"
+     targetNamespace="http://www.oracle.com/integration/b2b/B2B_po_X12_inbound/"
+     xmlns="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:ns2="http://www.globalcompany.example.com/b2b/utils"
+     xmlns:ns1="urn:oracle:integration:b2b:X12/4010/850"
+     xmlns:ns3="/oracle/fodemo/storefront/entities/events/schema/OrderEO"
+     xmlns:pns1="http://xmlns.oracle.com/CompositeServices11gMain/B2BX12OrderGateway/B2BOrderProcessingEngine/correlationset"
+     xmlns:tns="http://www.oracle.com/integration/b2b/B2B_po_X12_inbound/"
+     xmlns:b2bconfig="http://xmlns.oracle.com/pcbpel/wsdl/b2b/config/"
+     xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+    >
+    <import namespace="http://www.globalcompany.example.com/b2b/utils" location="B2BUtils.wsdl"/>
+    <import namespace="http://xmlns.oracle.com/CompositeServices11gMain/B2BX12OrderGateway/B2BOrderProcessingEngine/correlationset"
+         location="B2BOrderProcessingEngine_Properties.wsdl"/>
+    <types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://www.globalcompany.example.com/b2b/utils"
+             xmlns:ns1="urn:oracle:integration:b2b:X12/4010/850" xmlns:ns3="/oracle/fodemo/storefront/entities/events/schema/OrderEO"
+             xmlns:tns="http://www.oracle.com/integration/b2b/B2B_po_X12_inbound/" xmlns:b2bconfig="http://xmlns.oracle.com/pcbpel/wsdl/b2b/config/"
+             xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+            <import namespace="urn:oracle:integration:b2b:X12/4010/850" schemaLocation="xsd/EDI_X12/4010/850/850_Def/850.xsd"/>
+        </schema>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://www.globalcompany.example.com/b2b/utils"
+             xmlns:ns1="urn:oracle:integration:b2b:X12/4010/850" xmlns:ns3="/oracle/fodemo/storefront/entities/events/schema/OrderEO"
+             xmlns:tns="http://www.oracle.com/integration/b2b/B2B_po_X12_inbound/" xmlns:b2bconfig="http://xmlns.oracle.com/pcbpel/wsdl/b2b/config/"
+             xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+            <xsd:import namespace="/oracle/fodemo/storefront/entities/events/schema/OrderEO" 
+            schemaLocation="oramds:/apps/FusionOrderDemoShared/services/oracle/fodemo/storefront/entities/events/OrderEO.xsd"/>
+        </xsd:schema>
+    </types>
+    <message name="B2BMsg">
+        <part name="body" element="ns1:Transaction-850"/>
+    </message>
+    <portType name="B2B_receive_ptt">
+        <operation name="receive">
+            <b2bconfig:parameters UIPort="8001" UIDocRef="EDI_X12--4010--850--850_Def" UIConnectionName="sta00251"/>
+            <input message="tns:B2BMsg"/>
+        </operation>
+    </portType>
+    <plt:partnerLinkType name="B2B_receive_plt">
+        <plt:role name="receive_role">
+            <plt:portType name="tns:B2B_receive_ptt"/>
+        </plt:role>
+    </plt:partnerLinkType>
+</definitions>

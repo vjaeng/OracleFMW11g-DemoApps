@@ -1,0 +1,68 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<actions targetNamespace="http://www.globalcompany.example.com/ns/OrderBookingService" xmlns="http://xmlns.oracle.com/bpel/sensor" xmlns:tns="http://www.globalcompany.example.com/ns/OrderBookingService" xmlns:pc="http://xmlns.oracle.com/bpel/sensor">
+   <action name="BAM_SensorAction_ReceiveInput" publishName="OracleBam" publishType="BAM" enabled="true">
+      <property name="bamTransform">bam/xsl/SensorAction_ReceiveInput.xsl</property>
+      <property name="jcaFileName">bam/BAM_SensorAction_ReceiveInput.jcabam</property>
+      <sensorName>ActivitySensor_ReceiveInput</sensorName>
+   </action>
+   <action name="BAM_SensorAction_AuthorizeCreditCard" publishName="OracleBam" publishType="BAM" enabled="true">
+      <property name="jcaFileName">bam/BAM_SensorAction_AuthorizeCreditCard.jcabam</property>
+      <property name="bamTransform">bam/xsl/SensorAction_AuthorizeCreditCard.xsl</property>
+      <sensorName>ActivitySensor_AuthorizeCreditCard</sensorName>
+   </action>
+   <action name="BAM_SensorAction_OrderApproval_Start" publishName="OracleBam" publishType="BAM" enabled="true">
+      <property name="bamTransform">bam/xsl/SensorAction_OrderApproval_Start.xsl</property>
+      <property name="jcaFileName">bam/BAM_SensorAction_OrderApproval_Start.jcabam</property>
+      <sensorName>ActivitySensor_OrderApproval_Start</sensorName>
+   </action>
+   <action name="BAM_SensorAction_OrderApproval_End" publishName="OracleBam" publishType="BAM" enabled="true">
+      <property name="bamTransform">bam/xsl/SensorAction_OrderApproval_End.xsl</property>
+      <property name="jcaFileName">bam/BAM_SensorAction_OrderApproval_End.jcabam</property>
+      <sensorName>ActivitySensor_OrderApproval_End</sensorName>
+   </action>
+   <action name="BAM_SensorAction_InvokeInternalWarehouse_Start" publishName="OracleBam" publishType="BAM" enabled="true">
+      <property name="bamTransform">bam/xsl/SensorAction_InvokeInternalWarehouse_Start.xsl</property>
+      <property name="jcaFileName">bam/BAM_SensorAction_InvokeInternalWarehouse_Start.jcabam</property>
+      <sensorName>ActivitySensor_InvokeInternalWarehouse_Start</sensorName>
+   </action>
+   <action name="BAM_SensorAction_InvokePartnerSupplier_Start" publishName="OracleBam" publishType="BAM" enabled="true">
+      <property name="bamTransform">bam/xsl/SensorAction_InvokePartnerSupplier_Start.xsl</property>
+      <property name="jcaFileName">bam/BAM_SensorAction_InvokePartnerSupplier_Start.jcabam</property>
+      <sensorName>ActivitySensor_InvokePartnerSupplier_Start</sensorName>
+   </action>
+   <action name="BAM_SensorAction_InvokeInternalWarehouse_End" publishName="OracleBam" publishType="BAM" enabled="true">
+      <property name="bamTransform">bam/xsl/SensorAction_InvokeInternalWarehouse_End.xsl</property>
+      <property name="jcaFileName">bam/BAM_SensorAction_InvokeInternalWarehouse_End.jcabam</property>
+      <sensorName>ActivitySensor_InvokeInternalWarehouse_End</sensorName>
+   </action>
+   <action name="BAM_SensorAction_InvokePartnerSupplier_End" publishName="OracleBam" publishType="BAM" enabled="true">
+      <property name="bamTransform">bam/xsl/SensorAction_InvokePartnerSupplier_End.xsl</property>
+      <property name="jcaFileName">bam/BAM_SensorAction_InvokePartnerSupplier_End.jcabam</property>
+      <sensorName>ActivitySensor_InvokePartnerSupplier_End</sensorName>
+   </action>
+   <action name="BAM_SensorAction_SelectPreferredSupplier" publishName="OracleBam" publishType="BAM" enabled="true">
+      <property name="bamTransform">bam/xsl/SensorAction_SelectPreferredSupplier.xsl</property>
+      <property name="jcaFileName">bam/BAM_SensorAction_SelectPreferredSupplier.jcabam</property>
+      <sensorName>ActivitySensor_SelectPreferredSupplier</sensorName>
+   </action>
+   <action name="BAM_SensorAction_FulfillOrder" publishName="OracleBam" publishType="BAM" enabled="true">
+      <property name="bamTransform">bam/xsl/SensorAction_FulfillOrder.xsl</property>
+      <property name="jcaFileName">bam/BAM_SensorAction_FulfillOrder.jcabam</property>
+      <sensorName>ActivitySensor_FulfillOrder</sensorName>
+   </action>
+   <action name="BAM_SensorAction_Callback" publishName="OracleBam" publishType="BAM" enabled="true">
+      <property name="bamTransform">bam/xsl/SensorAction_Callback.xsl</property>
+      <property name="jcaFileName">bam/BAM_SensorAction_Callback.jcabam</property>
+      <sensorName>ActivitySensor_Callback</sensorName>
+   </action>
+   <action name="BAM_SensorAction_RetrieveCustomerForOrder" publishName="OracleBam" publishType="BAM" enabled="true">
+      <property name="jcaFileName">bam/BAM_SensorAction_RetrieveCustomerForOrder.jcabam</property>
+      <property name="bamTransform">bam/xsl/SensorAction_RetrieveCustomerForOrder.xsl</property>
+      <sensorName>ActivitySensor_RetrieveCustomerForOrder</sensorName>
+   </action>
+   <action name="BAM_SensorAction_FindOrderById" publishName="OracleBam" publishType="BAM" enabled="true">
+      <property name="jcaFileName">bam/BAM_SensorAction_FindOrderById.jcabam</property>
+      <property name="bamTransform">bam/xsl/SensorAction_FindOrderById.xsl</property>
+      <sensorName>ActivitySensor_FindOrderById</sensorName>
+   </action>
+</actions>

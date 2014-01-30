@@ -1,0 +1,64 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<graphics>
+   <diagram popupEditor="false" fixedWidthSwimlanes="true" roundedPartnerlinks="true" centerZoom="true" validateOnLoad="true" confirmBeforeDelete="true" selectedPartnerLinkColor="0,0,153" swimlaneBackground="240,240,240" swimlaneDividerBackground="218,218,218" graphBackground="255,255,255" selectedBorderBackground="49,105,198" connectedPartnerLinkColor="204,204,255" connectablePartnerLinkColor="0,0,255" unconnectedPartnerLinkColor="192,192,192"/>
+   <annotationfile/>
+   <iconize assign="no" invoke="no" receive="no" reply="no" transform="no" terminate="no" wait="no" compensate="no" empty="no" javaembedding="no" throw="no" validate="no" dropzone="no" sequence="no" scope="no" pick="no" while="no" flow="no" switch="no" onalarm="no" onmessage="no" catch="no" catchall="no" compensationhandler="no" optimize="no"/>
+   <partnerlink_locations>
+      <partnerlink name="orderprocessor_client_ep" x="0" y="954" side="left"/>
+      <partnerlink name="InternalWarehouseService" x="1609" y="20" side="right"/>
+      <partnerlink name="CreditCardAuthorizationService" x="1609" y="1016" side="right"/>
+      <partnerlink name="StoreFrontService" x="1609" y="642" side="right"/>
+      <partnerlink name="TaskService" x="1609" y="77" side="right"/>
+      <partnerlink name="PartnerSupplierMediator" x="1609" y="134" side="right"/>
+      <partnerlink name="NotificationService_WSDL" x="1609" y="191" side="right"/>
+      <partnerlink name="RequiresApprovalRule_OracleRules1_DecisionService_1" x="1609" y="248" side="right"/>
+      <partnerlink name="FulfillOrder.FulfillOrder" x="1609" y="305" side="right"/>
+      <partnerlink name="EvaluatePreferredSupplierRule.OracleRules1_DecisionService_1" x="1609" y="2313" side="right"/>
+   </partnerlink_locations>
+   <graph_layout viewport="0,0,724,356" show_swimlanes="true">
+      <layout_item collapsed="false" xpath="/process/process" type="Process" showhandlers="true"/>
+      <layout_item collapsed="false" xpath="/process/faultHandlers/catch" type="Catch"/>
+      <layout_item collapsed="false" xpath="/process/faultHandlers/catch/sequence" type="Sequence"/>
+      <layout_item collapsed="false" xpath="/process/faultHandlers/catchAll" type="CatchAll"/>
+      <layout_item collapsed="false" xpath="/process/faultHandlers/catchAll/sequence" type="Sequence"/>
+      <layout_item collapsed="false" xpath="/process/sequence" type="Sequence"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[1]" type="Scope" showhandlers="true"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[1]/sequence" type="Sequence"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[2]" type="Scope" showhandlers="true"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[2]/sequence" type="Sequence"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[3]" type="Scope" showhandlers="true"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[3]/faultHandlers/catch[1]" type="Catch"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[3]/faultHandlers/catch[1]/sequence" type="Sequence"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[3]/faultHandlers/catch[2]" type="Catch"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[3]/faultHandlers/catch[2]/sequence" type="Sequence"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[3]/sequence" type="Sequence"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[3]/sequence/switch" type="Switch"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[3]/sequence/switch/case/sequence" type="Sequence"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[4]" type="Scope" showhandlers="true"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[4]/sequence" type="Sequence"/>
+      <layout_item collapsed="true" xpath="/process/sequence/scope[4]/sequence/scope" type="Scope" showhandlers="true"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[4]/sequence/scope/sequence" type="Sequence"/>
+      <layout_item collapsed="true" xpath="/process/sequence/scope[4]/sequence/switch" type="Switch"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[4]/sequence/switch/case/sequence" type="Sequence"/>
+      <layout_item collapsed="true" xpath="/process/sequence/scope[4]/sequence/switch/case/sequence/scope" type="Scope" showhandlers="true"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[4]/sequence/switch/case/sequence/scope/sequence" type="Sequence"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[4]/sequence/switch/case/sequence/switch" type="Switch"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[4]/sequence/switch/case/sequence/switch/case[1]/sequence" type="Sequence"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[4]/sequence/switch/case/sequence/switch/case[2]/sequence" type="Sequence"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[4]/sequence/switch/case/sequence/switch/otherwise/sequence" type="Sequence"/>
+      <layout_item collapsed="true" xpath="/process/sequence/scope[5]" type="Scope" showhandlers="true"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[5]/flow" type="Flow"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[5]/flow/sequence[1]" type="Sequence"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[5]/flow/sequence[2]" type="Sequence"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[6]" type="Scope" showhandlers="true"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[6]/scope" type="Scope" showhandlers="true"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[6]/scope/sequence" type="Sequence"/>
+      <layout_item collapsed="true" xpath="/process/sequence/scope[7]" type="Scope" showhandlers="true"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[7]/sequence" type="Sequence"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[8]" type="Scope" showhandlers="true"/>
+      <layout_item collapsed="true" xpath="/process/sequence/scope[9]" type="Scope" showhandlers="true"/>
+      <layout_item collapsed="true" xpath="/process/sequence/scope[9]/scope" type="Scope" showhandlers="true"/>
+      <layout_item collapsed="false" xpath="/process/sequence/scope[9]/scope/sequence" type="Sequence"/>
+   </graph_layout>
+   <bookmarks/>
+</graphics>

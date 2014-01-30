@@ -1,0 +1,15 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<oracle-webservice-clients xmlns:ns2="http://java.sun.com/xml/ns/javaee">
+   <webservice-client>
+      <service-qname localpart="CreditAuthorizationService"
+                     namespaceURI="http://www.globalcompany.example.com/ns/CreditAuthorizationService"/>
+      <port-info>
+         <wsdl-port localpart="CreditAuthorizationPort"
+                    namespaceURI="http://www.globalcompany.example.com/ns/CreditAuthorizationService"/>
+         <runtime/>
+         <operations>
+            <operation name="authorizeCredit"/>
+         </operations>
+      </port-info>
+   </webservice-client>
+</oracle-webservice-clients>

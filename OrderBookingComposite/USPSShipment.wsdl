@@ -1,0 +1,21 @@
+<?binding.jca USPSShipment_file.jca?>
+<wsdl:definitions name="USPSShipment" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/file/WebLogicFusionOrderDemo/OrderBookingComposite/USPSShipment/" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/file/WebLogicFusionOrderDemo/OrderBookingComposite/USPSShipment/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:imp1="http://www.globalcompany.example.com/ns/legacyOrder" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://www.globalcompany.example.com/ns/legacyOrder" schemaLocation="xsd/LegacyOrderBookingPO.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="Write_msg">
+        <wsdl:part name="body" element="imp1:PurchaseOrder"/>
+    </wsdl:message>
+    <wsdl:portType name="Write_ptt">
+        <wsdl:operation name="Write">
+            <wsdl:input message="tns:Write_msg"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <plt:partnerLinkType name="Write_plt">
+        <plt:role name="Write_role">
+            <plt:portType name="tns:Write_ptt"/>
+        </plt:role>
+    </plt:partnerLinkType>
+</wsdl:definitions>

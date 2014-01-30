@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Deployment plan template for the SOA BAM OrderBooking composite
+    - this one is copied to ../ and changed according to the settings in
+    ../../bin build.properties
+-->
+<SOAConfigPlan xmlns:jca="http://platform.integration.oracle/blocks/adapter/fw/metadata" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:orawsp="http://schemas.oracle.com/ws/2006/01/policy" xmlns="http://schemas.oracle.com/soa/configplan">
+
+   <composite name="OrderBookingComposite">
+      <!-- enable / disable the sensors on the components -->
+      <property name="disableProcessSensors">
+           <replace>@disable.sensors@</replace>
+      </property>   
+      <!-- replace the concrete wsdl location for the Partner Supplier composite -->
+      <reference name="PartnerSupplierService">
+         <binding type="ws">
+            <attribute name="location">
+               <replace>http://@managed.server.host@:@managed.server.port@/soa-infra/services/@soa.partition.name@/PartnerSupplierComposite!1.0/externalpartnersupplier_client_ep?wsdl</replace>
+            </attribute>
+         </binding>
+      </reference>
+      <!-- replace the concrete wsdl location for the Credit Auth webservice -->
+      <reference name="CreditCardAuthorizationService">
+         <binding type="ws">
+            <attribute name="location">
+               <replace>http://@managed.server.host@:@managed.server.port@/WebServices_WebLogicFusionOrderDemo_CreditCardAuthorization/CreditAuthorizationPort?wsdl</replace>
+            </attribute>
+         </binding>
+      </reference>
+      <!-- replace the concrete wsdl location for StoreFrontService, either based on the SDO composite or the real adf service -->
+      <reference name="StoreFrontService">
+         <binding type="ws">
+            <attribute name="location">
+               <replace>http://@storefront.endpoint@?wsdl</replace>
+            </attribute>
+         </binding>
+      </reference>
+   </composite>
+
+   <!-- replace file endpoint for USPS shipment -->
+   <wsdlAndSchema name="USPSShipment_file.jca">
+     <jca:property name="PhysicalDirectory">
+        <replace>@file.endpoint@</replace>
+     </jca:property>
+   </wsdlAndSchema>  
+
+   <!-- replace jms destination for Fulfillment batch jms adapter -->
+   <wsdlAndSchema name="FulfillmentBatch_jms.jca">
+     <jca:property name="DestinationName">
+        <replace>@jms.destination@</replace>
+     </jca:property>
+   </wsdlAndSchema>  
+   
+   <!-- modify the bam connection factory adapter location -->
+   <wsdlAndSchema name="BAM_OrderDO_bam.jca | BAM_ProcessTimeDO_bam.jca | BAM_ProcessTimeDO_ECID_bam.jca | bam/BAM_SensorAction_AuthorizeCreditCard.jcabam | bam/BAM_SensorAction_OrderApproval_End.jcabam | bam/BAM_SensorAction_Callback.jcabam   | bam/BAM_SensorAction_OrderApproval_Start.jcabam | bam/BAM_SensorAction_FindOrderById.jcabam | bam/BAM_SensorAction_ReceiveInput.jcabam
+ | bam/BAM_SensorAction_FulfillOrder.jcabam | bam/BAM_SensorAction_RetrieveCustomerForOrder.jcabam | bam/BAM_SensorAction_InvokeInternalWarehouse_End.jcabam | bam/BAM_SensorAction_SelectPreferredSupplier.jcabam | 
+bam/BAM_SensorAction_InvokeInternalWarehouse_Start.jcabam | bam/BAM_SensorAction_InvokePartnerSupplier_End.jcabam |
+bam/BAM_SensorAction_InvokePartnerSupplier_Start.jcabam">
+    <searchReplace>
+        <search>eis/bam/rmi</search>
+        <replace>eis/bam/@bam.adapter.communication@</replace>
+     </searchReplace>
+   </wsdlAndSchema>  
+</SOAConfigPlan>

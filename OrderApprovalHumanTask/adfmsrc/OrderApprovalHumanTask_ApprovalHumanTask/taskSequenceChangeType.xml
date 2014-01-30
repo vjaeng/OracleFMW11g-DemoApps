@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="taskSequenceChangeType"
+          Package="OrderApprovalHumanTask_ApprovalHumanTask"
+          BeanClass="OrderApprovalHumanTask_ApprovalHumanTask.taskSequenceChangeType"
+          isJavaBased="false">
+  <Attribute Name="correlationId" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/common/tsc"/>
+        <Property Name="nextSibling" Value="anchorChain"/>
+        <Property Name="minOccurs" Value="1"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Correlation Id"/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/common/tsc"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="anchorChain" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/common/tsc"/>
+        <Property Name="nextSibling" Value="changeType"/>
+        <Property Name="minOccurs" Value="1"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Anchor Chain"/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/common/tsc"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="changeType" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/common/tsc"/>
+        <Property Name="nextSibling" Value="anchorType"/>
+        <Property Name="minOccurs" Value="1"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Change Type"/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/common/tsc"/>
+        <Property Name="type" Value="string"/>
+        <Property Name="enumeration" Value="[CRU, DEL, COA]"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="anchorType" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/common/tsc"/>
+        <Property Name="nextSibling" Value="anchorAssignee"/>
+        <Property Name="minOccurs" Value="1"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Anchor Type"/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/common/tsc"/>
+        <Property Name="type" Value="string"/>
+        <Property Name="enumeration"
+                  Value="[START_STAGE, END_STAGE, BEFORE_ASSIGNEE, AFTER_ASSIGNEE]"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="anchorAssignee" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/common/tsc"/>
+        <Property Name="nextSibling" Value="changeAssignee"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Anchor Assignee"/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/common/tsc"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="changeAssignee" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/common/tsc"/>
+        <Property Name="nextSibling" Value="responseType"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Change Assignee"/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/common/tsc"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="responseType" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/common/tsc"/>
+        <Property Name="nextSibling" Value="updatedBy"/>
+        <Property Name="minOccurs" Value="1"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Response Type"/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/common/tsc"/>
+        <Property Name="type" Value="string"/>
+        <Property Name="enumeration" Value="[REQUIRED, NREQUIRE]"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="updatedBy" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/common/tsc"/>
+        <Property Name="nextSibling" Value="updatedDate"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Updated By"/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/common/tsc"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="updatedDate"
+             Type="oracle.bpel.services.datacontrol.types.Calendar">
+    <Properties>
+      <CustomProperties>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Updated Date"/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/common/tsc"/>
+        <Property Name="type"
+                  Value="oracle.bpel.services.datacontrol.types.Calendar"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+</JavaBean>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<project name="CreditCardAuthorization" default="all" basedir=".">
+  <property file="../../bin/build.properties"/>
+  <property file="build.properties"/>
+  
+  <property name="wls.home" value="${oracle.home}/../wlserver_10.3"/>
+  <echo>Wls home: ${wls.home}</echo>
+  <echo>Oracle home: ${oracle.home}</echo>
+  <!-- weblogic deployer task -->
+  <taskdef name="wldeploy" classname="weblogic.ant.taskdefs.management.WLDeploy" 
+     classpath="${wls.home}/server/lib/weblogic.jar:${oracle.common.home}/modules/oracle.jps_11.1.1/jps-common.jar:${oracle.common.home}/modules/oracle.jps_11.1.1/jps-api.jar:${oracle.common.home}/modules/oracle.jps_11.1.1/jps-internal.jar"/>
+  <property name="wls.user"      value="${server.user}"/>
+  <property name="wls.password"  value="${server.password}"/>
+  <property name="deploy.ear.source"  value="${deploy.dir}/${war.name}.war"/>
+
+  <path id="library.JAX-WS.Web.Services">
+    <pathelement location="${oracle.home}/../wlserver_10.3/server/lib/weblogic.jar"/>
+    <pathelement location="${oracle.home}/../modules/com.oracle.ws.http_client_1.2.0.0.jar"/>
+    <pathelement location="${oracle.common.home}/modules/oracle.webservices_11.1.1/wsclient.jar"/>
+    <pathelement location="${oracle.common.home}/modules/org.jaxen_1.1.1.jar"/>
+  </path>
+
+  <path id="library.XMLParser">
+    <pathelement location="${oracle.common.home}/modules/oracle.xdk_11.1.0/xmlparserv2.jar"/>
+  </path>
+
+  <path id="classpath">
+    <path refid="library.JAX-WS.Web.Services"/>
+    <path refid="library.XMLParser"/>
+    <pathelement location="${output.dir}"/>  
+  </path>
+  
+  <target name="init">
+    <tstamp/>
+    <mkdir dir="${output.dir}"/>
+  </target>
+  <target name="all" description="Build the project" depends="compile,copy"/>
+  <target name="clean" description="Clean the project">
+    <echo>Clean up of Credit Auth service project </echo>
+    <mkdir dir="${output.dir}"/>
+    <delete includeemptydirs="true" >
+      <fileset dir="${output.dir}" includes="**/*"/>
+    </delete>
+    <delete file="${deploy.dir}/${war.name}.war"/>
+  </target>
+  <target name="compile" description="Compile Java source files" depends="init">
+    <javac destdir="${output.dir}" classpathref="classpath"
+           debug="${javac.debug}" nowarn="${javac.nowarn}"
+           deprecation="${javac.deprecation}" encoding="Cp1252" source="1.6"
+           target="1.6">
+      <src path="${src.dir}"/>
+    </javac>
+  </target>
+  <target name="copy" description="Copy files to output directory"
+          depends="init">
+    <patternset id="copy.patterns">
+      <include name="**/*.gif"/>
+      <include name="**/*.jpg"/>
+      <include name="**/*.jpeg"/>
+      <include name="**/*.png"/>
+      <include name="**/*.properties"/>
+      <include name="**/*.xml"/>
+      <include name="**/*-apf.xml"/>
+      <include name="**/*.ejx"/>
+      <include name="**/*.xcfg"/>
+      <include name="**/*.cpx"/>
+      <include name="**/*.dcx"/>
+      <include name="**/*.sva"/>
+      <include name="**/*.wsdl"/>
+      <include name="**/*.ini"/>
+      <include name="**/*.tld"/>
+      <include name="**/*.tag"/>
+      <include name="**/*.xlf"/>
+      <include name="**/*.xsl"/>
+      <include name="**/*.xsd"/>
+    </patternset>
+    <copy todir="${output.dir}">
+      <fileset dir="../src">
+        <patternset refid="copy.patterns"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="create-war" depends="compile" description="Create deployable war">
+    <mkdir dir="${deploy.dir}" />
+    <war basedir="${web.dir}" webxml="${web.dir}/WEB-INF/web.xml" 
+        destfile="${deploy.dir}/${war.name}.war">
+        <exclude name="WEB-INF/classes/com/example/globalcompany/ccauth/test/*"/>
+    </war>
+  </target>
+  
+  <target name="deploy-application" description="Deploy the CreditAuthorization Service">
+    <wldeploy action="deploy" name="${war.name}" 
+      source="${deploy.ear.source}" library="false"
+      user="${wls.user}" password="${wls.password}"
+      verbose="false" adminurl="${wls.url}"
+      remote="true" upload="true"
+      targets="${server.targets}" />
+  </target>
+
+  <!-- undeploy application -->
+  <target name="undeploy-application" description="Undeploy the service">
+    <wldeploy action="undeploy" name="${war.name}" 
+      user="${wls.user}" password="${wls.password}"
+      adminurl="${wls.url}"
+      remote="true" targets="${server.targets}" />
+  </target>
+
+  <!-- test the webservice endpoint -->
+  <target name="test-webservice" depends="compile" 
+    description="Tests the CCAuth webservice endpoint impl">
+    <property name="http.endpoint.address" 
+        value="http://${managed.server.host}:${managed.server.port}"/>
+    <java classpathref="classpath" 
+      classname="com.example.globalcompany.ccauth.test.CreditAuthorizationPortClient"
+      fork="true">
+      <arg line="${http.endpoint.address}"/>
+    </java>
+  </target>
+
+</project>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans          http://www.springframework.org/schema/beans/spring-beans-2.0.xsd        http://www.springframework.org/schema/jee    http://www.springframework.org/schema/jee/spring-jee-2.0.xsd ">
+  <!-- inject the property configurer so we can feed props from outside -->     
+  <bean id="propertyConfigurer"
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="location">
+      <value>classpath:tmp_project.properties</value>
+    </property>
+  </bean>
+  <!-- local only bean for partnersuppliermediator -->
+  <bean id="InternalPartnerSupplier"
+        class="com.otn.sample.fod.soa.internalsupplier.InternalSupplierMediator">
+    <property name="externalPartnerSupplier"
+              ref="IExternalPartnerSupplierService"/>
+    <!-- inject the quoteWriter -->   
+    <property name="quoteWriter" ref="WriteQuoteRequest"/>
+    <property name="logger" ref="loggerBean"/> 
+    <property name="headerHelper" ref="headerHelperBean"/>    
+  </bean>
+  <!-- mock bean for the IExternalPartnerSupplierService -->
+  <bean id="IExternalPartnerSupplierService"
+        class="com.otn.sample.fod.soa.externalps.test.MockExternalPartnerSupplierTest"/>
+  <!-- bean that gets the ejb injected -->
+  <bean id="InternalPartnerSupplierEJB"
+        class="com.otn.sample.fod.soa.internalsupplier.InternalSupplierMediator">
+    <property name="externalPartnerSupplier"
+              ref="IExternalPartnerSupplierServiceEJB"/>
+    <!-- inject the quoteWriter -->   
+    <property name="quoteWriter" ref="WriteQuoteRequest"/>
+    <property name="logger" ref="loggerBean"/>    
+    <property name="headerHelper" ref="headerHelperBean"/>    
+  </bean>
+  <!-- jndi lookup of remote ejb, to be injected into the above InternalPartnerSupplierEJB bean -->
+  <jee:jndi-lookup id="IExternalPartnerSupplierServiceEJB"
+                   jndi-name="${ejb.lookup.uri}" cache="false"
+                   proxy-interface="com.otn.sample.fod.soa.externalps.IExternalPartnerSupplierService">
+    <!-- the below entries are fed through the property resolver, based on tmp_project.propertie -->
+    <jee:environment>
+        java.naming.factory.initial=${java.naming.factory.initial}
+        java.naming.provider.url=${java.naming.provider.url}
+        java.naming.security.principal=${java.naming.security.principal}
+        java.naming.security.credentials=${java.naming.security.credentials}
+    </jee:environment>
+  </jee:jndi-lookup>
+  
+  <!-- exposed composite service as ejb -->
+  <jee:jndi-lookup id="IInternalCompositeSupplierService"
+                   jndi-name="${spring.ejb.lookup.uri}" cache="false"
+                   proxy-interface="com.otn.sample.fod.soa.internalsupplier.IInternalPartnerSupplier">
+    <jee:environment>
+        java.naming.factory.initial=${java.naming.factory.initial}
+        java.naming.provider.url=${java.naming.provider.url}
+        java.naming.security.principal=${java.naming.security.principal}
+        java.naming.security.credentials=${java.naming.security.credentials}
+    </jee:environment>
+  </jee:jndi-lookup>
+
+  <!-- negative testcase: bean w/o external supplier -->
+  <bean id="FailingInternalPartnerSupplierMissingEPS"
+        class="com.otn.sample.fod.soa.internalsupplier.InternalSupplierMediator">
+    <!-- inject the quoteWriter -->   
+    <property name="quoteWriter" ref="WriteQuoteRequest"/>
+    <property name="logger" ref="loggerBean"/>
+    <property name="headerHelper" ref="headerHelperBean"/>    
+  </bean>
+  <!-- negative testcase: test w/o writer -->
+  <bean id="FailingInternalPartnerSupplierMissingQwr"
+        class="com.otn.sample.fod.soa.internalsupplier.InternalSupplierMediator">
+    <property name="externalPartnerSupplier"
+              ref="IExternalPartnerSupplierService"/>
+    <property name="quoteWriter" ref="FailingMockProvider"/>
+    <property name="logger" ref="loggerBean"/>
+    <property name="headerHelper" ref="headerHelperBean"/>
+  </bean>  
+  <!-- mock write quote -->
+  <bean id="WriteQuoteRequest"
+        class="writequoterequest.partnersuppliercomposite.weblogicfusionorderdemo.file.adapter.pcbpel.com.oracle.xmlns.mock.Write_pptMock"
+        scope="prototype">
+  </bean>
+
+  <!-- failing mock write quote -->
+  <bean id="FailingMockProvider"
+        class="writequoterequest.partnersuppliercomposite.weblogicfusionorderdemo.file.adapter.pcbpel.com.oracle.xmlns.mock.Write_pptFailingMock"
+        scope="prototype">
+  </bean>
+  
+  <!-- mock logger -->
+  <bean id="loggerBean" class="com.otn.sample.fod.soa.internalsupplier.test.MockLoggerImpl"/>
+  
+  <!-- mock headerhelper -->
+  <bean id="headerHelperBean" class="com.otn.sample.fod.soa.internalsupplier.test.MockHeaderHandlerImpl"/>
+  
+</beans>

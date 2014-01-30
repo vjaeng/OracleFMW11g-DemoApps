@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<OracleBAMExport Version="2018">
+  <DataObject Version="14" Name="Customer" ID="_Customer" Path="/Demos/Fusion Order Demo" External="0">
+    <Layout>
+      <Column Name="CustomerID" ID="_CustomerID" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Column Name="FirstName" ID="_FirstName" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Column Name="LastName" ID="_LastName" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Column Name="MembershipID" ID="_MembershipID" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Column Name="MembershipType" ID="_MembershipType" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Column Name="ECID" ID="_ECID" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Indexes/>
+    </Layout>
+    <Contents>
+      <Row ID="1">
+        <Column ID="_CustomerID" Value="20"/>
+        <Column ID="_FirstName" Value="Deborah"/>
+        <Column ID="_LastName" Value="Steiner"/>
+        <Column ID="_MembershipID" Null="1"/>
+        <Column ID="_MembershipType" Null="1"/>
+        <Column ID="_ECID" Null="1"/>
+      </Row>
+      <Row ID="2">
+        <Column ID="_CustomerID" Value="10"/>
+        <Column ID="_FirstName" Value="Clemens"/>
+        <Column ID="_LastName" Value="Utschig"/>
+        <Column ID="_MembershipID" Null="1"/>
+        <Column ID="_MembershipType" Null="1"/>
+        <Column ID="_ECID" Null="1"/>
+      </Row>
+    </Contents>
+  </DataObject>
+</OracleBAMExport>

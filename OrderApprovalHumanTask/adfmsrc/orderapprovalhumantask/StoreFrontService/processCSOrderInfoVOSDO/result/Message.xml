@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="Message"
+          Package="orderapprovalhumantask.StoreFrontService.processCSOrderInfoVOSDO.result"
+          BeanClass="orderapprovalhumantask.StoreFrontService.processCSOrderInfoVOSDO.result.Message"
+          isJavaBased="false">
+  <Attribute Name="code" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="message" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="severity" IsUpdateable="0" Type="java.lang.String"/>
+  <AccessorAttribute id="detail" IsCollection="true"
+                     BeanClass="orderapprovalhumantask.StoreFrontService.processCSOrderInfoVOSDO.result.Message"
+                     CollectionBeanClass="orderapprovalhumantask.StoreFrontService.processCSOrderInfoVOSDO.result.Message_Operations"/>
+</JavaBean>

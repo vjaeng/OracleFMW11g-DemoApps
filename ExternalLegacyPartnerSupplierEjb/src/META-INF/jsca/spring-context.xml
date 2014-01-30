@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:sca="http://xmlns.oracle.com/weblogic/weblogic-sca" 
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd http://xmlns.oracle.com/weblogic/weblogic-sca META-INF/weblogic-sca.xsd"
+>
+  <!-- expose the InternalPartnerSupplierMediator + EJB as service -->
+  <sca:service name="IExternalPartnerSupplier"
+        target="ExternalPartnerSupplierService"
+        type="com.otn.sample.fod.soa.externalps.IExternalPartnerSupplierService">
+        <binding.ejb 
+            uri="WebLogicFusionOrderDemo-ExternalLegacyPartnerSupplierJScaEjb" 
+            remote="true" />
+  </sca:service>
+  
+  <!-- bean for the IExternalPartnerSupplierService -->
+  <bean id="ExternalPartnerSupplierService"
+        class="com.otn.sample.fod.soa.externalps.ExternalPartnerSupplierService"/>        
+</beans>

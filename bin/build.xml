@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<project name="OracleSOAFusionOrderDemo" default="build.src.zip">
+
+<!--
+	Global build script for the whole SOA fusion order demo
+        author: clemens utschig
+        
+        Tasks included here
+        a) createMDSConnections - create mds connections based on the config
+            in build.properties
+        b) compile-build-all - compile and build all applications
+        c) server-setup-seed-deploy-test - setup the whole demo in one shot
+        d) server-cleanup-all - remove all deployed artifacts from the server
+        e) test-fod-composite-end2end - tests the composites end 2 end, 
+            including jaxws, composite api, composite test suites and events
+-->
+  
+  <!-- master build.properties --> 
+  <property file="build.properties"/>  
+
+  <!-- import the common sca tools -->
+  <import file="common-sca-tools.xml"/>
+  <!-- if build.src is called, the below is the name of the source jar --> 
+  <property name="output.file.name" value="${ant.project.name}_Source_${fod.version}.jar"/>  
+  
+  <!-- clean all projects in preparation to zip up the source distribution -->
+  <target name="clean" description="cleans up the SOA fusion order demo app"
+    depends="init">
+    <echo>... cleaning up sources ..</echo>
+    <delete file="../${output.file.name}"/>
+    <delete file="createJMSResources.py"/>
+    <delete file="removeJMSResources.py"/>
+    <delete dir="results" includeemptydirs="true" includes="*/**"/>
+    <delete dir="util/classes" includeemptydirs="true" includes="*/**"/>
+    
+    <ant antfile="build_sca_composite.xml" target="clean" inheritall="true" 
+        dir="${orderbooking.composite.home}/${bin.sub.dir}/">
+          <property name="oracle.home" value="${oracle.home}"/>
+    </ant>    
+    <ant antfile="build_sca_composite.xml" target="clean" inheritall="true" 
+        dir="${partnersupplier.composite.home}/${bin.sub.dir}/">
+          <property name="oracle.home" value="${oracle.home}"/>
+    </ant>            
+    <ant antfile="build_sca_composite.xml" target="clean" inheritall="true" 
+        dir="${b2b.composite.home}/${bin.sub.dir}/">
+          <property name="oracle.home" value="${oracle.home}"/>
+    </ant>            
+    <ant antfile="build_sca_composite.xml" target="clean" inheritall="true" 
+        dir="${orderbookingsdo.composite.home}/${bin.sub.dir}/">
+          <property name="oracle.home" value="${oracle.home}"/>
+    </ant>    
+    <ant antfile="build.xml" target="clean" inheritall="true" 
+        dir="${creditauthorization.home}/${bin.sub.dir}/">
+          <property name="oracle.home" value="${oracle.home}"/>
+    </ant>    
+    <ant antfile="build.xml" target="clean" inheritall="true" 
+        dir="${external.partnersupplier.home}/${bin.sub.dir}/">
+          <property name="oracle.home" value="${oracle.home}"/>
+    </ant>    
+    <ant antfile="build.xml" target="clean" inheritall="true" 
+        dir="${orderapproval.home}/${bin.sub.dir}/">
+          <property name="oracle.home" value="${oracle.home}"/>
+    </ant>    
+  </target>
+    
+  <!-- jar up all sources into the main jar file -->  
+  <target name="build.src.zip" depends="clean" 
+    description="creates the source distribution">
+    <echo>Creating the source distribution for SOA Fusion Order Demo</echo>
+    <jar basedir=".." destfile="../${output.file.name}">
+        <include name="*/**"/>
+        <include name="*/**/*"/>
+
+        <exclude name="${ant.project.name}*.jar"/>
+        <exclude name="*.zip"/>
+        <exclude name="*/*svn*/*"/>
+        <exclude name="*/**/classes/**"/>
+        <exclude name="*/**/*.war"/>
+        <exclude name="*/**/deploy"/>
+        <exclude name="*/**/*.lck"/>
+        <exclude name="*/**/*.lock"/>
+        <exclude name="*/**/*.jdb"/>
+        <exclude name="*/**/*was*"/>        
+        <exclude name="*/*was*"/>
+        <exclude name="*/*was*/*"/>
+        <exclude name="*/**/*was*"/>
+        <exclude name="*/**/*was*/*"/>
+        <!-- b2b -->
+        <include name="${b2b.composite.home}/config/OOW08_X12_10.zip"/>
+        <!-- serverside app for seeding demo users -->
+        <include name="bin/bpm-seed/SOATestDemoApp.ear"/>
+        <!-- utls -->
+        <include name="${orderbooking.composite.home}/${bin.sub.dir}/util/src"/>
+    </jar>
+  </target>
+  
+  <!-- jar up all sources into the main jar file -->  
+  <target name="build.was.feature.zip" 
+    description="creates the was feature pack / patch distribution">
+    <echo>Creating the Websphere feature pack / patch distribution for SOA Fusion Order Demo</echo>
+    <jar basedir=".." destfile="../OracleSOAFusionOrderDemo_Websphere7_pack_${fod.version}.jar">
+        <include name="*/*was*"/>
+        <include name="*/*was*/*"/>
+        <include name="*/**/*was*"/>
+        <include name="*/**/*was*/*"/>
+    </jar>
+  </target>    
+  
+  <!-- build & compile all -->
+  <target name="compile-build-all" description="Compiles and builds all artifacts" depends="init">
+    <echo>Building and compiling SOA Fusion Order Demo ..</echo>
+    <!-- human task, the reason to have this one first is the creation / setup 
+        of connections.xml 
+        -->    
+    <ant antfile="build.xml" target="create-ear" inheritall="true" 
+        dir="${orderapproval.home}/${bin.sub.dir}/">
+          <property name="oracle.home" value="${oracle.home}"/>
+          <property name="java.home" value="${java.home}"/>
+          <property name="soa.only.deployment" value="${soa.only.deployment}"/>
+          <property name="storefrontservice.contextUri.soa" 
+                value="${storefrontservice.contextUri.soa}"/>
+          <property name="storefrontservice.contextUri.adf" 
+                value="${storefrontservice.contextUri.adf}"/>
+    </ant>        
+    <!-- the main composite for order processing -->
+    <ant antfile="${orderbooking.composite.home}/${bin.sub.dir}/build_sca_composite.xml" 
+        target="create-deployable-composite" inheritall="false">
+          <property name="oracle.home" value="${oracle.home}"/>
+          <property name="java.home" value="${java.home}"/>
+    </ant>    
+    <!-- partner supplier composite containing the spring c&i context -->
+    <ant antfile="${partnersupplier.composite.home}/${bin.sub.dir}/build_sca_composite.xml" 
+        target="create-deployable-composite" inheritall="false"> 
+          <property name="oracle.home" value="${oracle.home}"/>
+          <property name="java.home" value="${java.home}"/>
+    </ant>    
+    <!-- composite that creates sdo responses in case adf is not used -->
+    <ant antfile="${orderbookingsdo.composite.home}/${bin.sub.dir}/build_sca_composite.xml" 
+        target="create-deployable-composite" inheritall="false">
+          <property name="oracle.home" value="${oracle.home}"/>
+          <property name="java.home" value="${java.home}"/>
+    </ant>    
+    <!-- b2b composite, first creating an order and then sending an event to process it -->
+    <ant antfile="${b2b.composite.home}/${bin.sub.dir}/build_sca_composite.xml" 
+        target="create-deployable-composite" inheritall="false">
+          <property name="oracle.home" value="${oracle.home}"/>
+          <property name="java.home" value="${java.home}"/>
+    </ant>    
+        
+    <!-- credit auth webservice -->
+    <ant antfile="build.xml" target="create-war" inheritall="true" 
+        dir="${creditauthorization.home}/${bin.sub.dir}/">
+          <property name="oracle.home" value="${oracle.home}"/>
+          <property name="java.home" value="${java.home}"/>
+    </ant>    
+
+    <!-- external partner supplier ejb for spring integration -->
+    <ant antfile="build.xml" target="create-ear" inheritall="true" 
+        dir="${external.partnersupplier.home}/${bin.sub.dir}/">
+          <property name="oracle.home" value="${oracle.home}"/>
+          <property name="java.home" value="${java.home}"/>
+    </ant>    
+  </target>
+  
+  <!-- build & deploy all the stuff  -->
+  <target name="compile-deploy-all" depends="compile-build-all"
+    description="builds all artifacts and deploys them">
+    <echo>Deploying SOA Fusion Order Demo ..</echo>
+
+    <!-- external legacy partner supplier ejb / jsca application -->
+    <ant antfile="build.xml" target="deploy-application" inheritall="true" 
+        dir="${external.partnersupplier.home}/${bin.sub.dir}/">
+          <property name="oracle.home" value="${oracle.home}"/>
+          <property name="java.home" value="${java.home}"/>
+
+          <property name="managed.server.host" value="${managed.server.host}"/>
+          <property name="managed.server.port" value="${managed.server.port}"/>
+          <property name="server.user" value="${server.user}"/>
+          <property name="server.password" value="${server.password}"/>
+
+          <property name="server.targets" value="${server.targets}"/>
+    </ant>  
+
+    <!-- (main) bamorderbooking composite -->
+    <ant antfile="${orderbooking.composite.home}/${bin.sub.dir}/build_sca_composite.xml" 
+        target="deploy-composite" inheritall="false">
+          <property name="oracle.home" value="${oracle.home}"/>
+          <property name="java.home" value="${java.home}"/>
+          <property name="deploy.dir" 
+                value="${orderbooking.composite.home}/${deploy.sub.dir}"/>
+          <property name="managed.server.host" value="${managed.server.host}"/>
+          <property name="managed.server.port" value="${managed.server.port}"/>
+          <property name="server.user" value="${server.user}"/>
+          <property name="server.password" value="${server.password}"/>
+    </ant>    
+
+    <!-- partner supplier composite with spring and ejb 3.0 -->
+    <ant antfile="${partnersupplier.composite.home}/${bin.sub.dir}/build_sca_composite.xml" 
+        target="deploy-composite" inheritall="false"> 
+          <property name="oracle.home" value="${oracle.home}"/>
+          <property name="java.home" value="${java.home}"/>
+          <property name="deploy.dir" 
+                value="${partnersupplier.composite.home}/${deploy.sub.dir}"/>
+
+          <property name="managed.server.host" value="${managed.server.host}"/>
+          <property name="managed.server.port" value="${managed.server.port}"/>
+          <property name="server.user" value="${server.user}"/>
+          <property name="server.password" value="${server.password}"/>
+    </ant>    
+    
+    <!-- order sdo composite, in case use.adf is false -->
+    <ant antfile="${orderbookingsdo.composite.home}/${bin.sub.dir}/build_sca_composite.xml" 
+        target="deploy-composite" inheritall="false">
+          <property name="oracle.home" value="${oracle.home}"/>
+          <property name="java.home" value="${java.home}"/>
+          <property name="deploy.dir" 
+                value="${orderbookingsdo.composite.home}/${deploy.sub.dir}"/>
+
+          <property name="managed.server.host" value="${managed.server.host}"/>
+          <property name="managed.server.port" value="${managed.server.port}"/>
+          <property name="server.user" value="${server.user}"/>
+          <property name="server.password" value="${server.password}"/>
+    </ant>
+
+    <!-- b2b composite -->
+    <ant antfile="${b2b.composite.home}/${bin.sub.dir}/build_sca_composite.xml" 
+        target="deploy-composite" inheritall="false">
+          <property name="oracle.home" value="${oracle.home}"/>
+          <property name="java.home" value="${java.home}"/>
+          <property name="deploy.dir" 
+                value="${b2b.composite.home}/${deploy.sub.dir}"/>
+          <property name="managed.server.host" value="${managed.server.host}"/>
+          <property name="managed.server.port" value="${managed.server.port}"/>
+          <property name="server.user" value="${server.user}"/>
+          <property name="server.password" value="${server.password}"/>
+    </ant>    
+        
+    <!-- credit auth webservice -->
+    <ant antfile="build.xml" target="deploy-application" inheritall="true" 
+        dir="${creditauthorization.home}/${bin.sub.dir}/">
+          <property name="oracle.home" value="${oracle.home}"/>
+          <property name="java.home" value="${java.home}"/>
+
+          <property name="managed.server.host" value="${managed.server.host}"/>
+          <property name="managed.server.port" value="${managed.server.port}"/>
+          <property name="server.user" value="${server.user}"/>
+          <property name="server.password" value="${server.password}"/>
+
+          <property name="server.targets" value="${server.targets}"/>
+    </ant>    
+        
+    <!-- human task -->     
+    <ant antfile="build.xml" target="deploy-application" inheritall="true" 
+        dir="${orderapproval.home}/${bin.sub.dir}/">
+          <property name="soa.only.deployment" value="${soa.only.deployment}"/>
+          <property name="storefrontservice.contextUri.soa" 
+                value="${storefrontservice.contextUri.soa}"/>
+          <property name="storefrontservice.contextUri.adf" 
+                value="${storefrontservice.contextUri.adf}"/>
+          <property name="oracle.home" value="${oracle.home}"/>
+          <property name="java.home" value="${java.home}"/>
+
+          <property name="managed.server.host" value="${managed.server.host}"/>
+          <property name="managed.server.port" value="${managed.server.port}"/>
+          <property name="server.user" value="${server.user}"/>
+          <property name="server.password" value="${server.password}"/>
+
+          <property name="server.targets" value="${server.targets}"/>
+    </ant>    
+  </target>
+
+  <!-- setup workspace for standalone jdeveloper build -->
+  <target name="setupWorkspaceForJdeveloperUse" 
+    description="Setup the SOA FOD application for jdeveloper use" depends="init">
+    <echo>!!! Setting up workspace for JDeveloper use, hence seeding adf-config, connections.xml and populating mds</echo>
+    <antcall target="importCommonServiceArtifactsIntoMds"/>
+    <!-- setup of connections.xml -->
+    <ant antfile="build.xml" target="setupDeploymentEnvironment" inheritall="true" 
+        dir="${orderapproval.home}/${bin.sub.dir}/">
+          <property name="soa.only.deployment" value="${soa.only.deployment}"/>
+          <property name="oracle.home" value="${oracle.home}"/>
+    </ant>        
+    <!-- setup of the deployment plan of externally called services -->
+    <ant antfile="build_sca_composite.xml" target="setupDeploymentEnvironment" inheritall="true" 
+        dir="${orderbooking.composite.home}/${bin.sub.dir}/">
+          <property name="soa.only.deployment" value="${soa.only.deployment}"/>
+          <property name="oracle.home" value="${oracle.home}"/>
+    </ant>    
+    <!-- setup of the deployment plan for storefront / orderbooking -->
+    <ant antfile="build_sca_composite.xml" target="setupDeploymentEnvironment" inheritall="true" 
+        dir="${b2b.composite.home}/${bin.sub.dir}/">
+          <property name="soa.only.deployment" value="${soa.only.deployment}"/>
+          <property name="oracle.home" value="${oracle.home}"/>
+    </ant>  
+    <!-- setup of the ejb / jsca reference / will be enabled for PS2 -->
+    <ant antfile="build_sca_composite.xml" target="setupDeploymentEnvironment" 
+        inheritall="true" dir="${partnersupplier.composite.home}/${bin.sub.dir}/">
+          <property name="soa.only.deployment" value="${soa.only.deployment}"/>
+          <property name="oracle.home" value="${oracle.home}"/>
+    </ant>  
+  </target>
+  
+  <!-- do it all in one shot, setup / seed / deploy and test -->
+  <target name="server-setup-seed-deploy-test" 
+    description="one shot server side deployment, including test" depends="init">
+    <echo>Setting up mds store, deploying shared artifacts, 
+        seeding jms info, deploying to server, and running tests</echo>
+    <!-- import common service artifacts -->
+    <antcall target="importCommonServiceArtifactsIntoMds"/>
+    <!-- create partition, if it does not exist -->
+    <antcall target="createSOAPartitionIfNotExist"/>
+    <!-- compile and deploy all -->
+    <antcall target="compile-deploy-all"/>
+    <!-- seed the jms resources -->
+    <antcall target="seedFodJmsResources"/>
+    <!-- seed file adapter resources -->
+    <antcall target="seedFodFileAdapterResources"/>      
+    <!-- seed demo users -->
+    <antcall target="seedDemoUsers"/>
+    <!-- run end 2 end tests -->
+    <antcall target="test-fod-composite-end2end"/>    
+  </target>
+
+  <!-- cleanup the server, undeploy all -->
+  <target name="server-cleanup-all" description="Undeploy all artifacts from server" depends="init">
+    <echo>Undeploying all artifacts for SOA Fusion Order Demo ..</echo>
+    
+    <!-- undeploy orderbooking composite -->
+    <ant antfile="${orderbooking.composite.home}/${bin.sub.dir}/build_sca_composite.xml" 
+        target="undeploy-composite" inheritall="false">
+          <property name="oracle.home" value="${oracle.home}"/>
+          <property name="java.home" value="${java.home}"/>
+          <property name="server.user" value="${server.user}"/>
+          <property name="server.password" value="${server.password}"/>
+    </ant>    
+        
+    <!-- undeploy partnersupplier composite -->
+    <ant antfile="${partnersupplier.composite.home}/${bin.sub.dir}/build_sca_composite.xml" 
+        target="undeploy-composite" inheritall="false"> 
+          <property name="oracle.home" value="${oracle.home}"/>
+          <property name="java.home" value="${java.home}"/>
+          <property name="server.user" value="${server.user}"/>
+          <property name="server.password" value="${server.password}"/>
+    </ant>    
+
+    <!-- undeploy order sdo composite -->
+    <ant antfile="${orderbookingsdo.composite.home}/${bin.sub.dir}/build_sca_composite.xml" 
+        target="undeploy-composite" inheritall="false">
+          <property name="oracle.home" value="${oracle.home}"/>
+          <property name="java.home" value="${java.home}"/>
+          <property name="server.user" value="${server.user}"/>
+          <property name="server.password" value="${server.password}"/>
+    </ant>    
+
+    <!-- undeploy b2b composite -->
+    <ant antfile="${b2b.composite.home}/${bin.sub.dir}/build_sca_composite.xml" 
+        target="undeploy-composite" inheritall="false">
+          <property name="oracle.home" value="${oracle.home}"/>
+          <property name="java.home" value="${java.home}"/>
+          <property name="server.user" value="${server.user}"/>
+          <property name="server.password" value="${server.password}"/>
+    </ant>    
+        
+    <!-- undeploy credit auth webservice -->
+    <ant antfile="build.xml" target="undeploy-application" inheritall="true" 
+        dir="${creditauthorization.home}/${bin.sub.dir}/">
+          <property name="oracle.home" value="${oracle.home}"/>
+          <property name="java.home" value="${java.home}"/>
+          <property name="server.user" value="${server.user}"/>
+          <property name="server.password" value="${server.password}"/>
+    </ant>    
+    <!-- external partner supplier ejb / jsca apps -->
+    <ant antfile="build.xml" target="undeploy-application" inheritall="true" 
+        dir="${external.partnersupplier.home}/${bin.sub.dir}/">
+          <property name="oracle.home" value="${oracle.home}"/>
+          <property name="java.home" value="${java.home}"/>
+          <property name="server.user" value="${server.user}"/>
+          <property name="server.password" value="${server.password}"/>
+    </ant>    
+    
+    <!-- human task detail -->    
+    <ant antfile="build.xml" target="undeploy-application" inheritall="true" 
+        dir="${orderapproval.home}/${bin.sub.dir}/">
+          <property name="oracle.home" value="${oracle.home}"/>
+          <property name="java.home" value="${java.home}"/>
+    </ant>    
+
+    <!-- remove fod partition if it's not the default one, and exists -->
+    <antcall target="deleteSOAPartitionIfNotExistsAndNotDefault"/>
+
+    <!-- jms resources -->
+    <antcall target="removeFodJmsResources"/>
+    
+    <!-- demo users -->    
+    <antcall target="removeDemoUsers"/>
+    
+    <!-- delete shared artifacts-->
+    <antcall target="deleteCommonServiceArtifactsFromMds"/>
+  </target>
+  
+  <!-- do it all in one shot, setup, seed, prepare jdev env-->
+  <target name="jdeveloper-setup-seed" 
+    description="one shot client side setup, with mds config, seed of jms, demo users and token replacement"
+    depends="init">
+    <echo>Setting up mds store, seeding jms / file adapter stuff and setting up local files.. </echo>
+    <antcall target="importCommonServiceArtifactsIntoMds"/>
+    <antcall target="seedFodJmsResources"/>
+    <antcall target="seedFodFileAdapterResources"/>
+    <antcall target="seedDemoUsers"/>
+    <antcall target="setupWorkspaceForJdeveloperUse"/>
+  </target>
+    
+  <!-- test the whole deployment -->  
+  <target name="test-fod-composite-end2end"  
+    description="runs testsuite based test and api based test" depends="init, build-ws-client">
+
+    <!-- test the CCAuth service -->
+    <ant antfile="${creditauthorization.home}/${bin.sub.dir}/build.xml" 
+        target="test-webservice" inheritall="false">
+        <property name="oracle.home" value="${oracle.home}"/>
+        <property name="java.home" value="${java.home}"/>
+        <property name="server.password" value="${server.password}"/>
+    </ant>            
+
+    <!-- test the external partnersupplier ejb -->
+    <ant antfile="${external.partnersupplier.home}/${bin.sub.dir}/build.xml" 
+        target="test-remote-ejb" inheritall="false">
+        <property name="oracle.home" value="${oracle.home}"/>
+        <property name="java.home" value="${java.home}"/>
+        <property name="server.password" value="${server.password}"/>
+    </ant>            
+
+    <!-- test the partnersupplier composite -->
+    <ant antfile="${partnersupplier.composite.home}/${bin.sub.dir}/build_sca_composite.xml" 
+        target="test-composite" inheritall="false">
+        <property name="oracle.home" value="${oracle.home}"/>
+        <property name="java.home" value="${java.home}"/>
+        <property name="server.password" value="${server.password}"/>
+    </ant>            
+   
+    <!-- test (bam) orderbooking -->
+    <ant antfile="${orderbooking.composite.home}/${bin.sub.dir}/build_sca_composite.xml" 
+        target="test-composite" inheritall="false">
+        <property name="oracle.home" value="${oracle.home}"/>
+        <property name="java.home" value="${java.home}"/>
+        <property name="server.password" value="${server.password}"/>
+    </ant>            
+
+    <!-- send an event via api -->
+    <java classpathref="soaClasspath" 
+        classname="oracle.integration.platform.blocks.event.SendEvent"
+        fork="true" failonerror="true">
+        <arg line="-dbconn ${soa.db.connectstring} -dbuser ${soa.db.username} -dbpass ${soa.db.password} -event ./test-events/orderEvent.xml"/>
+    </java>
+    
+    <!-- run standalone tests via the fabric facade remote api and webservice -->
+    <java classpathref="soaClasspath" 
+        classname="com.otn.sample.fod.soa.wls.WLSSpecificSoaTests"
+        fork="true" failonerror="true">
+        <!-- 
+            valid values are
+            ws -> test jax ws proxy only
+            api -> test composite api only
+            sdo -> test sdo service
+            direct -> direct binding api
+            or any combination of those, splitted by a "-"
+        --> 
+        <arg value="api-sdo-ws-direct"/>
+    </java>
+  </target>  
+
+  <!-- create the ws proxy for the bam orderbooking composite -->  
+  <target name="build-ws-client" description="create the ws client proxy for testing">
+     <!-- use jax ws client generation for the proxy --> 
+     <clientgen
+       wsdl="http://${managed.server.host}:${managed.server.port}/soa-infra/services/${soa.partition.name}/OrderBookingComposite!1.0/orderprocessor_client_ep?wsdl"
+       destDir="util/classes"
+       fork="false"
+       type="JAXWS"/>
+  </target>
+  
+</project>

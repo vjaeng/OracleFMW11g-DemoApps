@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<definitions targetNamespace="http://www.globalcompany.example.com/b2b/utils"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:tns="http://www.globalcompany.example.com/b2b/utils"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+             xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+  
+    <message name="B2BOrderProcessorFault">
+        <part name="code" type="xsd:string"/>
+        <part name="summary" type="xsd:string"/>
+    </message>
+
+</definitions>

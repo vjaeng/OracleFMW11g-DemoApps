@@ -1,0 +1,33 @@
+<schema attributeFormDefault="unqualified"
+	elementFormDefault="qualified"
+	targetNamespace="http://www.globalcompany.example.com/ns/InternalWarehouse"
+        xmlns:tns="http://www.globalcompany.example.com/ns/InternalWarehouse"
+	xmlns="http://www.w3.org/2001/XMLSchema">
+	<element name="WarehouseRequest">
+		<complexType>
+			<sequence>
+				<element name="orderId" type="string"/>
+			</sequence>
+		</complexType>
+	</element>
+	<element name="WarehouseResponse">
+		<complexType>
+			<sequence>
+                                <element name="warehouse" type="string"/>
+				<element name="deliveryDate" type="date"/>
+                                <element name="orderTotal" type="double"/>
+                       </sequence>
+		</complexType>
+	</element>
+        
+        <element name="SelectedWarehouse" type="string"/>
+        
+	<element name="WarehouseList">
+		<complexType>
+			<sequence>
+                                <element ref="tns:WarehouseResponse"
+                                         maxOccurs="unbounded" minOccurs="0"/>
+                       </sequence>
+		</complexType>
+	</element>        
+</schema>

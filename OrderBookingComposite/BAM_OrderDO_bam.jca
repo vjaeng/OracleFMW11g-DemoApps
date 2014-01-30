@@ -1,0 +1,13 @@
+<adapter-config name="BAM_OrderDO" adapter="BAM Adapter" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+  
+  <connection-factory location="eis/bam/rmi" UIConnectionName="sta00751" adapterRef=""/>
+  <endpoint-interaction portType="writetoBAM_ptt" operation="writetoBAM">
+    <interaction-spec className="oracle.bam.adapter.adc.ADCInteractionSpec">
+      <property name="DataObjectName" value="/Demos/Fusion Order Demo/Order"/>
+      <property name="OperationType" value="Upsert"/>
+      <property name="InBatch" value="true"/>
+      <property name="Keys" value="_OrderID"/>
+    </interaction-spec>
+  </endpoint-interaction>
+
+</adapter-config>

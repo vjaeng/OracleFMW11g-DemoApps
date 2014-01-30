@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<OracleBAMExport Version="2018">
+  <DataObject Version="14" Name="Confirmation" ID="_Confirmation" Path="/Demos/Fusion Order Demo" External="0">
+    <Layout>
+      <Description><![CDATA[The re-assigned orders will go into this dataobject]]></Description>
+      <Column Name="ECID" ID="_ECID" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Column Name="OrderId" ID="_OrderId" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Column Name="OrderPrice" ID="_OrderPrice" Type="float" Nullable="1" Public="1"/>
+      <Column Name="CustomerID" ID="_CustomerID" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Indexes/>
+    </Layout>
+    <Contents/>
+  </DataObject>
+</OracleBAMExport>

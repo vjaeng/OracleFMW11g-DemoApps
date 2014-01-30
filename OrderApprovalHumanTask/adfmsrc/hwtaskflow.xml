@@ -1,0 +1,17 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<hwTaskFlows xmlns="http://xmlns.oracle.com/bpel/workflow/hwTaskFlowProperties">
+   <ApplicationName>worklist</ApplicationName>
+   <LookupType>LOCAL</LookupType>
+   <TaskFlowDeploy>false</TaskFlowDeploy>
+   <SoaServer>
+      <ejbProviderUrl/>
+      <aliasKeyName/>
+      <keyName/>
+      <connectionName/>
+   </SoaServer>
+   <TaskFlowServer>
+      <hostName/>
+      <httpPort/>
+      <httpsPort/>
+   </TaskFlowServer>
+<hwTaskFlow><WorkflowName>ApprovalHumanTask</WorkflowName><TaskDefinitionNamespace>http://www.globalcompany.com/ns/OrderBooking/ApprovalHumanTask</TaskDefinitionNamespace><TaskFlowId>ApprovalHumanTask_TaskFlow</TaskFlowId><TaskFlowFileName>ApprovalHumanTask_TaskFlow.xml</TaskFlowFileName></hwTaskFlow></hwTaskFlows>

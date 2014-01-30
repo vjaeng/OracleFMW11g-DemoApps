@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<project name="PartnerSupplierComposite-WAS">
+
+  <!-- master build.properties -->  
+  <property file="../../bin/build.was.properties"/>
+
+  <!-- import the property file -->
+  <property file="sca-build.properties"/>           
+  <property name="deploy.dir" value="../deploy"/>
+  
+  <condition property="spring.lib.path" 
+    value="${oracle.common.home}/modules/org.springframework_2.0.jar"
+    else="${oracle.common.home}/modules/org.springframework_2.5.jar">
+      <available file="${oracle.common.home}/modules/org.springframework_2.0.jar"/>
+  </condition>  
+
+  <!-- classpath for spring libs and standalone testcase-->
+  <path id="classpath_was">
+    <pathelement location="${was.home}/runtimes/com.ibm.ws.ejb.thinclient_7.0.0.jar"/>
+    <pathelement location="${was.home}/runtimes/com.ibm.ws.webservices.thinclient_7.0.0.jar"/>
+    <pathelement location="${was.home}/runtimes/com.ibm.ws.orb_7.0.0.jar"/>
+    <pathelement location="${was.home}/runtimes/com.ibm.ws.admin.client_7.0.0.jar"/>
+    <pathelement location="${was.home}/plugins/com.ibm.ws.runtime.jar"/>
+    <pathelement location="${was.home}/plugins/org.eclipse.core.runtime_.jar"/>
+    <pathelement location="${was.home}/plugins/org.eclipse.equinox.common_.jar"/>
+    <pathelement location="${was.home}/plugins/org.eclipse.osgi_.jar"/>
+    <!-- WHAAAA get this out of here -->
+    <pathelement location="${oracle.home}/soa/modules/oracle.soa.fabric_11.1.1/fabric-runtime.jar"/>
+    <pathelement location="${oracle.home}/soa/modules/oracle.soa.fabric_11.1.1/fabric-runtime-ext-was.jar"/>
+    <pathelement location="${oracle.home}/soa/modules/oracle.soa.fabric_11.1.1/bpm-infra.jar"/>
+    <pathelement location="${oracle.common.home}/modules/oracle.fabriccommon_11.1.1/fabric-common.jar"/>
+    <pathelement location="${oracle.common.home}/modules/com.oracle.weblogic.sca.engine_1.1.0.0.jar"/>
+    <pathelement location="${oracle.home}/soa/modules/oracle.soa.adapter_11.1.1/adapter.jar"/>
+    <pathelement location="${oracle.home}/soa/modules/oracle.soa.adapter_11.1.1/jca-binding-api.jar"/>    
+    <!-- WHAAAA ends here .. -->
+    <pathelement location="${spring.lib.path}"/>
+    <pathelement location="${oracle.home}/../modules/javax.ejb_3.0.1.jar"/>
+    <pathelement location="${oracle.common.home}/modules/org.apache.commons.logging_1.0.4.jar"/>
+    <path location="${sca-inf.classes.dir}"/>
+  </path>
+
+  <!-- import the base version .. -->
+  <import file="build_sca_composite.xml"/>
+
+  <echo>was oh: ${oracle.home}</echo>
+ 
+  <target name="compile-classes">
+    <mkdir dir="${sca-inf.classes.dir}"/>
+    <mkdir dir="${sca-inf.classes.dir}/../lib"/>
+    <javac destdir="${sca-inf.classes.dir}" classpathref="classpath_was"
+           debug="on" nowarn="${javac.nowarn}"
+           deprecation="${javac.deprecation}" encoding="Cp1252" source="1.6"
+           target="1.6">
+      <src path="${src.dir}"/>
+    </javac>  
+    <exec executable="${was.home}/bin/createEJBStubs.sh" dir="${sca-inf.classes.dir}">
+      <arg line="com.otn.sample.fod.soa.externalps.IExternalPartnerSupplierService -cp ."/>
+    </exec>    
+    <jar basedir="${sca-inf.classes.dir}" destfile="${sca-inf.classes.dir}/../lib/was_stub.jar">
+      <include name="com/otn/sample/fod/soa/externalps/*Stub*.class"/>
+    </jar>
+  </target> 
+ 
+  <!-- test with composite tests -->  
+  <target name="test-composite" depends="test-spring-classes"
+    description="test the composite, via sca-test and also via standalone spring">
+    <echo>Running sca-testing for ${composite.name} against ${wls.mgd.server.url}</echo>
+    <!-- api expects a file - so we create one on demand -->
+    <property name="tmp.jndi.properties" value="${basedir}/tmp-jndi.properties"/>
+    <echo file="${tmp.jndi.properties}">java.naming.factory.initial=${java.naming.factory.initial}
+java.naming.provider.url=${wls.mgd.server.url}
+java.naming.security.principal=${server.user}
+java.naming.security.credentials=${server.password}
+    </echo>
+    <delete file="${test.results.dir}/${testsuite.name}/antRun-TestFwk"/>
+  
+    <ant antfile="${oracle.home}/bin/ant-sca-test.xml" 
+        target="test" inheritall="false">
+        <!-- connection information -->    
+        <property name="oracle.home" value="${oracle.home}"/>
+        <property name="java.passed.home" value="${java.home}"/>
+        <!-- name of the composite -->
+        <property name="scatest.input" value="${composite.name}"/>
+        <!-- name of the testsuite -->
+        <property name="scatestsuite.input" value="${testsuite.name}"/>
+        <!-- api is bad, hence default ones -->
+        <property name="jndi.properties.input" value="${tmp.jndi.properties}"/>
+        <!-- result dir -->
+        <property name="scatest.result" value="${test.results.dir}"/>
+        <!-- partition name -->
+        <property name="scatest.partition" value="${soa.partition.name}"/>     
+        <!-- websphere -->
+        <property name="was.home" value="${was.home}"/>
+        <property name="oracle.fabric.config.platform" value="websphere"/> 
+        <property name="java.security.auth.login.config" 
+          value="file:../../bin/was_conf/wsjaas_client.conf"/>  
+        <property name="com.ibm.CORBA.ConfigURL"
+          value="file:../../bin/was_conf/sas.client.props"/>          
+    </ant>        
+  </target>
+  
+  <!-- Tests the standalone spring case, including ejbs, and error handling -->
+  <target name="test-spring-classes" depends="compile-classes"
+    description="test the assembly via spring context">
+    <echo>Testing was spring classes</echo>
+    <fail message="Could not find ../../bin/was_conf/sas.client.props - please run global build.was.xml init's target">
+      <condition>
+        <not>
+          <available file="../../bin/was_conf/sas.client.props"/>
+        </not>
+      </condition>
+    </fail>
+    
+    <!-- copy the test spring context -->
+    <copy file="../src/test-spring-context.xml" todir="${sca-inf.classes.dir}"
+        overwrite="true"/>
+    <echo>Testing ejb binding injection based on: ${local.partnersupplier.ejb.uri}</echo>
+    <!-- create a tmp file with properties that spring can pick up -->
+    <echo file="${sca-inf.classes.dir}/tmp_project.properties">java.naming.factory.initial=${java.naming.factory.initial}
+java.naming.provider.url=${wls.mgd.server.url}
+java.naming.security.principal=${server.user}
+java.naming.security.credentials=${server.password}
+ejb.lookup.uri=${local.partnersupplier.ejb.uri}
+spring.ejb.lookup.uri=IInternalCompositeSupplierService
+    </echo>        
+    <!-- tests the spring components -->    
+    <java classpathref="classpath_was" 
+            classname="com.otn.sample.fod.soa.TestSpringComponents"
+            failonerror="true" fork="true">
+      <sysproperty key="java.security.auth.login.config" 
+        value="file:../../bin/was_conf/wsjaas_client.conf"/>  
+      <sysproperty key="com.ibm.CORBA.ConfigURL"
+        value="file:../../bin/was_conf/sas.client.props"/>      </java>       
+    <delete file="${sca-inf.classes.dir}/tmp_project.properties"/>
+  </target>  
+  
+</project>

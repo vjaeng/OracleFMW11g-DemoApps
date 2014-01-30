@@ -1,0 +1,21 @@
+<?binding.jca BAM_ProcessTimeDO_bam.jca?>
+<wsdl:definitions name="BAM_ProcessTimeDO" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/bam/WebLogicFusionOrderDemo/OrderBookingComposite/BAM_ProcessTimeDO/" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/bam/WebLogicFusionOrderDemo/OrderBookingComposite/BAM_ProcessTimeDO/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:imp1="http://xmlns.oracle.com/bam" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://xmlns.oracle.com/bam" schemaLocation="xsd/sta00751_Demos_Fusion_Order_Demo_ProcessTime.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="_ProcessTimesCollection_msg">
+        <wsdl:part name="_ProcessTimesCollection" element="imp1:_ProcessTimesCollection"/>
+    </wsdl:message>
+    <wsdl:portType name="writetoBAM_ptt">
+        <wsdl:operation name="writetoBAM">
+            <wsdl:input message="tns:_ProcessTimesCollection_msg"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <plt:partnerLinkType name="writetoBAM_plt">
+        <plt:role name="writetoBAM_role">
+            <plt:portType name="tns:writetoBAM_ptt"/>
+        </plt:role>
+    </plt:partnerLinkType>
+</wsdl:definitions>

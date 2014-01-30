@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appdeployment:Deployment xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI"
+                          xmlns:appdeployment="http://www.ibm.com/websphere/appserver/schemas/5.0/appdeployment.xmi"
+                          xmi:id="Deployment_1259818150010">
+  <deployedObject xmi:type="appdeployment:ApplicationDeployment"
+                  xmi:id="ApplicationDeployment_1259818150010" deploymentId="0"
+                  startingWeight="315"
+                  useMetadataFromBinaries="false" enableDistribution="true"
+                  createMBeansForResources="true" reloadEnabled="false"
+                  filePermission=".*\.dll=755#.*\.so=755#.*\.a=755#.*\.sl=755"
+                  allowDispatchRemoteInclude="false"
+                  allowServiceRemoteInclude="false"
+                  asyncRequestDispatchType="DISABLED">
+    <classloader xmi:id="Classloader_1270876937073" mode="PARENT_LAST">
+      <libraries xmi:id="LibraryRef_1270876937101"
+                 libraryName="adf.oracle.domain_1.0_11.1.1.2.0"/>
+      <libraries xmi:id="LibraryRef_1270876937102"
+                 libraryName="oracle.soa.workflow_11.1.1_11.1.1"/>
+    </classloader>
+    <modules xmi:type="appdeployment:WebModuleDeployment"
+             xmi:id="WebModuleDeployment_1270876937073" deploymentId="1"
+             startingWeight="10000" uri="OrderApprovalHumanTask.war"
+             classloaderMode="PARENT_LAST">
+      <classloader xmi:id="Classloader_1270876937074">
+        <libraries xmi:id="LibraryRef_1270876937074"
+                   libraryName="jsf_1.2_1.2.9.0" sharedClassloader="true"/>
+        <libraries xmi:id="LibraryRef_1270876937075"
+                   libraryName="adf.oracle.domain.webapp_1.0_11.1.1.2.0"
+                   sharedClassloader="true"/>
+      </classloader>
+    </modules>
+  </deployedObject>  
+</appdeployment:Deployment>

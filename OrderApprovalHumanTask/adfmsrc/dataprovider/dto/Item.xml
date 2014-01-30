@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.53.80"
+          id="Item" Package="dataprovider.dto"
+          BeanClass="dataprovider.dto.Item" isJavaBased="true">
+  <Attribute Name="product" Type="java.lang.String"/>
+  <Attribute Name="quantity" Type="java.lang.Integer"/>
+  <Attribute Name="unitPrice" Type="java.lang.Double"/>
+  <ConstructorMethod IsCollection="true" Type="dataprovider.dto.Item"
+                     BeanClass="dataprovider.dto.Item" id="Item"/>
+</JavaBean>

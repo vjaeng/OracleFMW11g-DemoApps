@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<project name="OrderSDOComposite-WAS">
+
+  <!-- master build.properties -->  
+  <property file="../../bin/build.was.properties"/>
+
+  <!-- import the property file -->
+  <property file="sca-build.properties"/>           
+  <property name="deploy.dir" value="../deploy"/>
+
+  <!-- import the base version .. -->
+  <import file="build_sca_composite.xml"/>
+
+  <echo>was oh: ${oracle.home}</echo>
+</project>

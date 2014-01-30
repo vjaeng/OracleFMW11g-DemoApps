@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Config plan for the Partnersupplier composite. Replaces the endpoint uri
+    of the ejb binding reference depending on jsca / pure ejb usage
+-->
+<SOAConfigPlan xmlns:jca="http://platform.integration.oracle/blocks/adapter/fw/metadata" 
+        xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" 
+        xmlns:orawsp="http://schemas.oracle.com/ws/2006/01/policy" 
+        xmlns:edl="http://schemas.oracle.com/events/edl" 
+        xmlns="http://schemas.oracle.com/soa/configplan">
+   <composite name="PartnerSupplierComposite">
+      <!-- external ejb reference -->
+      <reference name="IExternalPartnerSupplierService">
+         <binding type="ejb">
+            <!-- 
+                change the uri based on whether jsca or ejb partnersupplier 
+                is used. This is controlled by the use.jsca.impl property in the
+                global bin/build.properties
+            -->
+            <attribute name="uri">
+               <!-- jndi name for jsca based ejb binding -->
+               <replace>WebLogicFusionOrderDemo-ExternalLegacyPartnerSupplierJScaEjb</replace>
+            </attribute>         
+         </binding>
+      </reference>
+   </composite>
+   <!-- replace file endpoint for the simpleSupplierMediator -->
+   <wsdlAndSchema name="WriteQuoteRequest_file.jca">
+     <jca:property name="PhysicalDirectory">
+        <replace>/tmp/quote</replace>
+     </jca:property>
+   </wsdlAndSchema>     
+</SOAConfigPlan>

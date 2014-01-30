@@ -1,0 +1,16 @@
+<wsdl:definitions
+    
+     targetNamespace="http://www.globalcompany.example.com/ns/CreditAuthorizationService"
+     xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:tns="http://www.globalcompany.example.com/ns/CreditAuthorizationService"
+     xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    >
+    <wsdl:import namespace="http://www.globalcompany.example.com/ns/CreditAuthorizationService" location="oramds:/apps/FusionOrderDemoShared/services/creditAuthorization/CreditAuthorizationService.wsdl"/>
+    <plnk:partnerLinkType name="CreditCardAuthorizationService">
+        <plnk:role name="CreditAuthorizationPort">
+            <plnk:portType name="tns:CreditAuthorizationPort"/>
+        </plnk:role>
+    </plnk:partnerLinkType>
+</wsdl:definitions>

@@ -1,0 +1,19 @@
+<business-event xmlns:ns1="/oracle/fodemo/storefront/entities/events/edl/OrderEO"
+                xmlns="http://oracle.com/fabric/businessEvent">
+   <name>ns1:NewOrderSubmitted</name>
+   <id>e4196227-806c-4680-a6b4-6f8df931b3f5</id>
+   <content>
+      <!-- this is the event payload based on the xsd -->
+      <NewOrderSubmittedInfo xmlns="/oracle/fodemo/storefront/entities/events/schema/OrderEO">
+          <OrderId>
+             <newValue value="52640293"/>
+          </OrderId>
+      </NewOrderSubmittedInfo>    
+   </content>
+</business-event>
+
+
+
+
+
+

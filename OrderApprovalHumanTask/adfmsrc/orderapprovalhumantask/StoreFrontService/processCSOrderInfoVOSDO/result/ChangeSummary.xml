@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="ChangeSummary"
+          Package="orderapprovalhumantask.StoreFrontService.processCSOrderInfoVOSDO.result"
+          BeanClass="orderapprovalhumantask.StoreFrontService.processCSOrderInfoVOSDO.result.ChangeSummary"
+          isJavaBased="false">
+  <Attribute Name="create" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="delete" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="logging" IsUpdateable="0" Type="java.lang.Boolean"/>
+  <AccessorAttribute id="any" IsCollection="false"/>
+</JavaBean>

@@ -1,0 +1,14 @@
+<wsdl:definitions
+     name="properties"
+     targetNamespace="http://xmlns.oracle.com/CompositeServices11gMain/B2BX12OrderGateway/B2BOrderProcessingEngine/correlationset"
+     xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+     xmlns:client="/oracle/fodemo/storefront/entities/events/schema/OrderEO"
+     xmlns:tns="http://xmlns.oracle.com/CompositeServices11gMain/B2BX12OrderGateway/B2BOrderProcessingEngine/correlationset"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    >
+    <bpws:property name="orderId" type="xsd:string"/>
+    <bpws:propertyAlias propertyName="tns:orderId" element="client:NewOrderSubmittedInfo" query="/client:NewOrderSubmittedInfo/client:OrderId/client:newValue/@value"/>
+    <bpws:propertyAlias propertyName="tns:orderId" element="client:OrderCompletedInfo" query="/client:OrderCompletedInfo/client:OrderId"/>
+</wsdl:definitions>

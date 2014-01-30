@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="OrderItemsInfoVO"
+          Package="StoreFrontService.createOrderInfoVOSDO.params.orderInfoVO1"
+          BeanClass="StoreFrontService.createOrderInfoVOSDO.params.orderInfoVO1.OrderItemsInfoVO"
+          isJavaBased="false">
+  <Attribute Name="OrderId" Type="java.lang.Long"/>
+  <Attribute Name="LineItemId" Type="java.lang.Integer"/>
+  <Attribute Name="ProductId" Type="java.lang.Long"/>
+  <Attribute Name="Quantity" Type="java.lang.Integer"/>
+  <Attribute Name="UnitPrice" Type="java.math.BigDecimal"/>
+  <Attribute Name="ProductName" Type="java.lang.String"/>
+  <Attribute Name="SupplierName" Type="java.lang.String"/>
+  <Attribute Name="ProductId1" Type="java.lang.Integer"/>
+  <Attribute Name="SupplierId1" Type="java.lang.Long"/>
+</JavaBean>

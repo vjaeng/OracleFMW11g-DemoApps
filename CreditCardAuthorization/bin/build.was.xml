@@ -1,0 +1,227 @@
+<project name="CreditCardAuthorization" default="all" basedir=".">
+  <property file="../../bin/build.was.properties"/>
+  <property file="build.properties"/>
+  <property name="app.name"          value="FOD-CreditAuthorization"/>
+  <property name="deploy.ear.source" value="${deploy.dir}/${war.name}.war"/>
+
+  <!--*******************************************************************-->
+  <!-- Marco to run wsadmin for WAS                                      -->
+  <!--*******************************************************************-->
+  <macrodef name="wsascript">
+    <attribute name="script"/>
+    <attribute name="washome"/>
+    <attribute name="host"/>
+    <attribute name="port"/>
+    <attribute name="conntype" default="SOAP"/>
+    <attribute name="user"/>
+    <attribute name="password"/>
+    <sequential>
+      <property name="wsadminargs"
+                value="-host @{host} -port @{port} -conntype @{conntype} -user @{user} -password @{password} -lang jython -log_priority=debug -f @{script}"/>
+      <echo>${wsadminargs}</echo>
+      <exec dir="." 
+            executable="${oracle.common.home}/common/bin/wsadmin.sh"
+            resolveexecutable="true" 
+            failonerror="false"
+            resultproperty="deploy.results">
+        <arg line="${wsadminargs}"/>
+        <env key="MW_HOME"                value="${oracle.home}/.."/>
+        <env key="COMMON_COMPONENTS_HOME" value="${oracle.common.home}"/>
+        <env key="WAS_HOME"               value="@{washome}"/>
+      </exec>
+    </sequential>
+  </macrodef>
+
+  <path id="library.JAX-WS.Web.Services">
+    <pathelement location="${was.home}/runtimes/com.ibm.jaxws.thinclient_7.0.0.jar"/>
+  </path>
+  <path id="library.XMLParser">
+    <pathelement location="${oracle.common.home}/modules/oracle.xdk_11.1.0/xmlparserv2.jar"/>
+  </path>
+  <path id="classpath">
+    <path refid="library.JAX-WS.Web.Services"/>
+    <path refid="library.XMLParser"/>
+    <pathelement location="${output.dir}"/>
+  </path>
+  <target name="init">
+    <tstamp/>
+    <mkdir dir="${output.dir}"/>
+  </target>
+  <target name="all" description="Build the project" depends="compile,copy"/>
+  <target name="clean" description="Clean the project">
+    <echo>Clean up of Credit Auth service project </echo>
+    <mkdir dir="${output.dir}"/>
+    <delete includeemptydirs="true">
+      <fileset dir="${output.dir}" includes="**/*"/>
+    </delete>
+    <delete file="${deploy.dir}/${war.name}.war"/>
+  </target>
+  <target name="compile" description="Compile Java source files" depends="init">
+    <javac destdir="${output.dir}" classpathref="classpath"
+           debug="${javac.debug}" nowarn="${javac.nowarn}"
+           deprecation="${javac.deprecation}" encoding="Cp1252" source="1.6"
+           target="1.6">
+      <src path="${src.dir}"/>
+    </javac>
+  </target>
+  <target name="copy" description="Copy files to output directory"
+          depends="init">
+    <patternset id="copy.patterns">
+      <include name="**/*.gif"/>
+      <include name="**/*.jpg"/>
+      <include name="**/*.jpeg"/>
+      <include name="**/*.png"/>
+      <include name="**/*.properties"/>
+      <include name="**/*.xml"/>
+      <include name="**/*-apf.xml"/>
+      <include name="**/*.ejx"/>
+      <include name="**/*.xcfg"/>
+      <include name="**/*.cpx"/>
+      <include name="**/*.dcx"/>
+      <include name="**/*.sva"/>
+      <include name="**/*.wsdl"/>
+      <include name="**/*.ini"/>
+      <include name="**/*.tld"/>
+      <include name="**/*.tag"/>
+      <include name="**/*.xlf"/>
+      <include name="**/*.xsl"/>
+      <include name="**/*.xsd"/>
+    </patternset>
+    <copy todir="${output.dir}">
+      <fileset dir="../src">
+        <patternset refid="copy.patterns"/>
+      </fileset>
+    </copy>
+  </target>
+  <target name="create-war" depends="compile"
+          description="Create deployable war">
+    <mkdir dir="${deploy.dir}"/>
+    <war basedir="${web.dir}" webxml="${web.dir}/WEB-INF/web.xml"
+         destfile="${deploy.dir}/${war.name}.war">
+      <exclude name="WEB-INF/classes/com/example/globalcompany/ccauth/test/*"/>
+    </war>
+  </target>
+  <target name="deploy-application" depends="create-deploy-py"
+    description="deploys the credit authorization webservice to was">
+    <property name="user.install.root" location="${was.home}"/>
+    <property name="wasinstall" location="${was.home}"/>
+    <wsascript script="create-deploy.py" 
+               washome="${was.home}"
+               host="${admin.server.host}"
+               port="${admin.server.port}"              
+               user="${server.user}"
+               password="${server.password}"/> 
+    <delete file="create-deploy.py"/>                
+  </target>
+  
+  <!-- undeploy application -->
+  <target name="undeploy-application" depends="create-undeploy-py"
+          description="Undeploy the service">
+    <wsascript script="create-undeploy.py" 
+               washome="${was.home}"
+               host="${admin.server.host}"
+               port="${admin.server.port}"              
+               user="${server.user}"
+               password="${server.password}"/> 
+    <delete file="create-undeploy.py"/>
+  </target>
+  <!-- test the webservice endpoint -->
+  <target name="test-webservice" depends="compile"
+          description="Tests the CCAuth webservice endpoint impl">
+    <property name="http.endpoint.address" 
+        value="http://${managed.server.host}:${managed.server.port}"/>
+    <java classpathref="classpath" 
+      classname="com.example.globalcompany.ccauth.test.CreditAuthorizationPortClient"
+      fork="true">
+      <arg line="${http.endpoint.address}"/>
+    </java>      
+  </target>
+  
+  <target name="create-undeploy-py">
+    <echo file="create-undeploy.py"># Undeploy the application
+# *********  MAIN SECTION  *********** #
+# Global variables declaration
+global AdminConfig
+global AdminApp
+
+AdminApp.uninstall("${app.name}")
+AdminConfig.save()
+</echo>
+  </target>
+
+  <target name="create-deploy-py">
+    <echo file="create-deploy.py"># install the application
+import time
+    
+def installApp(crAppWAR, appName):
+
+  # If the Application exists, then update it, otherwise install it	
+  try:
+   app = AdminApp.view(appName)
+  except: 
+   print "***** App not found: " + appName + ". Installing " +crAppWAR+ " now\n"
+   options = "-appname " + appName + " -server ${server.targets} -node ${was.node} -cell ${was.cell} -contextroot /WebServices_WebLogicFusionOrderDemo_CreditCardAuthorization -defaultbinding.virtual.host default_host -usedefaultbindings -useAutoLink"
+   AdminApp.install(crAppWAR, options)
+   AdminConfig.save()
+   print "\n***** Done installing App: " + appName + ". Config saved .."
+  else:
+   if app > 1:
+     print "***** The App EXISTS: " + appName + ". Skipping...\n"
+   #endif
+#enddef
+
+# start the application
+def startApp(appName):
+
+  # If the Application is already started then do not do anything.
+  try:
+    app = AdminControl.completeObjectName("type=Application,name=" + appName + ",*")
+  except:
+     print "***** The Application " + appName + " is already STARTED"
+     return 0
+     
+  if len(app) > 1:
+     print "***** The Application " + appName + " is already STARTED"
+     return 0
+  #endif
+	
+  # If the Application status is not Started, only then do the rest ...	
+  #get the ApplicationManager MBean
+  appMgr = AdminControl.queryNames("node=${was.node},type=ApplicationManager,process=" + srvr + ",*")
+	
+  #start the Application using the ApplicationManager MBean
+  try:
+    AdminControl.invoke(appMgr,'startApplication',appName)
+    print "\n***** Started: " + appName
+    return 0
+  except:
+    print "***** Retry start..."
+    return 1
+#enddef
+
+# *********  MAIN SECTION  *********** #
+# Global variables declaration
+global AdminConfig
+global AdminControl
+global AdminApp
+global AdminTask
+
+nodeName = "${was.node}"
+srvr = "${server.targets}"
+
+crAppWAR = "${deploy.dir}/${war.name}.war" 
+crAppName = "${app.name}" # display name of the enterprise App
+
+# functions for the deployment steps
+installApp (crAppWAR,crAppName)  # Step 1 - Install FOD CR App
+
+for i in range(9):
+  time.sleep(15)
+  if startApp(crAppName) == 0: # Step 2 - Start FOD CR
+    break
+  #endif
+#endfor
+</echo>
+  </target>  
+  
+</project>

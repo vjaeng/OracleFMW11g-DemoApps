@@ -1,0 +1,709 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer 
+  
+  Created: Sun Oct 12 15:20:24 PDT 2008
+  Author:  cutschig
+  Purpose: Synchronous BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<process name="CustomerAndOrderService"
+               targetNamespace="http://xmlns.oracle.com/TestRules/OrderSDOComposite/CustomerAndOrderService"
+               xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+               xmlns:client="http://xmlns.oracle.com/TestRules/OrderSDOComposite/CustomerAndOrderService"
+               xmlns:ora="http://schemas.oracle.com/xpath/extension"
+               xmlns:orcl="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"
+               xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20"
+               xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap"
+               xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+               xmlns:ns1="www.globalcompany.example.com"
+               xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:ns2="www.globalcompany.example.com/types/"
+         xmlns:ns3="/oracle/fodemo/storefront/store/queries/common/"
+         xmlns:ns9="http://www.oracle.com/XSL/Transform/java/oracle.tip.dvm.LookupValue"
+         xmlns:ns7="http://www.oracle.com/XSL/Transform/java/oracle.tip.mediator.service.common.functions.GetRequestHeaderExtnFunction"
+         xmlns:ns6="http://xmlns.oracle.com/bpel/services/IdentityService/xpath"
+         xmlns:ns10="http://schemas.oracle.com/bpel/extension/xpath/function/xdk"
+         xmlns:ns8="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions"
+         xmlns:ns4="http://xmlns.oracle.com/adf/svc/types/"
+         xmlns:ns5="http://xmlns.oracle.com/adf/svc/errors/"
+         xmlns:hwf="http://xmlns.oracle.com/bpel/workflow/xpath"
+         xmlns:med="http://schemas.oracle.com/mediator/xpath"
+         xmlns:socket="http://www.oracle.com/XSL/Transform/java/oracle.tip.adapter.socket.ProtocolTranslator"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      PARTNERLINKS                                                      
+      List of services participating in this BPEL process               
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  --> 
+  <partnerLinks>
+    <!-- 
+      The 'client' role represents the requester of this service. It is 
+      used for callback. The location and correlation information associated
+      with the client role are automatically set using WS-Addressing.
+    -->
+    <partnerLink name="customerandorderservice_client" partnerLinkType="ns1:StorefrontService" 
+        myRole="StoreFrontService"/>
+  </partnerLinks>
+
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      VARIABLES                                                        
+      List of messages and XML documents used within this BPEL process 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <variables>
+    <!-- Reference to the message passed as input during initiation -->
+    <variable name="inputVariable" messageType="ns1:StoreFrontService_findCustomerInfoVO1"/>
+
+    <!-- Reference to the message that will be returned to the requester-->
+    <variable name="outputVariable" messageType="ns1:StoreFrontService_findCustomerInfoVO1Response"/>
+    <variable name="OnMessage_findCustomerInfoVO1CustomerInfoVOCriteria_InputVariable"
+              messageType="ns1:StoreFrontService_findCustomerInfoVO1CustomerInfoVOCriteria"/>
+    <variable name="Reply_findCustomerInfoVOByCriteria_findCustomerInfoVO1CustomerInfoVOCriteria_OutputVariable"
+              messageType="ns1:StoreFrontService_findCustomerInfoVO1CustomerInfoVOCriteriaResponse"/>
+    <variable name="OnMessage_getOrderInfoVOSDO_InputVariable"
+              messageType="ns1:StoreFrontService_getOrderInfoVOSDO"/>
+    <variable name="Reply_getOrderInfoVO_getOrderInfoVOSDO_OutputVariable"
+              messageType="ns1:StoreFrontService_getOrderInfoVOSDOResponse"/>
+    <variable name="OnMessage_findOrderInfoVOSDO_InputVariable"
+              messageType="ns1:StoreFrontService_findOrderInfoVOSDO"/>
+    <variable name="Reply_findOrderInfoVO_findOrderInfoVOSDO_OutputVariable"
+              messageType="ns1:StoreFrontService_findOrderInfoVOSDOResponse"/>
+    <variable name="OnMessage_processOrderInfoVOSDO_InputVariable"
+              messageType="ns1:StoreFrontService_processOrderInfoVOSDO"/>
+    <variable name="Reply_ProcessOrderInfoVO_processOrderInfoVOSDO_OutputVariable"
+              messageType="ns1:StoreFrontService_processOrderInfoVOSDOResponse"/>
+    <variable name="OnMessage_processCSOrderInfoVOSDO_InputVariable"
+              messageType="ns1:StoreFrontService_processCSOrderInfoVOSDO"/>
+    <variable name="Reply_ProcessOrderVOCS_processCSOrderInfoVOSDO_OutputVariable"
+              messageType="ns1:StoreFrontService_processCSOrderInfoVOSDOResponse"/>
+    <variable name="OnMessage_updateOrderInfoVOSDO_InputVariable"
+              messageType="ns1:StoreFrontService_updateOrderInfoVOSDO"/>
+    <variable name="Reply_UpdateOrderInfoVO_updateOrderInfoVOSDO_OutputVariable"
+              messageType="ns1:StoreFrontService_updateOrderInfoVOSDOResponse"/>
+    <variable xml:id="id80" name="createOrderInfoVOSDO_InputVariable"
+              messageType="ns1:StoreFrontService_createOrderInfoVOSDO"/>
+    <variable xml:id="id82" name="createOrderInfoVOSDO_OutputVariable"
+              messageType="ns1:StoreFrontService_createOrderInfoVOSDOResponse"/>
+  </variables>
+
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     ORCHESTRATION LOGIC                                               
+     Set of activities coordinating the flow of messages across the    
+     services integrated within this business process                  
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <sequence name="main">
+
+    <!-- Receive input from requestor. (Note: This maps to operation defined in CustomerAndOrderService.wsdl) -->
+
+    <!-- Generate reply to synchronous request -->
+    <pick name="Pick_Operation" createInstance="yes">
+      <onMessage variable="inputVariable"
+                 partnerLink="customerandorderservice_client"
+                 portType="ns1:StoreFrontService"
+                 operation="findCustomerInfoVO1">
+        <sequence>
+          <assign name="Assign_FindCustomerInfo">
+            <copy>
+              <from>
+                <ns2:result xmlns:ns2="www.globalcompany.example.com/types/"
+                            xmlns:ns3="/oracle/fodemo/storefront/store/queries/common/">
+                  <ns3:PersonId>10</ns3:PersonId>
+                  <ns3:FirstName>Clemens</ns3:FirstName>
+                  <ns3:LastName>Utschig</ns3:LastName>
+                  <ns3:ConfirmedEmail>clemens.utschig@oracle.example.com</ns3:ConfirmedEmail>
+                  <ns3:MobilePhoneNumber/>
+                  <ns3:MembershipId/>
+                  <ns3:MembershipTypeCode/>
+                </ns2:result>
+              </from>
+              <to variable="outputVariable" part="parameters"
+                  query="/ns2:findCustomerInfoVO1Response/ns2:result"/>
+            </copy>
+            <copy xml:id="id1">
+              <from xml:id="id2" variable="inputVariable" part="parameters"
+                    query="/ns2:findCustomerInfoVO1"/>
+              <to xml:id="id3" variable="inputVariable" part="parameters"
+                  query="/ns2:findCustomerInfoVO1"/>
+            </copy>
+          </assign>
+          <reply name="Reply_findCustomerInfo" variable="outputVariable"
+                 partnerLink="customerandorderservice_client"
+                 portType="ns1:StoreFrontService"
+                 operation="findCustomerInfoVO1"/>
+        </sequence>
+      </onMessage>
+      <onMessage variable="OnMessage_findCustomerInfoVO1CustomerInfoVOCriteria_InputVariable"
+                 partnerLink="customerandorderservice_client"
+                 portType="ns1:StoreFrontService"
+                 operation="findCustomerInfoVO1CustomerInfoVOCriteria">
+        <bpelx:annotation>
+          <bpelx:pattern></bpelx:pattern>
+        </bpelx:annotation>
+        <sequence>
+          <assign name="Assign_FindCustomerInfoByVC">
+            <copy xml:id="id4">
+              <from xml:id="id5"
+                    variable="OnMessage_findCustomerInfoVO1CustomerInfoVOCriteria_InputVariable"
+                    part="parameters"
+                    query="/ns2:findCustomerInfoVO1CustomerInfoVOCriteria"/>
+              <to xml:id="id6"
+                  variable="OnMessage_findCustomerInfoVO1CustomerInfoVOCriteria_InputVariable"
+                  part="parameters"
+                  query="/ns2:findCustomerInfoVO1CustomerInfoVOCriteria"/>
+            </copy>
+            <copy>
+              <from>
+                <ns2:result xmlns:ns2="www.globalcompany.example.com/types/"
+                            xmlns:ns3="/oracle/fodemo/storefront/store/queries/common/">
+                  <ns3:PersonId/>
+                  <ns3:FirstName/>
+                  <ns3:LastName/>
+                  <ns3:ConfirmedEmail/>
+                  <ns3:MobilePhoneNumber/>
+                  <ns3:MembershipId/>
+                  <ns3:MembershipTypeCode/>
+                </ns2:result>
+              </from>
+              <to variable="Reply_findCustomerInfoVOByCriteria_findCustomerInfoVO1CustomerInfoVOCriteria_OutputVariable"
+                  part="parameters"
+                  query="/ns2:findCustomerInfoVO1CustomerInfoVOCriteriaResponse/ns2:result"/>
+            </copy>
+          </assign>
+          <switch xml:id="id13" name="Switch_ByCustomerId">
+            <case xml:id="id20"
+                  condition="bpws:getVariableData('OnMessage_findCustomerInfoVO1CustomerInfoVOCriteria_InputVariable','parameters','/ns2:findCustomerInfoVO1CustomerInfoVOCriteria/ns2:CustId') = 20">
+              <bpelx:annotation>
+                <bpelx:pattern>customerId = 20</bpelx:pattern>
+              </bpelx:annotation>
+              <assign xml:id="id21" name="Assign_CustomerWithId20">
+                <copy xml:id="id22">
+                  <from xml:id="id23">
+                    <ns2:result xmlns:ns2="www.globalcompany.example.com/types/"
+                                xmlns:ns3="/oracle/fodemo/storefront/store/queries/common/">
+                      <ns3:PersonId>20</ns3:PersonId>
+                      <ns3:FirstName>Deborah</ns3:FirstName>
+                      <ns3:LastName>Steiner</ns3:LastName>
+                      <ns3:ConfirmedEmail>deborah.steiner@oracle.example.com</ns3:ConfirmedEmail>
+                      <ns3:MobilePhoneNumber>1235550112</ns3:MobilePhoneNumber>
+                      <ns3:MembershipId/>
+                      <ns3:MembershipTypeCode/>
+                    </ns2:result>
+                  </from>
+                  <to xml:id="id24"
+                      variable="Reply_findCustomerInfoVOByCriteria_findCustomerInfoVO1CustomerInfoVOCriteria_OutputVariable"
+                      part="parameters"
+                      query="/ns2:findCustomerInfoVO1CustomerInfoVOCriteriaResponse/ns2:result"/>
+                </copy>
+              </assign>
+            </case>
+            <case xml:id="id14"
+                  condition="bpws:getVariableData('OnMessage_findCustomerInfoVO1CustomerInfoVOCriteria_InputVariable','parameters','/ns2:findCustomerInfoVO1CustomerInfoVOCriteria/ns2:CustId') = 10">
+              <bpelx:annotation>
+                <bpelx:pattern>customerId = 10</bpelx:pattern>
+              </bpelx:annotation>
+              <assign xml:id="id16" name="Assign_CustomerWithId10">
+                <copy xml:id="id17">
+                  <from xml:id="id18">
+                    <ns2:result xmlns:ns2="www.globalcompany.example.com/types/"
+                                xmlns:ns3="/oracle/fodemo/storefront/store/queries/common/">
+                      <ns3:PersonId>10</ns3:PersonId>
+                      <ns3:FirstName>Clemens</ns3:FirstName>
+                      <ns3:LastName>Utschig</ns3:LastName>
+                      <ns3:ConfirmedEmail>clemens.utschig@oracle.example.com</ns3:ConfirmedEmail>
+                      <ns3:MobilePhoneNumber>1235550111</ns3:MobilePhoneNumber>
+                      <ns3:MembershipId/>
+                      <ns3:MembershipTypeCode/>
+                    </ns2:result>
+                  </from>
+                  <to xml:id="id19"
+                      variable="Reply_findCustomerInfoVOByCriteria_findCustomerInfoVO1CustomerInfoVOCriteria_OutputVariable"
+                      part="parameters"
+                      query="/ns2:findCustomerInfoVO1CustomerInfoVOCriteriaResponse/ns2:result"/>
+                </copy>
+              </assign>
+            </case>
+          </switch>
+          <reply name="Reply_findCustomerInfoVOByCriteria"
+                 variable="Reply_findCustomerInfoVOByCriteria_findCustomerInfoVO1CustomerInfoVOCriteria_OutputVariable"
+                 partnerLink="customerandorderservice_client"
+                 portType="ns1:StoreFrontService"
+                 operation="findCustomerInfoVO1CustomerInfoVOCriteria"/>
+        </sequence>
+      </onMessage>
+      <onMessage variable="OnMessage_findOrderInfoVOSDO_InputVariable"
+                 partnerLink="customerandorderservice_client"
+                 portType="ns1:StoreFrontService"
+                 operation="findOrderInfoVOSDO">
+        <bpelx:annotation>
+          <bpelx:pattern></bpelx:pattern>
+        </bpelx:annotation>
+        <sequence>
+          <scope xml:id="id31" name="Scope_ForId">
+            <variables xml:id="id33">
+              <variable xml:id="id34" name="lOrderId" type="xsd:integer"/>
+            </variables>
+            <sequence xml:id="id32" name="Sequence_1">
+              <assign name="Assign_findOrderInfoVO">
+                <copy xml:id="id7">
+                  <from xml:id="id8"
+                        variable="OnMessage_findOrderInfoVOSDO_InputVariable"
+                        part="parameters" query="/ns2:findOrderInfoVOSDO"/>
+                  <to xml:id="id9"
+                      variable="OnMessage_findOrderInfoVOSDO_InputVariable"
+                      part="parameters" query="/ns2:findOrderInfoVOSDO"/>
+                </copy>
+                <copy xml:id="id35">
+                  <from xml:id="id36"
+                        variable="OnMessage_findOrderInfoVOSDO_InputVariable"
+                        part="parameters"
+                        query="/ns2:findOrderInfoVOSDO/ns2:findCriteria/ns4:filter/ns4:group/ns4:item/ns4:value"/>
+                  <to xml:id="id37" variable="lOrderId"/>
+                </copy>
+              </assign>
+              <switch xml:id="id28" name="Switch_OrderById">
+                <case xml:id="id29"
+                      condition="bpws:getVariableData('lOrderId') &lt;= 1000">
+                  <bpelx:annotation>
+                    <bpelx:pattern>OrderId &lt;= 1000</bpelx:pattern>
+                  </bpelx:annotation>
+                  <assign xml:id="id38" name="Assign_OrderAmountLowerThan2000">
+                    <copy xml:id="id48">
+                      <from xml:id="id49">
+                        <ns2:result xmlns:ns2="www.globalcompany.example.com/types/"
+                                    xmlns:ns3="/oracle/fodemo/storefront/store/queries/common/">
+                          <ns3:OrderId/>
+                          <ns3:OrderDate>2008-08-28T07:17:04.0Z</ns3:OrderDate>
+                          <ns3:OrderStatusCode>PENDING</ns3:OrderStatusCode>
+                          <ns3:OrderTotal>1999</ns3:OrderTotal>
+                          <ns3:CustomerId>10</ns3:CustomerId>
+                          <ns3:ShipToName>Clemens Utschig</ns3:ShipToName>
+                          <ns3:ShipToPhoneNumber>1235550111</ns3:ShipToPhoneNumber>
+                          <ns3:AddressId>10</ns3:AddressId>
+                          <ns3:Address1>100 Oracle Parkway</ns3:Address1>
+                          <ns3:City>Redwood Shores</ns3:City>
+                          <ns3:PostalCode>94065</ns3:PostalCode>
+                          <ns3:StateProvince>CA</ns3:StateProvince>
+                          <ns3:CountryId>US</ns3:CountryId>
+                          <ns3:AccountNumber>41</ns3:AccountNumber>
+                          <ns3:CardTypeCode>AMEX</ns3:CardTypeCode>
+                          <ns3:ExpireDate>2010-10-26T21:32:52</ns3:ExpireDate>
+                          <ns3:CheckDigits>1234</ns3:CheckDigits>
+                          <ns3:OrderItemsInfoVO>
+                            <ns3:OrderId/>
+                            <ns3:LineItemId>1</ns3:LineItemId>
+                            <ns3:ProductId>1</ns3:ProductId>
+                            <ns3:Quantity>1</ns3:Quantity>
+                            <ns3:UnitPrice>1999</ns3:UnitPrice>
+                            <ns3:ProductName>something</ns3:ProductName>
+                            <ns3:SupplierName>from someone</ns3:SupplierName>
+                          </ns3:OrderItemsInfoVO>
+                        </ns2:result>
+                      </from>
+                      <to xml:id="id50"
+                          variable="Reply_findOrderInfoVO_findOrderInfoVOSDO_OutputVariable"
+                          part="parameters"
+                          query="/ns2:findOrderInfoVOSDOResponse/ns2:result"/>
+                    </copy>
+                  </assign>
+                </case>
+                <otherwise xml:id="id30">
+                  <assign xml:id="id51" name="AssignAmoutHigher2000">
+                    <copy xml:id="id52">
+                      <from xml:id="id53">
+                        <ns2:result xmlns:ns2="www.globalcompany.example.com/types/"
+                                    xmlns:ns3="/oracle/fodemo/storefront/store/queries/common/">
+                          <ns3:OrderId/>
+                          <ns3:OrderDate>2008-08-28T07:17:04.0Z</ns3:OrderDate>
+                          <ns3:OrderStatusCode>PENDING</ns3:OrderStatusCode>
+                          <ns3:OrderTotal>2001</ns3:OrderTotal>
+                          <ns3:CustomerId>20</ns3:CustomerId>
+                          <ns3:ShipToName>Clemens Utschig</ns3:ShipToName>
+                          <ns3:ShipToPhoneNumber>1235550111</ns3:ShipToPhoneNumber>
+                          <ns3:AddressId>10</ns3:AddressId>
+                          <ns3:Address1>100 Oracle Parkway</ns3:Address1>
+                          <ns3:City>Redwood Shores</ns3:City>
+                          <ns3:PostalCode>94065</ns3:PostalCode>
+                          <ns3:StateProvince>CA</ns3:StateProvince>
+                          <ns3:CountryId>US</ns3:CountryId>
+                          <ns3:AccountNumber>41</ns3:AccountNumber>
+                          <ns3:CardTypeCode>AMEX</ns3:CardTypeCode>
+                          <ns3:ExpireDate>2010-10-26T21:32:52</ns3:ExpireDate>
+                          <ns3:CheckDigits>1234</ns3:CheckDigits>
+                          <ns3:OrderItemsInfoVO>
+                            <ns3:OrderId/>
+                            <ns3:LineItemId>1</ns3:LineItemId>
+                            <ns3:ProductId>1</ns3:ProductId>
+                            <ns3:Quantity>1</ns3:Quantity>
+                            <ns3:UnitPrice>2001</ns3:UnitPrice>
+                            <ns3:ProductName>something</ns3:ProductName>
+                            <ns3:SupplierName>from someone</ns3:SupplierName>
+                          </ns3:OrderItemsInfoVO>
+                        </ns2:result>
+                      </from>
+                      <to xml:id="id54"
+                          variable="Reply_findOrderInfoVO_findOrderInfoVOSDO_OutputVariable"
+                          part="parameters"
+                          query="/ns2:findOrderInfoVOSDOResponse/ns2:result"/>
+                    </copy>
+                  </assign>
+                </otherwise>
+              </switch>
+              <assign xml:id="id55" name="Assign_OrderId">
+                <copy xml:id="id56">
+                  <from xml:id="id57" variable="lOrderId"/>
+                  <to xml:id="id58"
+                      variable="Reply_findOrderInfoVO_findOrderInfoVOSDO_OutputVariable"
+                      part="parameters"
+                      query="/ns2:findOrderInfoVOSDOResponse/ns2:result/ns3:OrderId"/>
+                </copy>
+                <copy xml:id="id59">
+                  <from xml:id="id60" variable="lOrderId"/>
+                  <to xml:id="id61"
+                      variable="Reply_findOrderInfoVO_findOrderInfoVOSDO_OutputVariable"
+                      part="parameters"
+                      query="/ns2:findOrderInfoVOSDOResponse/ns2:result/ns3:OrderItemsInfoVO[1]/ns3:OrderId"/>
+                </copy>
+              </assign>
+            </sequence>
+          </scope>
+          <reply name="Reply_findOrderInfoVO"
+                 partnerLink="customerandorderservice_client"
+                 portType="ns1:StoreFrontService" operation="findOrderInfoVOSDO"
+                 variable="Reply_findOrderInfoVO_findOrderInfoVOSDO_OutputVariable"/>
+        </sequence>
+      </onMessage>
+      <onMessage variable="OnMessage_getOrderInfoVOSDO_InputVariable"
+                 partnerLink="customerandorderservice_client"
+                 portType="ns1:StoreFrontService" operation="getOrderInfoVOSDO">
+        <bpelx:annotation>
+          <bpelx:pattern></bpelx:pattern>
+        </bpelx:annotation>
+        <sequence>
+          <switch xml:id="id62" name="Switch_OrderId">
+            <case xml:id="id63"
+                  condition="bpws:getVariableData('OnMessage_getOrderInfoVOSDO_InputVariable','parameters','/ns2:getOrderInfoVOSDO/ns2:orderId') &lt;= 1000">
+              <bpelx:annotation>
+                <bpelx:pattern>orderid &lt;= 1000</bpelx:pattern>
+              </bpelx:annotation>
+              <assign name="Assign_getOrderInfo">
+                <copy xml:id="id10">
+                  <from xml:id="id11"
+                        variable="OnMessage_getOrderInfoVOSDO_InputVariable"
+                        part="parameters" query="/ns2:getOrderInfoVOSDO"/>
+                  <to xml:id="id12"
+                      variable="OnMessage_getOrderInfoVOSDO_InputVariable"
+                      part="parameters" query="/ns2:getOrderInfoVOSDO"/>
+                </copy>
+                <copy>
+                  <from>
+                    <ns2:result xmlns:ns2="www.globalcompany.example.com/types/"
+                                xmlns:ns3="/oracle/fodemo/storefront/store/queries/common/">
+                      <ns3:OrderId/>
+                      <ns3:OrderDate>2008-08-28T07:17:04.0Z</ns3:OrderDate>
+                      <ns3:OrderStatusCode>PENDING</ns3:OrderStatusCode>
+                      <ns3:OrderTotal>1999</ns3:OrderTotal>
+                      <ns3:CustomerId>10</ns3:CustomerId>
+                      <ns3:ShipToName>Clemens Utschig</ns3:ShipToName>
+                      <ns3:ShipToPhoneNumber>1235550111</ns3:ShipToPhoneNumber>
+                      <ns3:AddressId>10</ns3:AddressId>
+                      <ns3:Address1>100 Oracle Parkway</ns3:Address1>
+                      <ns3:City>Redwood Shores</ns3:City>
+                      <ns3:PostalCode>94065</ns3:PostalCode>
+                      <ns3:StateProvince>CA</ns3:StateProvince>
+                      <ns3:CountryId>US</ns3:CountryId>
+                      <ns3:AccountNumber>41</ns3:AccountNumber>
+                      <ns3:CardTypeCode>AMEX</ns3:CardTypeCode>
+                      <ns3:ExpireDate>2010-10-26T21:32:52</ns3:ExpireDate>
+                      <ns3:CheckDigits>1234</ns3:CheckDigits>
+                      <ns3:OrderItemsInfoVO>
+                        <ns3:OrderId/>
+                        <ns3:LineItemId>1</ns3:LineItemId>
+                        <ns3:ProductId>1</ns3:ProductId>
+                        <ns3:Quantity>1</ns3:Quantity>
+                        <ns3:UnitPrice>1999</ns3:UnitPrice>
+                        <ns3:ProductName>something</ns3:ProductName>
+                        <ns3:SupplierName>from someone</ns3:SupplierName>
+                      </ns3:OrderItemsInfoVO>
+                    </ns2:result>
+                  </from>
+                  <to variable="Reply_getOrderInfoVO_getOrderInfoVOSDO_OutputVariable"
+                      part="parameters"
+                      query="/ns2:getOrderInfoVOSDOResponse/ns2:result"/>
+                </copy>
+              </assign>
+            </case>
+            <otherwise xml:id="id64">
+              <assign xml:id="id65" name="Assign_OrderLarger2000">
+                <copy xml:id="id76">
+                  <from xml:id="id77"
+                        variable="OnMessage_getOrderInfoVOSDO_InputVariable"
+                        part="parameters" query="/ns2:getOrderInfoVOSDO"/>
+                  <to xml:id="id78"
+                      variable="OnMessage_getOrderInfoVOSDO_InputVariable"
+                      part="parameters" query="/ns2:getOrderInfoVOSDO"/>
+                </copy>
+                <copy xml:id="id66">
+                  <from xml:id="id67">
+                    <ns2:result xmlns:ns2="www.globalcompany.example.com/types/"
+                                xmlns:ns3="/oracle/fodemo/storefront/store/queries/common/">
+                      <ns3:OrderId/>
+                      <ns3:OrderDate>2008-08-28T07:17:04.0Z</ns3:OrderDate>
+                      <ns3:OrderStatusCode>PENDING</ns3:OrderStatusCode>
+                      <ns3:OrderTotal>2001</ns3:OrderTotal>
+                      <ns3:CustomerId>20</ns3:CustomerId>
+                      <ns3:ShipToName>Clemens Utschig</ns3:ShipToName>
+                      <ns3:ShipToPhoneNumber>1234</ns3:ShipToPhoneNumber>
+                      <ns3:AddressId>10</ns3:AddressId>
+                      <ns3:Address1>100 Oracle Parkway</ns3:Address1>
+                      <ns3:City>Redwood Shores</ns3:City>
+                      <ns3:PostalCode>94065</ns3:PostalCode>
+                      <ns3:StateProvince>CA</ns3:StateProvince>
+                      <ns3:CountryId>US</ns3:CountryId>
+                      <ns3:AccountNumber>41</ns3:AccountNumber>
+                      <ns3:CardTypeCode>AMEX</ns3:CardTypeCode>
+                      <ns3:ExpireDate>2010-10-26T21:32:52</ns3:ExpireDate>
+                      <ns3:CheckDigits>1234</ns3:CheckDigits>
+                      <ns3:OrderItemsInfoVO>
+                        <ns3:OrderId/>
+                        <ns3:LineItemId>1</ns3:LineItemId>
+                        <ns3:ProductId>1</ns3:ProductId>
+                        <ns3:Quantity>1</ns3:Quantity>
+                        <ns3:UnitPrice>2001</ns3:UnitPrice>
+                        <ns3:ProductName>something</ns3:ProductName>
+                        <ns3:SupplierName>from someone</ns3:SupplierName>
+                      </ns3:OrderItemsInfoVO>
+                    </ns2:result>
+                  </from>
+                  <to xml:id="id68"
+                      variable="Reply_getOrderInfoVO_getOrderInfoVOSDO_OutputVariable"
+                      part="parameters"
+                      query="/ns2:getOrderInfoVOSDOResponse/ns2:result"/>
+                </copy>
+              </assign>
+            </otherwise>
+          </switch>
+          <assign xml:id="id69" name="Assign_OrderId">
+            <copy xml:id="id70">
+              <from xml:id="id71"
+                    variable="OnMessage_getOrderInfoVOSDO_InputVariable"
+                    part="parameters"
+                    query="/ns2:getOrderInfoVOSDO/ns2:orderId"/>
+              <to xml:id="id72"
+                  variable="Reply_getOrderInfoVO_getOrderInfoVOSDO_OutputVariable"
+                  part="parameters"
+                  query="/ns2:getOrderInfoVOSDOResponse/ns2:result/ns3:OrderId"/>
+            </copy>
+            <copy xml:id="id73">
+              <from xml:id="id74"
+                    variable="OnMessage_getOrderInfoVOSDO_InputVariable"
+                    part="parameters"
+                    query="/ns2:getOrderInfoVOSDO/ns2:orderId"/>
+              <to xml:id="id75"
+                  variable="Reply_getOrderInfoVO_getOrderInfoVOSDO_OutputVariable"
+                  part="parameters"
+                  query="/ns2:getOrderInfoVOSDOResponse/ns2:result/ns3:OrderItemsInfoVO[1]/ns3:OrderId"/>
+            </copy>
+          </assign>
+          <reply name="Reply_getOrderInfo"
+                 variable="Reply_getOrderInfoVO_getOrderInfoVOSDO_OutputVariable"
+                 partnerLink="customerandorderservice_client"
+                 portType="ns1:StoreFrontService"
+                 operation="getOrderInfoVOSDO"/>
+        </sequence>
+      </onMessage>
+      <onMessage variable="OnMessage_processOrderInfoVOSDO_InputVariable"
+                 partnerLink="customerandorderservice_client"
+                 portType="ns1:StoreFrontService"
+                 operation="processOrderInfoVOSDO">
+        <bpelx:annotation>
+          <bpelx:pattern></bpelx:pattern>
+        </bpelx:annotation>
+        <sequence>
+          <assign name="Assign_ProcessOrderInfo">
+            <copy>
+              <from>
+                <ns2:result xmlns:ns2="www.globalcompany.example.com/types/"
+                            xmlns:ns3="/oracle/fodemo/storefront/store/queries/common/">
+                  <ns3:OrderId>1000</ns3:OrderId>
+                  <ns3:OrderStatusCode>PENDING</ns3:OrderStatusCode>
+                  <ns3:OrderTotal>2001</ns3:OrderTotal>
+                  <ns3:CustomerId>10</ns3:CustomerId>
+                  <ns3:ShipToName>Clemens Utschig</ns3:ShipToName>
+                  <ns3:ShipToPhoneNumber>1235550111</ns3:ShipToPhoneNumber>
+                  <ns3:AddressId>10</ns3:AddressId>
+                  <ns3:Address1>100 Oracle Parkway</ns3:Address1>
+                  <ns3:City>Redwood Shores</ns3:City>
+                  <ns3:PostalCode>94065</ns3:PostalCode>
+                  <ns3:StateProvince>CA</ns3:StateProvince>
+                  <ns3:CountryId>US</ns3:CountryId>
+                  <ns3:AccountNumber>41</ns3:AccountNumber>
+                  <ns3:CardTypeCode>AMEX</ns3:CardTypeCode>
+                  <ns3:ExpireDate>2010-10-26T21:32:52</ns3:ExpireDate>
+                  <ns3:CheckDigits>1234</ns3:CheckDigits>
+                  <ns3:OrderItemsInfoVO>
+                    <ns3:OrderId>10</ns3:OrderId>
+                    <ns3:LineItemId>1</ns3:LineItemId>
+                    <ns3:ProductId>1</ns3:ProductId>
+                    <ns3:Quantity>1</ns3:Quantity>
+                    <ns3:UnitPrice>2001</ns3:UnitPrice>
+                    <ns3:ProductName>something</ns3:ProductName>
+                    <ns3:SupplierName>from someone</ns3:SupplierName>
+                  </ns3:OrderItemsInfoVO>
+                </ns2:result>
+              </from>
+              <to variable="Reply_ProcessOrderInfoVO_processOrderInfoVOSDO_OutputVariable"
+                  part="parameters"
+                  query="/ns2:processOrderInfoVOSDOResponse/ns2:result"/>
+            </copy>
+          </assign>
+          <reply name="Reply_ProcessOrderInfoVO"
+                 variable="Reply_ProcessOrderInfoVO_processOrderInfoVOSDO_OutputVariable"
+                 partnerLink="customerandorderservice_client"
+                 portType="ns1:StoreFrontService"
+                 operation="processOrderInfoVOSDO"/>
+        </sequence>
+      </onMessage>
+      <onMessage variable="OnMessage_processCSOrderInfoVOSDO_InputVariable"
+                 partnerLink="customerandorderservice_client"
+                 portType="ns1:StoreFrontService"
+                 operation="processCSOrderInfoVOSDO">
+        <bpelx:annotation>
+          <bpelx:pattern></bpelx:pattern>
+        </bpelx:annotation>
+        <sequence>
+          <assign name="Assign_ProcessOrderInfoVOCS">
+            <copy>
+              <from>
+                <ns0:Value xsi:type="ns1:OrderInfoVOSDO"
+                           xmlns:ns0="http://xmlns.oracle.com/adf/svc/types/"
+                           xmlns:ns1="/oracle/fodemo/storefront/store/queries/common/"
+                           xmlns:ns2="www.globalcompany.example.com/types/"
+                           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                           xmlns:tns="http://xmlns.oracle.com/adf/svc/errors/">
+                  <ns1:OrderId>1010</ns1:OrderId>
+                  <ns1:OrderDate>2008-08-28T07:17:04.0Z</ns1:OrderDate>
+                  <ns1:OrderShippedDate xsi:nil="true"/>
+                  <ns1:OrderStatusCode>complete</ns1:OrderStatusCode>
+                  <ns1:OrderTotal>1259.98</ns1:OrderTotal>
+                  <ns1:CustomerId>120</ns1:CustomerId>
+                  <ns1:ShipToName xsi:nil="true"/>
+                  <ns1:ShipToPhoneNumber xsi:nil="true"/>
+                  <ns1:AddressId>21</ns1:AddressId>
+                  <ns1:Address1>5415 W 11th St</ns1:Address1>
+                  <ns1:Address2 xsi:nil="true"/>
+                  <ns1:City>Greeley</ns1:City>
+                  <ns1:PostalCode>80634</ns1:PostalCode>
+                  <ns1:StateProvince>CO</ns1:StateProvince>
+                  <ns1:CountryId>US</ns1:CountryId>
+                  <ns1:PaymentOptionId>1015</ns1:PaymentOptionId>
+                  <ns1:BillingAddressId>21</ns1:BillingAddressId>
+                  <ns1:AccountNumber>5555555555554444</ns1:AccountNumber>
+                  <ns1:CardTypeCode>MSTR</ns1:CardTypeCode>
+                  <ns1:ExpireDate>2010-11-30T08:16:09.0Z</ns1:ExpireDate>
+                  <ns1:CheckDigits>333</ns1:CheckDigits>
+                  <ns1:RoutingIdentifier xsi:nil="true"/>
+                  <ns1:InstitutionName xsi:nil="true"/>
+                  <ns1:ShipToAddressId>21</ns1:ShipToAddressId>
+                  <ns1:ObjectVersionId>3</ns1:ObjectVersionId>
+                  <ns1:ShippingOptionId>2</ns1:ShippingOptionId>
+                  <ns1:ObjectVersionId1>0</ns1:ObjectVersionId1>
+                  <ns1:FreeShippingFlag>N</ns1:FreeShippingFlag>
+                  <ns1:ObjectVersionId2>0</ns1:ObjectVersionId2>
+                  <ns1:CustomerCollectFlag>N</ns1:CustomerCollectFlag>
+                  <ns1:GiftwrapFlag>N</ns1:GiftwrapFlag>
+                  <ns1:PaymentOptionId1>1015</ns1:PaymentOptionId1>
+                  <ns1:OrderItemsInfoVO>
+                    <ns1:OrderId>1010</ns1:OrderId>
+                    <ns1:LineItemId>1</ns1:LineItemId>
+                    <ns1:ProductId>31</ns1:ProductId>
+                    <ns1:Quantity>2</ns1:Quantity>
+                    <ns1:UnitPrice>629.99</ns1:UnitPrice>
+                    <ns1:ProductName>7 Megapixel Digital Camera</ns1:ProductName>
+                    <ns1:SupplierName>Transistor City</ns1:SupplierName>
+                    <ns1:ProductId1>31</ns1:ProductId1>
+                  </ns1:OrderItemsInfoVO>
+                </ns0:Value>
+              </from>
+              <to variable="Reply_ProcessOrderVOCS_processCSOrderInfoVOSDO_OutputVariable"
+                  part="parameters"
+                  query="/ns2:processCSOrderInfoVOSDOResponse/ns2:result/ns4:Value"/>
+            </copy>
+            <copy>
+              <from>
+                <ns0:ChangeSummary logging="false" xmlns:sdo="commonj.sdo"
+                                   xmlns:ns0="http://xmlns.oracle.com/adf/svc/types/"/>
+              </from>
+              <to variable="Reply_ProcessOrderVOCS_processCSOrderInfoVOSDO_OutputVariable"
+                  part="parameters"
+                  query="/ns2:processCSOrderInfoVOSDOResponse/ns2:result/ns4:ChangeSummary"/>
+            </copy>
+          </assign>
+          <reply name="Reply_ProcessOrderVOCS"
+                 variable="Reply_ProcessOrderVOCS_processCSOrderInfoVOSDO_OutputVariable"
+                 partnerLink="customerandorderservice_client"
+                 portType="ns1:StoreFrontService"
+                 operation="processCSOrderInfoVOSDO"/>
+        </sequence>
+      </onMessage>
+      <onMessage variable="OnMessage_updateOrderInfoVOSDO_InputVariable"
+                 partnerLink="customerandorderservice_client"
+                 portType="ns1:StoreFrontService"
+                 operation="updateOrderInfoVOSDO">
+        <bpelx:annotation>
+          <bpelx:pattern></bpelx:pattern>
+        </bpelx:annotation>
+        <sequence>
+          <assign name="Assign_UpdateOrderInfoVO">
+            <copy>
+              <from variable="OnMessage_updateOrderInfoVOSDO_InputVariable"
+                    part="parameters"
+                    query="/ns2:updateOrderInfoVOSDO/ns2:orderInfoVO1/ns3:OrderId"/>
+              <to variable="Reply_UpdateOrderInfoVO_updateOrderInfoVOSDO_OutputVariable"
+                  part="parameters"
+                  query="/ns2:updateOrderInfoVOSDOResponse/ns2:result/ns3:OrderId"/>
+            </copy>
+          </assign>
+          <reply name="Reply_UpdateOrderInfoVO"
+                 variable="Reply_UpdateOrderInfoVO_updateOrderInfoVOSDO_OutputVariable"
+                 partnerLink="customerandorderservice_client"
+                 portType="ns1:StoreFrontService"
+                 operation="updateOrderInfoVOSDO"/>
+        </sequence>
+      </onMessage>
+      <onMessage xml:id="id79" variable="createOrderInfoVOSDO_InputVariable"
+                 partnerLink="customerandorderservice_client"
+                 portType="ns1:StoreFrontService"
+                 operation="createOrderInfoVOSDO">
+        <bpelx:annotation>
+          <bpelx:pattern></bpelx:pattern>
+        </bpelx:annotation>
+        <sequence xml:id="id84">
+          <assign xml:id="id88" name="Transform_CreateOrderInfo">
+            <bpelx:annotation>
+              <bpelx:pattern>transformation</bpelx:pattern>
+            </bpelx:annotation>
+            <copy xml:id="id89">
+              <from xml:id="id90"
+                    expression="ora:processXSLT('xsl/Transformation_CreateOrderInfo.xsl',bpws:getVariableData('createOrderInfoVOSDO_InputVariable','parameters'))"/>
+              <to xml:id="id91" variable="createOrderInfoVOSDO_OutputVariable"
+                  part="parameters"/>
+            </copy>
+          </assign>
+          <reply xml:id="id81" name="Reply_CreateOrderInfoVO"
+                 variable="createOrderInfoVOSDO_OutputVariable"
+                 partnerLink="customerandorderservice_client"
+                 portType="ns1:StoreFrontService"
+                 operation="createOrderInfoVOSDO"/>
+        </sequence>
+      </onMessage>
+    </pick>
+  </sequence>
+</process>

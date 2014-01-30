@@ -1,0 +1,23 @@
+<adapter-config name="FulfillmentBatch" adapter="Jms Adapter" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+  
+  <connection-factory location="eis/Jms/TopicConnectionFactory" UIConnectionName="sta00251" csfKey="sta00251" UIJmsProvider="WLSJMS" adapterRef="">
+    <!--non-managed-connection managedConnectionFactoryClassName="oracle.tip.adapter.jms.JmsManagedConnectionFactory">
+      <property name="ConnectionFactoryLocation" value="jms/DemoSupplierTopicCF"/>
+      <property name="IsTopic" value="true"/>
+      <property name="IsTransacted" value="false"/>
+      <property name="FactoryProperties" value=""/>
+      <property name="Username" value="weblogic"/>
+      <property name="Password" value="weblogic" encoded-credential="false"/>
+    </non-managed-connection-->
+  </connection-factory>
+
+  <endpoint-interaction portType="Produce_Message_ptt" operation="Produce_Message">
+    <interaction-spec className="oracle.tip.adapter.jms.outbound.JmsProduceInteractionSpec">
+      <property name="DestinationName" value="jms/DemoSupplierTopic"/>
+      <property name="DeliveryMode" value="Persistent"/>
+      <property name="TimeToLive" value="0"/>
+      <property name="PayloadType" value="TextMessage"/>
+    </interaction-spec>
+  </endpoint-interaction>
+
+</adapter-config>

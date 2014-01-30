@@ -1,0 +1,23 @@
+"""
+   WLST Python script that seeds the soap/rmi CF on the BamAdapter for fusion order demo
+"""   
+import sys
+from java.lang import System
+
+print "Starting modification of BAM resource adapter connection factory .."
+connect('@server.user@','@server.password@','t3://@admin.server.host@:@admin.server.port@') 
+
+# get the server mbean to lookup 
+servermb=getMBean("Servers/@server.target@")
+if servermb is None:
+    print 'Could not find a reference to Servers/@server.target@'
+
+else:
+    print 'Configuring OracleBamAdapter - amending connection factory info for eis/bam/rmi and eis/bam/soap'
+    try:
+        redeploy('OracleBamAdapter', '@deployment.plan@', upload='true', stageMode='stage') 
+
+    except:
+        print "Error while modifying bam adapter connection factory"
+
+

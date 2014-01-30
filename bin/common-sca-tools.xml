@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<project default="init">
+
+  <!-- master build.properties --> 
+  <property file="build.properties"/>  
+  <!-- this is the adf config we need to load the mds store from -->
+  <property name="adf.config.uri" value="../.adf/META-INF/adf-config.xml"/>
+    
+  <!-- debug out the versions -->
+  <echo>Ant: ${ant.version} Java: ${ant.java.version}</echo>
+
+  <!-- check if oracle.home is valid -->
+  <fail message="Oracle Home ${oracle.home} is not valid - does not contain /soa/modules/oracle.soa.bpel_11.1.1/orabpel-common">
+    <condition>
+        <not>
+            <available file="${oracle.home}/soa/modules/oracle.soa.bpel_11.1.1/orabpel-common.jar"/>
+        </not>    
+    </condition>
+  </fail>
+  
+  <!-- get the java.home -->
+  <property environment="env"/>
+  <fail message="JAVA_HOME is not available. Please provide this property (as system property or as java.).">
+      <condition>
+          <and>
+              <not>
+                  <isset property="env.JAVA_HOME"/>
+              </not>
+              <not>
+                  <isset property="java.home"/>
+              </not>
+          </and>
+      </condition>
+  </fail>
+  <condition property="java.home" value="${env.JAVA_HOME}">
+      <isset property="env.JAVA_HOME"/>
+  </condition>
+
+  <!-- check if java version is 1.6 -->
+  <fail message="ant.java.home must contain Java sdk 6">
+    <condition>
+      <not>
+          <equals arg1="${ant.java.version}" arg2="1.6"/>
+      </not>   
+    </condition>
+  </fail>
+  
+  <!-- check if ant is version 1.7 -->
+  <fail message="ant version must be at least ant 1.7">
+      <condition>
+        <not>
+            <contains string="${ant.version}" substring="1.7"/>
+        </not>   
+      </condition>
+  </fail>    
+
+  <!-- Check the mds settings ..  -->
+  <fail message="foreign mds type must be either db / jdev / or server.file">
+      <condition>
+        <and>
+            <not>
+                <equals arg1="${foreign.mds.type}" arg2="db"/>
+            </not>   
+            <not>
+                <equals arg1="${foreign.mds.type}" arg2="jdev"/>
+            </not>   
+            <not>
+                <equals arg1="${foreign.mds.type}" arg2="server.file"/>
+            </not>   
+        </and>
+      </condition>
+  </fail>    
+
+    <echo>Using mds-type : ${foreign.mds.type}</echo>
+    <condition property="db.based" value="true">
+        <equals arg1="${foreign.mds.type}" arg2="db"></equals>
+    </condition>
+    <condition property="file.based" value="true">
+        <equals arg1="${foreign.mds.type}" arg2="jdev"></equals>
+    </condition>
+    <condition property="server.file.based" value="true">
+        <equals arg1="${foreign.mds.type}" arg2="server.file"></equals>
+    </condition>
+
+  <!-- fixes the asinst soa.mgmt jar issue -->
+  <condition property="oracle.soa.mgmt.home"
+             value="${oracle.common.home}"
+             else="${oracle.home}">
+    <available file="${oracle.common.home}/soa/modules/oracle.soa.mgmt_11.1.1/soa-infra-mgmt.jar"/>
+  </condition>  
+
+  <!-- prompt for password.  With Ant 1.7, if the property is already set   -->
+  <!--   this input will be skipped.  This will allow users to decide if    -->
+  <!--   they want to code the password in the build.properties file, or    -->
+  <!--   input that password during deployment.                             -->
+  <input
+    message="Please enter the password for the application (weblogic) server:"
+    addproperty="server.password"
+  />
+
+  <property name="wls.home" value="${oracle.home}/../wlserver_10.3"/>
+
+    <!-- 
+        classpath for mds transfer task and soa libs for the standalone sample 
+    -->
+    <path id="soaClasspath">
+        <pathelement location="util/classes"/>
+
+        <!-- mds libs -->
+        <fileset file="${oracle.common.home}/modules/oracle.mds_11.1.1/mdslcm.jar"/>
+        <fileset file="${oracle.common.home}/modules/oracle.mds_11.1.1/mdsrt.jar"/>
+        <!-- xdk -->
+        <fileset file="${oracle.common.home}/modules/oracle.xdk_11.1.0/xmlparserv2.jar"/>
+        <fileset file="${oracle.common.home}/modules/oracle.xdk_11.1.0/xml.jar"/>
+        <!-- ADF lib -->
+        <fileset file="${oracle.common.home}/modules/oracle.adf.share_11.1.1/adf-share-support.jar"/>
+        <fileset file="${oracle.common.home}/modules/oracle.adf.share.ca_11.1.1/adf-share-ca.jar"/>
+        <fileset file="${oracle.common.home}/modules/oracle.adf.share.ca_11.1.1/adf-share-base.jar"/>
+        <fileset file="${oracle.common.home}/modules/oracle.adf.share_11.1.1/adflogginghandler.jar"/>
+        <fileset file="${oracle.common.home}/modules/oracle.idm_11.1.1/identitystore.jar"/>
+        <fileset file="${oracle.common.home}/modules/oracle.javacache_11.1.1/cache.jar"/>
+        <!-- jaxb for mds -->
+        <fileset file="${oracle.common.home}/modules/javax.xml.bind_2.1.1.jar"/>
+        <!-- dms -->
+        <fileset file="${oracle.common.home}/modules/oracle.dms_11.1.1/dms.jar"/>
+        <!-- ojdl -->
+        <fileset file="${oracle.common.home}/modules/oracle.odl_11.1.1/ojdl.jar"/>
+        <!-- xmlef -->
+        <fileset file="${oracle.common.home}/modules/oracle.xmlef_11.1.1/xmlef.jar"/>
+        <!-- bali share -->
+        <fileset file="${oracle.common.home}/modules/oracle.bali.share_11.1.1/share.jar"/>
+        <!-- oracle jdbc libs -->
+        <fileset file="${oracle.common.home}/modules/oracle.ucp_11.1.0.jar"/>
+        <fileset file="${oracle.home}/../wlserver_10.3/server/ext/jdbc/oracle/11g/ojdbc6.jar"/>
+        <!-- ant -->
+        <fileset file="${oracle.home}/../modules/org.apache.ant_1.7.1/lib/ant.jar"/>
+        
+        <!-- weblogic -->
+        <fileset file="${wls.home}/server/lib/weblogic.jar"/>
+
+        <!-- webserivces -->
+        <fileset file="${oracle.common.home}/modules/oracle.jrf_11.1.1/jrf.jar"/>
+        <fileset file="${oracle.common.home}/modules/oracle.webservices_11.1.1/wsclient.jar"/>
+
+        <!-- soa -->
+        <fileset file="${oracle.home}/soa/modules/oracle.soa.fabric_11.1.1/fabric-runtime.jar"/>
+        <fileset file="${oracle.common.home}/modules/oracle.fabriccommon_11.1.1/fabric-common.jar"/>
+        <!-- moved to common home for em -->
+        <fileset dir="${oracle.soa.mgmt.home}">
+            <include name="soa/modules/oracle.soa.mgmt_11.1.1/soa-infra-mgmt.jar"/>
+        </fileset>        <!-- direct invocation api -->
+        <fileset file="${oracle.home}/soa/modules/oracle.soa.fabric_11.1.1/oracle-soa-client-api.jar"/>
+
+    </path>
+
+  <!-- weblogic deployer task -->
+  <taskdef name="wldeploy" classname="weblogic.ant.taskdefs.management.WLDeploy" 
+     classpath="${wls.home}/server/lib/weblogic.jar:${oracle.common.home}/modules/oracle.jps_11.1.1/jps-common.jar:${oracle.common.home}/modules/oracle.jps_11.1.1/jps-api.jar:${oracle.common.home}/modules/oracle.jps_11.1.1/jps-internal.jar"/>
+  
+  <!-- jaxws client gen -->
+  <taskdef name="clientgen"
+     classname="weblogic.wsee.tools.anttasks.ClientGenTask"
+     classpath="${wls.home}/server/lib/weblogic.jar:${oracle.common.home}/modules/oracle.jps_11.1.1/jps-common.jar:${oracle.common.home}/modules/oracle.jps_11.1.1/jps-api.jar:${oracle.common.home}/modules/oracle.jps_11.1.1/jps-internal.jar"/>
+
+  <target name="init">
+      <echo>SOA Suite 11g version: </echo>
+      <!-- dump the build info -->
+      <java classname="com.collaxa.cube.util.BuildInfo">
+        <classpath>
+            <pathelement location="${oracle.home}/soa/modules/oracle.soa.bpel_11.1.1/orabpel.jar"/>
+            <pathelement location="${oracle.home}/soa/modules/oracle.soa.bpel_11.1.1/orabpel-common.jar"/>
+            <pathelement location="${oracle.home}/soa/modules/oracle.soa.fabric_11.1.1/fabric-runtime.jar"/>
+        </classpath>
+      </java>
+      <!-- compile the utility classes -->
+      <echo>soa infra mgmt home: ${oracle.soa.mgmt.home} </echo>
+      <mkdir dir="util/classes"/>
+      <javac classpathref="soaClasspath" destdir="util/classes" debug="true">
+          <src path="util/src"/>
+      </javac> 
+  </target>
+
+  <!-- seed jms resources via wlst to the target server -->
+  <target name="seedFodJmsResources"
+    description="creates the needed jms resources" depends="init">  
+    <property name="wls.home" value="${oracle.home}/../wlserver_10.3"/>
+    <echo>Seeding jms topic and connection factory for fusion order demo</echo>
+    <property name="jmsSeedScript" value="createJMSResources.py"/>
+    <!-- yak - bug in deployment plan -->
+    <java classname="com.otn.sample.fod.soa.util.GetCurrentTimeStampHelper" 
+            outputproperty="timestamp">
+        <classpath path="util/classes"/>
+    </java>
+    <property name="jmsPlan" value="JmsAdapterDeploymentPlan${timestamp}.xml"/>
+
+    <copy file="templates/createJMSResources.seed" tofile="${jmsSeedScript}" 
+        overwrite="true"/>
+    <replace file="${jmsSeedScript}" token="@server.user@" 
+        value="${server.user}"/>
+    <replace file="${jmsSeedScript}" token="@server.password@" 
+        value="${server.password}"/>
+    <replace file="${jmsSeedScript}" token="@admin.server.host@" 
+        value="${admin.server.host}"/>
+    <replace file="${jmsSeedScript}" token="@admin.server.port@" 
+        value="${admin.server.port}"/>
+    <replace file="${jmsSeedScript}" token="@server.target@" 
+        value="${server.targets}"/>
+
+    <replace file="${jmsSeedScript}" token="@deployment.plan@" 
+        value="${jmsPlan}"/>
+    <replace file="${jmsSeedScript}" token="@jms.topic.jndi@" 
+        value="${orderbooking.jms.topic.jndi}"/>
+    
+    <!-- the jms adapter deployment plan -->
+    <copy file="templates/JmsAdapterDeploymentPlan.seed" tofile="${jmsPlan}" 
+        overwrite="true"/>
+    <replace file="${jmsPlan}" token="@server.username@" 
+        value="${server.user}"/>
+    <replace file="${jmsPlan}" token="@server.password@" 
+        value="${server.password}"/>
+    <replace file="${jmsPlan}" token="@soa.oracle.home@" 
+        value="${soa.server.oracle.home}"/>
+
+    <!-- the wlst ant task needs libs in the system class path - YAK -->
+    <java classname="weblogic.WLST" fork="true">
+       <arg value="${jmsSeedScript}" />
+       <classpath>
+         <pathelement location="${wls.home}/server/lib/weblogic.jar"/>
+         <pathelement location="${oracle.home}/modules/oracle.jps_11.1.1/jps-common.jar"/>
+         <pathelement location="${oracle.home}/modules/oracle.jps_11.1.1/jps-api.jar"/>
+         <pathelement location="${oracle.home}/modules/oracle.jps_11.1.1/jps-internal.jar"/>
+       </classpath>
+    </java>    
+    <delete file="${jmsSeedScript}"/>
+    <delete file="${jmsPlan}"/>
+  </target>
+
+  <!-- remove jms resources via wlst on the target server -->
+  <target name="removeFodJmsResources" description="removes the FOD jms resources">  
+    <property name="wls.home" value="${oracle.home}/../wlserver_10.3"/>
+    <echo>Removing jms topic and connection factory for fusion order demo</echo>
+    <property name="jmsSeedScript" value="removeJMSResources.py"/>
+    <copy file="templates/removeJMSResources.seed" tofile="${jmsSeedScript}" 
+        overwrite="true"/>
+    <replace file="${jmsSeedScript}" token="@server.user@" 
+        value="${server.user}"/>
+    <replace file="${jmsSeedScript}" token="@server.password@" 
+        value="${server.password}"/>
+    <replace file="${jmsSeedScript}" token="@admin.server.host@" 
+        value="${admin.server.host}"/>
+    <replace file="${jmsSeedScript}" token="@admin.server.port@" 
+        value="${admin.server.port}"/>
+    <replace file="${jmsSeedScript}" token="@server.target@" 
+        value="${server.targets}"/>
+        
+    <!-- the wlst ant task needs libs in the system class path - YAK -->
+    <java classname="weblogic.WLST" fork="true">
+       <arg value="${jmsSeedScript}" />
+       <classpath>
+         <pathelement location="${wls.home}/server/lib/weblogic.jar"/>
+         <pathelement location="${oracle.home}/modules/oracle.jps_11.1.1/jps-common.jar"/>
+         <pathelement location="${oracle.home}/modules/oracle.jps_11.1.1/jps-api.jar"/>
+         <pathelement location="${oracle.home}/modules/oracle.jps_11.1.1/jps-internal.jar"/>
+       </classpath>
+    </java>   
+    <delete file="${jmsSeedScript}"/>
+  </target>
+
+
+  <!-- file adapter -->
+  <target name="seedFodFileAdapterResources"
+    description="creates the needed file adapter resources" depends="init">  
+    <property name="wls.home" value="${oracle.home}/../wlserver_10.3"/>
+    <echo>Seeding file adapter connection factory for fusion order demo</echo>
+    <property name="fileSeedScript" value="createFileAdapterResources.py"/>
+    <!-- yak - bug in deployment plan -->
+    <java classname="com.otn.sample.fod.soa.util.GetCurrentTimeStampHelper" 
+            outputproperty="timestamp">
+        <classpath path="util/classes"/>
+    </java>
+    <property name="filePlan" value="FileAdapterDeploymentPlan${timestamp}.xml"/>
+
+    <copy file="templates/createFileAdapterResources.seed" 
+        tofile="${fileSeedScript}" 
+        overwrite="true"/>
+    <replace file="${fileSeedScript}" token="@server.user@" 
+        value="${server.user}"/>
+    <replace file="${fileSeedScript}" token="@server.password@" 
+        value="${server.password}"/>
+    <replace file="${fileSeedScript}" token="@admin.server.host@" 
+        value="${admin.server.host}"/>
+    <replace file="${fileSeedScript}" token="@admin.server.port@" 
+        value="${admin.server.port}"/>
+    <replace file="${fileSeedScript}" token="@server.target@" 
+        value="${server.targets}"/>
+
+    <replace file="${fileSeedScript}" token="@deployment.plan@" 
+        value="${filePlan}"/>
+    
+    <!-- the file adapter deployment plan -->
+    <copy file="templates/FileAdapterDeploymentPlan.seed" tofile="${filePlan}" 
+        overwrite="true"/>
+    <replace file="${filePlan}" token="@file.adapter.controldir@" 
+        value="${orderbooking.file.adapter.control.dir}"/>
+    <replace file="${filePlan}" token="@soa.oracle.home@" 
+        value="${soa.server.oracle.home}"/>
+
+    <!-- the wlst ant task needs libs in the system class path - YAK -->
+    <java classname="weblogic.WLST" fork="true">
+       <arg value="${fileSeedScript}" />
+       <classpath>
+         <pathelement location="${wls.home}/server/lib/weblogic.jar"/>
+         <pathelement location="${oracle.home}/modules/oracle.jps_11.1.1/jps-common.jar"/>
+         <pathelement location="${oracle.home}/modules/oracle.jps_11.1.1/jps-api.jar"/>
+         <pathelement location="${oracle.home}/modules/oracle.jps_11.1.1/jps-internal.jar"/>
+       </classpath>
+    </java>    
+    <delete file="${fileSeedScript}"/>
+    <delete file="${filePlan}"/>
+  </target>  
+
+  <!-- creates mds connection information for adf-config.xml -->
+  <target name="createMDSConnections" 
+    description="seed the mds connection information based on the properties in build.properties"
+    depends="init">    
+    <antcall target="createMDSConnectionForDB"/>
+    <antcall target="createMDSConnectionForFileStore"/>    
+    <antcall target="createMDSConnectionForServerFileStore"/>    
+  </target>
+    
+  <!-- root target to create MDS connection based on db / file / server.file -->
+  <target name="createMDSConnectionForDB" if="db.based">
+    <echo>Creating ${adf.config.uri} for database backed MDS</echo>
+
+    <!-- prompt for password.  With Ant 1.7, if the property is already set   -->
+    <!--   this input will be skipped.  This will allow users to decide if    -->
+    <!--   they want to code the password in the build.properties file, or    -->
+    <!--   input that password during deployment.                             -->
+    <input
+      message="Please enter the password for the MDS schema:"
+      addproperty="mds.db.password"
+    />  
+
+    <copy file="templates/adf-config-db.seed" tofile="${adf.config.uri}" overwrite="true"/>
+    <replace file="${adf.config.uri}" token="@db.user@" value="${mds.db.userid}"/>
+    <replace file="${adf.config.uri}" token="@db.password@" value="${mds.db.password}"/>
+    <replace file="${adf.config.uri}" token="@db.connect.string@" value="${mds.db.jdbc-url}"/>
+    <echo>Using ${mds.db.jdbc-url} for db-based backing, with user ${mds.db.userid}</echo>
+  </target>
+
+  <target name="createMDSConnectionForFileStore" if="file.based">
+    <echo>Creating ${adf.config.uri} for filebased MDS</echo>
+    <copy file="templates/adf-config-file.seed" tofile="${adf.config.uri}" overwrite="true"/>
+    <replace file="${adf.config.uri}" token="@oracle.home@" value="${oracle.home}"/>
+    <echo>Using ${oracle.home}/integration for file-based backing</echo>
+  </target>
+
+  <target name="createMDSConnectionForServerFileStore" if="server.file.based">
+    <echo>Creating ${adf.config.uri} for server-filebased MDS</echo>
+    <copy file="templates/adf-config-server-file.seed" tofile="${adf.config.uri}" overwrite="true"/>
+    <replace file="${adf.config.uri}" token="@bea.home@" value="${oracle.home}/../"/>
+    <replace file="${adf.config.uri}" token="@domain.name@" value="${server.domain.name}"/>
+    <echo>Using ${oracle.home}/../user_projects/domains/${server.domain.name}/gmds/applications/soa-infra for file-based backing</echo>
+  </target>
+
+  <!-- seed bpm demo user community -->
+  <target name="seedDemoUsers" description="seed bpm demo user community">
+      <property name="wls.user"      value="${server.user}"/>
+      <property name="wls.password"  value="${server.password}"/>
+    <echo>${wls.url}</echo>
+  
+    <wldeploy action="deploy" name="SOATestDemoApp" 
+      source="bpm-seed/SOATestDemoApp.ear" library="false"
+      user="${wls.user}" password="${wls.password}"
+      verbose="false" adminurl="${wls.url}"
+      remote="true" upload="true"
+      targets="${server.targets}" failonerror="false"/>
+  
+     <property name="server.url" value="http://${managed.server.host}:${managed.server.port}"/>
+     <echo message="Server URL: ${server.url} ${oracle.home}"/>
+     <java classname="oracle.bpel.services.identity.demoseed.DemoCommunitySeed" fork="yes">
+        <classpath>
+           <pathelement location="${oracle.home}/soa/modules/oracle.soa.workflow_11.1.1/bpm-services.jar"/>
+        </classpath>
+        <arg line="-serverURL ${server.url} -action SEED_COMMUNITY"/>
+     </java>
+  </target>
+
+  <!-- remove bpm demo user community, including application -->
+  <target name="removeDemoUsers" description="remove bpm demo user community">
+     <property name="server.url" value="http://${managed.server.host}:${managed.server.port}"/>
+     <echo message="Server URL: ${server.url} ${oracle.home}"/>
+     <java classname="oracle.bpel.services.identity.demoseed.DemoCommunitySeed">
+        <classpath>
+           <pathelement location="${oracle.home}/soa/modules/oracle.soa.workflow_11.1.1/bpm-services.jar"/>
+        </classpath>
+        <arg line="-serverURL ${server.url} -action REMOVE_COMMUNITY"/>
+     </java>
+    <property name="wls.user"      value="${server.user}"/>
+    <property name="wls.password"  value="${server.password}"/>
+  
+    <wldeploy action="undeploy" name="SOATestDemoApp" 
+      user="${wls.user}" password="${wls.password}"
+      adminurl="${wls.url}" remote="true" 
+      targets="${server.targets}" failonerror="false"/>     
+  </target>
+
+    <!-- import common defs/xsds into mds -->
+    <target name="importCommonServiceArtifactsIntoMds" 
+        depends="createMDSConnections"
+        description="imports the common wsdls/xsds into the mds store">
+        <java classpathref="soaClasspath" fork="true"  
+            classname="com.otn.sample.fod.soa.util.MdsImportTask"
+            failonerror="true">
+            <sysproperty key="oracle.home" value="${oracle.home}"/>
+            <!-- location of adf config (where we transfer to) -->
+            <arg value="../.adf/META-INF/adf-config.xml"/>
+            <!-- store usage defined in adf-config.xml -->
+            <arg value="mstore-usage_1"/>            
+            <!-- mds namespace to import from (src) and to -->
+            <arg value="apps"/>         
+            <!-- local repo, the above param will be postfixed to the below -->
+            <arg value="./soa-seed"/>            
+        </java>
+    </target>
+
+    <!-- delete common defs/xsds from mds -->
+    <target name="deleteCommonServiceArtifactsFromMds" 
+        depends="createMDSConnections"
+        description="imports the common wsdls/xsds into the mds store">
+        <java classpathref="soaClasspath" fork="true"  
+            classname="com.otn.sample.fod.soa.util.MdsDeleteTask"
+            failonerror="true">
+            <sysproperty key="oracle.home" value="${oracle.home}"/>
+            <!-- location of adf config (where we transfer to) -->
+            <arg value="../.adf/META-INF/adf-config.xml"/>
+            <!-- store usage defined in adf-config.xml -->
+            <arg value="mstore-usage_1"/>            
+            <!-- mds namespace to delete from -->
+            <arg value="apps"/>         
+            <!-- local repo, the above param will be postfixed to the below -->
+            <arg value="./soa-seed"/>            
+        </java>
+    </target>
+    
+    <!-- retrieve files from remote mds into the local soa-seed one -->
+    <target name="manageSOASuiteConfiguration" 
+        depends="createMDSConnections"
+        description="retrieves remote mds files for local modification">
+        <input message="soa configuration filename: " addproperty="config.file" 
+            defaultvalue="**"/>
+        <input message="import (to remote) / export (from remote): " 
+            addproperty="config.command" defaultvalue="export"/>
+        <java classpathref="soaClasspath" fork="true"  
+            classname="com.otn.sample.fod.soa.util.MdsSOAInfraConfigurationMgmtTask"
+            failonerror="true">
+            <sysproperty key="oracle.home" value="${oracle.home}"/>
+            <!-- in order to overwrite it from outside -->
+            <sysproperty key="mds.fileName" value="${config.file}"/>
+            <sysproperty key="mds.command" value="${config.command}"/>
+            <!--
+                <arg value="../.adf/META-INF/adf-config.xml"/>
+                <arg value="mstore-usage_1"/>            
+                <arg value="soa/configuration/default"/>         
+                <arg value="./soa-seed"/> 
+            -->    
+        </java>
+    </target>    
+
+  <!-- validate settings of configuration (build.properties as well as mds) -->
+  <target name="validateFodConfigSettings" 
+    description="validates fod config settings including mds" 
+    depends="createMDSConnections">  
+    <property name="wls.home" value="${oracle.home}/../wlserver_10.3"/>
+    <echo>Validating fod config settings through wlst</echo>
+    <property name="fodConfigResources" value="checkFODSettings.py"/>
+    <copy file="templates/checkFODSettings.seed" tofile="${fodConfigResources}" 
+        overwrite="true"/>
+    <replace file="${fodConfigResources}" token="@server.user@" 
+        value="${server.user}"/>
+    <replace file="${fodConfigResources}" token="@server.password@" 
+        value="${server.password}"/>
+    <replace file="${fodConfigResources}" token="@admin.server.host@" 
+        value="${admin.server.host}"/>
+    <replace file="${fodConfigResources}" token="@admin.server.port@" 
+        value="${admin.server.port}"/>
+    <replace file="${fodConfigResources}" token="@server.target@" 
+        value="${server.targets}"/>
+    <replace file="${fodConfigResources}" token="@server.domain.name@" 
+        value="${server.domain.name}"/>
+    <replace file="${fodConfigResources}" token="@managed.server.port@" 
+        value="${managed.server.port}"/>
+    <replace file="${fodConfigResources}" token="@managed.server.host@" 
+        value="${managed.server.host}"/>
+                
+    <!-- the wlst ant task needs libs in the system class path - YAK -->
+    <java classname="weblogic.WLST" fork="true" failonerror="true">
+       <arg value="${fodConfigResources}" />
+       <classpath>
+         <pathelement location="${wls.home}/server/lib/weblogic.jar"/>
+         <pathelement location="${oracle.home}/modules/oracle.jps_11.1.1/jps-common.jar"/>
+         <pathelement location="${oracle.home}/modules/oracle.jps_11.1.1/jps-api.jar"/>
+         <pathelement location="${oracle.home}/modules/oracle.jps_11.1.1/jps-internal.jar"/>
+       </classpath>
+    </java>   
+    <delete file="${fodConfigResources}" />
+    <java classpathref="soaClasspath" fork="true"  
+        classname="com.otn.sample.fod.soa.util.MdsImportTask"
+        failonerror="true">
+        <!-- needed for the oracle home that can be set in adf-config.xml -->
+        <sysproperty key="oracle.home" value="${oracle.home}"/>        
+        <!-- location of adf config (where we transfer to) -->
+        <arg value="../.adf/META-INF/adf-config.xml"/>
+        <!-- store usage defined in adf-config.xml -->
+        <arg value="mstore-usage_1"/>            
+        <!-- mds path to go from (src) and to -->
+        <arg value="apps"/>         
+        <!-- local repo, the above param will be postfixed to the below -->
+        <arg value="./soa-seed"/>    
+        <!-- validate the settings only, no import -->
+        <arg value="true"/>
+    </java>    
+    <fail message="While ALL tests have passed, you MUST set the property named
+'foreign.mds.type' to 'db' in order to be able to deploy! Currently it is set to '${foreign.mds.type}'">
+        <condition>
+            <not>
+                <equals arg1="${foreign.mds.type}" arg2="db"/>
+            </not>
+        </condition>
+    </fail>
+  </target>    
+  
+  <!-- check if partition is there, if not create it .. -->
+  <target name="createSOAPartitionIfNotExist" 
+    description="Create a new partition for fod if it's not already there">
+    <property name="outputfileName" value="partitionList.dat"/>
+    <ant antfile="${oracle.home}/bin/ant-sca-mgmt.xml" target="listPartitions"
+      output="${outputfileName}">
+        <property name="user" value="${server.user}"/>
+        <property name="password" value="${server.password}"/>
+        <property name="host" value="${managed.server.host}"/>
+        <property name="port" value="${managed.server.rmi.port}"/>
+    </ant>    
+    <loadfile property="output" srcfile="${outputfileName}" />
+    <condition property="createPartition" value="true">
+      <and>
+        <not>
+          <equals arg1="${soa.partition.name}" arg2="default"/>
+        </not>  
+        <not>
+          <contains string="${output}" substring="${soa.partition.name}"/>
+        </not>
+     </and>     
+    </condition>
+    <echo>Creating partition ${soa.partition.name}? ${createPartition}</echo>
+    <antcall target="doCreatePartition" inheritall="true"/>
+    <delete file="${outputfileName}"/>
+  </target>
+
+  <target name="doCreatePartition" if="createPartition">
+    <ant antfile="${oracle.home}/bin/ant-sca-mgmt.xml" target="createPartition">
+        <property name="user" value="${server.user}"/>
+        <property name="password" value="${server.password}"/>
+        <property name="host" value="${managed.server.host}"/>
+        <property name="port" value="${managed.server.rmi.port}"/>
+        <property name="partition" value="${soa.partition.name}"/>
+    </ant>
+  </target>
+
+  <!-- check if partition is named default, if not delete it .. -->
+  <target name="deleteSOAPartitionIfNotExistsAndNotDefault" 
+    description="Delete the fod  partition if it is not the default one">
+    <property name="outputfileName" value="partitionList.dat"/>
+    <ant antfile="${oracle.home}/bin/ant-sca-mgmt.xml" target="listPartitions"
+      output="${outputfileName}">
+        <property name="user" value="${server.user}"/>
+        <property name="password" value="${server.password}"/>
+        <property name="host" value="${managed.server.host}"/>
+        <property name="port" value="${managed.server.rmi.port}"/>
+    </ant>
+    <condition property="deletePartition" value="true">
+      <and>
+        <not>
+          <equals arg1="${soa.partition.name}" arg2="default"/>
+        </not>  
+        <contains string="${output}" substring="${soa.partition.name}"/>
+     </and>     
+    </condition>
+    <echo>Deleting partition ${soa.partition.name}? ${deletePartition}</echo>
+    <antcall target="deletePartition" inheritall="true"/>
+    <delete file="${outputfileName}"/>    
+  </target>
+
+  <target name="deletePartition" description="Deletes the fod partition"
+    if="deletePartition">
+    <ant antfile="${oracle.home}/bin/ant-sca-mgmt.xml" target="deletePartition">
+        <property name="user" value="${server.user}"/>
+        <property name="password" value="${server.password}"/>
+        <property name="host" value="${managed.server.host}"/>
+        <property name="port" value="${managed.server.rmi.port}"/>
+        <property name="partition" value="${soa.partition.name}"/>
+    </ant>
+  </target>
+
+</project>

@@ -1,0 +1,32 @@
+#------------------------------------------------------------------------------
+# WSADMIN Python script that removes jms adapter resources for fusion order demo
+#------------------------------------------------------------------------------
+
+cellName = '@was.cell@'
+nodeName = '@was.node@'
+serverName = '@server.targets@'
+jmsTCFjndi = 'jms/DemoSupplierTopicCF'
+jmsTopicJndi = '@jms.topic.jndi@'
+
+# -------------------- FOD TCF renove --------------------
+server = AdminConfig.getid("/Node:"+nodeName+"/Server:"+serverName)
+cfs = AdminTask.listSIBJMSConnectionFactories(server, "-type all").split("\n")
+for cf in cfs:
+    #print cf
+    cfname = AdminConfig.showAttribute(cf, 'name')
+    #print cfname
+    if cfname == "DemoSupplierTopicCF":
+        AdminConfig.remove(cf)
+	print "removed old TCF "+cfname
+
+# -------------------- FOD Topic remove -------------------
+topics = AdminTask.listSIBJMSTopics(server).split("\n")
+for topic in topics:
+    #print topic
+    tName = AdminConfig.showAttribute(topic, 'name')
+    #print tName
+    if tName == "DemoSupplierTopic":
+        AdminConfig.remove(topic)
+	print "removed old Topic "+tName
+
+AdminConfig.save()

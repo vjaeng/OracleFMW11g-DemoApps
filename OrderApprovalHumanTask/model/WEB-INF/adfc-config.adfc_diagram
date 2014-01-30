@@ -1,0 +1,39 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<SDM>
+   <OverallProperties
+      id="OverallProperties1"/>
+   <WildcardControlFlowRule
+      id="WildcardControlFlowRule2">
+      <property
+         name="activityId">*</property>
+      <property
+         name="y">138.0</property>
+      <property
+         name="x">108.0</property>
+   </WildcardControlFlowRule>
+   <View
+      id="View3">
+      <property
+         name="activityId">view1</property>
+      <property
+         name="description">&lt;html>&lt;p align="left" style="font-family:Dialog;font-size:11pt">view - view1&lt;/p>&lt;/html></property>
+      <property
+         name="exceptionHandler">false</property>
+      <property
+         name="rawDescription">view - view1</property>
+      <property
+         name="y">69.0</property>
+      <property
+         name="x">211.0</property>
+   </View>
+   <ControlFlowCase
+      islink="true"
+      id="ControlFlowCase4"
+      from="WildcardControlFlowRule2"
+      to="View3">
+      <property
+         name="fromOutcome">done</property>
+      <property
+         name="sdm:polyPoints">R50,144.0,138.0,170.0,69.0,L50</property>
+   </ControlFlowCase>
+</SDM>

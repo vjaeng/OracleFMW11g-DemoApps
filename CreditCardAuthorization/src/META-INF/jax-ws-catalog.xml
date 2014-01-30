@@ -1,0 +1,4 @@
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+  <system systemId="http://130.35.103.126:8888/FODServices-CCAuthorizationService-context-root/CreditAuthorizationPort?wsdl"
+          uri="../com/example/globalcompany/ccauth/test/CreditAuthorizationService.wsdl"/>
+</catalog>

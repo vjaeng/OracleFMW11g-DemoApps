@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faultPolicyBindings version="2.0.1" 
+                     xmlns="http://schemas.oracle.com/bpel/faultpolicy" 
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<!-- 
+            the faultpolicy mapping for the reference called 
+                CreditCardAuthorizationService, and PartnerSupplierService 
+        -->
+	<reference faultPolicy="OrderBookingFaultPolicy">
+	    <name>CreditCardAuthorizationService</name>
+            <name>PartnerSupplierMediator</name>
+	</reference>
+
+</faultPolicyBindings>

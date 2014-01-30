@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MonitorModel id="1" xmlns="http://www.oracle.com/bpel/monitor">
+<MonitorObjects id="2">
+    <Indicators id="3" />
+    <Paths id="4" />
+    <Counters id="5" />
+</MonitorObjects>
+<Config id="6">
+     <FeatureSwitches enabled="true" id="7">
+     </FeatureSwitches>
+     <DataBases id="8">
+     </DataBases>
+</Config>
+</MonitorModel>

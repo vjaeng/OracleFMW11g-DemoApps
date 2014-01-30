@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="B2B_orderconfirmation_x12" xmlns="http://schemas.xmlsoap.org/wsdl/"  xmlns:tns="http://www.oracle.com/integration/b2b/B2B_orderconfirmation_x12/" xmlns:ns1="urn:oracle:b2b:X12/V4010/855" targetNamespace="http://www.oracle.com/integration/b2b/B2B_orderconfirmation_x12/" xmlns:b2bconfig="http://xmlns.oracle.com/pcbpel/wsdl/b2b/config/" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+	<types>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema">
+			<import namespace="urn:oracle:b2b:X12/V4010/855" schemaLocation="xsd/EDI_X12/4010/855/855_Def/855.xsd"/>
+		</schema>
+	</types>
+	<message name="B2BMsg">
+		<part name="body" element="ns1:Transaction-855"/>
+	</message>
+	<portType name="B2B_send_ptt">
+		<operation name="send">
+			<b2bconfig:parameters
+				UIPort="8001"
+				UIDocRef="EDI_X12--4010--855--855_Def"
+				UIConnectionName="sta00251">
+			</b2bconfig:parameters>
+			<input message="tns:B2BMsg"/>
+		</operation>
+	</portType>
+
+	<plt:partnerLinkType name="B2B_send_plt">
+		<plt:role name="send_role">
+			<plt:portType name="tns:B2B_send_ptt"/>
+		</plt:role>
+	</plt:partnerLinkType>
+</definitions>

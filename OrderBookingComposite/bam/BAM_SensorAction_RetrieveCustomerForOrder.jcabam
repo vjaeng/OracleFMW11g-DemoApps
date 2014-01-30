@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<adapter-config name="BamAdapterService"
+                xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata"
+                xmlns:wsdl-ref="http://xmlns.oracle.com/bam">
+  <connection-factory location="eis/bam/rmi"></connection-factory>
+  <endpoint-interaction operation="writetoBAM">
+    <interaction-spec className="oracle.bam.adapter.adc.ADCInteractionSpec">
+      <property name="DataObjectName"
+                value="/Demos/Fusion Order Demo/Customer"/>
+      <property name="InBatch" value="true"/>
+      <property name="OperationType" value="Upsert"/>
+      <property name="Keys" value="_CustomerID"/>
+    </interaction-spec>
+  </endpoint-interaction>
+</adapter-config>

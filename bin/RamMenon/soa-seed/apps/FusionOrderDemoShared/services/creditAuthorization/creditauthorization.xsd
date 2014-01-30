@@ -1,0 +1,14 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.globalcompany.example.com/ns/CCAuthorizationService"
+     targetNamespace="http://www.globalcompany.example.com/ns/CCAuthorizationService" elementFormDefault="qualified">
+    <xsd:element name="AuthInformation">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="CCType" type="xsd:string"/>
+                <xsd:element name="CCNumber" type="xsd:string"/>
+                <xsd:element name="PurchaseAmount" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="status" type="xsd:string"/>
+    <xsd:element name="error" type="xsd:string"/>
+</xsd:schema>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="findCustomerInfoVO1"
+          Package="orderapprovalhumantask.StoreFrontService"
+          BeanClass="orderapprovalhumantask.StoreFrontService.findCustomerInfoVO1"
+          isJavaBased="false">
+  <AccessorAttribute id="result" IsCollection="true"
+                     BeanClass="orderapprovalhumantask.StoreFrontService.findCustomerInfoVO1.result"
+                     CollectionBeanClass="orderapprovalhumantask.StoreFrontService.findCustomerInfoVO1_Operations"/>
+</JavaBean>

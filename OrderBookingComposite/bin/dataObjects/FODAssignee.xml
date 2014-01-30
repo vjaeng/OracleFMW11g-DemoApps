@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<OracleBAMExport Version="2018">
+  <DataObject Version="14" Name="Assignee" ID="_Assignee" Path="/Demos/Fusion Order Demo" External="0">
+    <Layout>
+      <Column Name="AssigneeID" ID="_AssigneeID" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Column Name="AssigneeName" ID="_AssigneeName" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Column Name="Load" ID="_Load" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Indexes/>
+    </Layout>
+    <Contents/>
+  </DataObject>
+</OracleBAMExport>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions xmlns="http://xmlns.oracle.com/bpel/sensor">
+    <action name="DBSensorAction" enabled="true" publishName="" publishType="BpelReportsSchema" filter="" publishTarget="">
+        <sensorName>OrderProcessingStart</sensorName>
+        <sensorName>OrderBookingCompositeProcessorResult</sensorName>
+        <sensorName>CreditCardAuthResultSensor</sensorName>
+        <sensorName>AssignedUserForApprovalSensor</sensorName>
+        <sensorName>OrderBookingCompositeProcessorFault</sensorName>
+        <sensorName>CustomerForOrder</sensorName>
+        <sensorName>FulfillmentBatchInsert</sensorName>
+    </action>
+</actions>

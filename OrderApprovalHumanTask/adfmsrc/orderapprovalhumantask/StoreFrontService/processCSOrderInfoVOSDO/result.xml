@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="result"
+          Package="orderapprovalhumantask.StoreFrontService.processCSOrderInfoVOSDO"
+          BeanClass="orderapprovalhumantask.StoreFrontService.processCSOrderInfoVOSDO.result"
+          isJavaBased="false">
+  <AccessorAttribute id="Message" IsCollection="true"
+                     BeanClass="orderapprovalhumantask.StoreFrontService.processCSOrderInfoVOSDO.result.Message"
+                     CollectionBeanClass="orderapprovalhumantask.StoreFrontService.processCSOrderInfoVOSDO.result_Operations"/>
+  <AccessorAttribute id="Value" IsCollection="true"
+                     BeanClass="orderapprovalhumantask.StoreFrontService.processCSOrderInfoVOSDO.result.Value"
+                     CollectionBeanClass="orderapprovalhumantask.StoreFrontService.processCSOrderInfoVOSDO.result_Operations"/>
+  <AccessorAttribute id="ChangeSummary" IsCollection="false"
+                     BeanClass="orderapprovalhumantask.StoreFrontService.processCSOrderInfoVOSDO.result.ChangeSummary"/>
+</JavaBean>

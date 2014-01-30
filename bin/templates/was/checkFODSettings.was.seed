@@ -1,0 +1,12 @@
+nodeName = '@was.node@'
+serverName = '@server.targets@'
+
+print "Trying to get server: " + serverName
+server = AdminConfig.getid("/Node:"+nodeName+"/Server:"+serverName)
+
+if server != "":
+	print "Found server and node"
+else:
+  raise NoServerFound, "Could not find server: " + serverName
+
+

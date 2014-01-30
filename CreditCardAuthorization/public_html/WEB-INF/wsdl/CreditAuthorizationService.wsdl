@@ -1,0 +1,53 @@
+<definitions
+    
+     targetNamespace="http://www.globalcompany.example.com/ns/CreditAuthorizationService"
+     xmlns="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:tns="http://www.globalcompany.example.com/ns/CreditAuthorizationService"
+     xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+     xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+     xmlns:types="http://www.globalcompany.example.com/ns/CCAuthorizationService"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+     xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    >
+    <types>
+        <xsd:schema>
+            <xsd:import schemaLocation="creditauthorization.xsd" id="creditauthorization.xsd" namespace="http://www.globalcompany.example.com/ns/CCAuthorizationService"/>
+        </xsd:schema>
+    </types>
+    <message name="CreditAuthorizationRequestMessage">
+        <part name="Authorization" element="types:AuthInformation"/>
+    </message>
+    <message name="CreditAuthorizationResponseMessage">
+        <part name="status" element="types:status"/>
+    </message>
+    <message name="CreditAuthorizationFaultMessage">
+        <part name="error" element="types:error"/>
+    </message>
+    <portType name="CreditAuthorizationPort">
+        <operation name="AuthorizeCredit">
+            <input message="tns:CreditAuthorizationRequestMessage"/>
+            <output message="tns:CreditAuthorizationResponseMessage"/>
+            <fault name="InvalidCredit" message="tns:CreditAuthorizationFaultMessage"/>
+        </operation>
+    </portType>
+    <binding name="CreditAuthorizationSOAPBinding" type="tns:CreditAuthorizationPort">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="AuthorizeCredit">
+            <soap:operation style="document" soapAction="http://www.globalcompany.example.com/ns/CreditAuthorizationService/AuthorizeCredit"/>
+            <input>
+                <soap:body use="literal" parts="Authorization"/>
+            </input>
+            <output>
+                <soap:body use="literal" parts="status"/>
+            </output>
+            <fault name="InvalidCredit">
+                <soap:fault name="InvalidCredit" use="literal"/>
+            </fault>
+        </operation>
+    </binding>
+    <service name="CreditAuthorizationService">
+        <port name="CreditAuthorizationPort" binding="tns:CreditAuthorizationSOAPBinding">
+            <soap:address location="http://130.35.103.126:8888/FODServices-CCAuthorizationService-context-root/CreditAuthorizationPort"/>
+        </port>
+    </service>
+</definitions>

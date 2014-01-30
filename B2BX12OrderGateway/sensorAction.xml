@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions xmlns="http://xmlns.oracle.com/bpel/sensor">
+    <action name="DBSensorAction" enabled="true" publishName="" publishType="BpelReportsSchema" filter="" publishTarget="">
+        <sensorName>B2bIncomingOrderSensor</sensorName>
+    </action>
+</actions>

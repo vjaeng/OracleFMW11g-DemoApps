@@ -1,0 +1,20 @@
+<wsdl:definitions
+     name="PartnerSupplierMediator"
+     targetNamespace="http://xmlns.oracle.com/WebLogicFusionOrderDemo/OrderBookingComposite/PartnerSupplierMediator"
+     xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:tns="http://xmlns.oracle.com/WebLogicFusionOrderDemo/OrderBookingComposite/PartnerSupplierMediator"
+     xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    >
+    <wsdl:import namespace="http://xmlns.oracle.com/WebLogicFusionOrderDemo/OrderBookingComposite/PartnerSupplierMediator"
+         location="PartnerSupplierMediator.wsdl"/>
+    <plnk:partnerLinkType name="PartnerSupplierMediator.PartnerSupplierMediator">
+        <plnk:role name="callback_ptt">
+            <plnk:portType name="tns:callback_ptt"/>
+        </plnk:role>
+        <plnk:role name="execute_ptt">
+            <plnk:portType name="tns:execute_ptt"/>
+        </plnk:role>
+    </plnk:partnerLinkType>
+</wsdl:definitions>

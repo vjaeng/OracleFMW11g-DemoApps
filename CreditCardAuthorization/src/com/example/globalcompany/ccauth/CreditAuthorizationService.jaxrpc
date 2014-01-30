@@ -1,0 +1,111 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<jdevws:WebService xmlns:jdevws="http://xmlns.oracle.com/jdeveloper/10130/webservice">
+   <list n="CHILD_NODES">
+      <url path="types/ObjectFactory.java"/>
+      <url path="CreditAuthorizationFaultMessage.java"/>
+      <url path="types/AuthInformation.java"/>
+      <url path="types/package-info.java"/>
+      <url path="CreditAuthorizationPortImpl.java"/>
+   </list>
+   <hash n="DATA_MODEL">
+      <value n="ATTACHMENT_ENCODING" v="MTOM"/>
+      <list n="BD_">
+         <hash>
+            <value n="BD_DEFAULT_DOCUMENT_WRAPPED" v="false"/>
+            <value n="BOUND_PORT_TYPE" v="{USE_OWNER_TNS}CreditAuthorizationPort"/>
+            <value n="DEFAULT_NAME" v="false"/>
+            <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.SOAPBinding"/>
+            <value n="NAME" v="{http://www.globalcompany.example.com/ns/CreditAuthorizationService}CreditAuthorizationSOAPBinding"/>
+            <list n="OP_BINDINGS">
+               <hash>
+                  <value n="BD_DOCUMENT_WRAPPED" v="false"/>
+                  <value n="BD_RESPONSE_PART" v="status"/>
+                  <value n="BD_SOAP_ACTION" v="http://www.globalcompany.example.com/ns/CreditAuthorizationService/AuthorizeCredit"/>
+                  <value n="BD_WSDL_RETURN_NAME" v="status"/>
+                  <value n="BD_WSDL_RETURN_TNS" v="http://www.globalcompany.example.com/ns/CCAuthorizationService"/>
+                  <value n="BOUND_OPERATION" v="java.lang.String.authorizeCredit.com.example.globalcompany.ccauth.types.AuthInformation"/>
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.SOAPOperationBinding"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+            </list>
+            <hash n="PROPERTY_GROUPS"/>
+         </hash>
+      </list>
+      <list n="BINDING_FILES"/>
+      <list n="GENERATED_FILES"/>
+      <value n="GENERATION_OPTION" v="ANNOTATIONS"/>
+      <value n="GUID" v="5854d464-011c-1000-8001-8d905137adc7"/>
+      <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.java.JavaWebService"/>
+      <list n="PO_">
+         <hash>
+            <value n="DEFAULT_NAME" v="false"/>
+            <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.SOAPPort"/>
+            <value n="NAME" v="CreditAuthorizationPort"/>
+            <value n="PORT_BINDING_NAME" v="{http://www.globalcompany.example.com/ns/CreditAuthorizationService}CreditAuthorizationSOAPBinding"/>
+            <list n="PORT_OPS">
+               <hash>
+                  <value n="EXPOSED_BD_OPERATION" v="java.lang.String.authorizeCredit.com.example.globalcompany.ccauth.types.AuthInformation"/>
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.PortOperation"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+            </list>
+            <hash n="PROPERTY_GROUPS">
+               <hash n="WLS_POLICY_MODEL">
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.policy.WlsPolicyModel"/>
+               </hash>
+            </hash>
+            <url n="URL" protocol="http" host="130.35.103.126" port="8888" path="/FODServices-CCAuthorizationService-context-root/CreditAuthorizationPort"/>
+         </hash>
+      </list>
+      <hash n="PROPERTY_GROUPS">
+         <hash n="WSDL_TO_JAVA_PROPERTIES">
+            <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.java.WSDLToJavaProperties"/>
+            <value n="WSDL2JAVA_DEFAULT_PACKAGE" v="com.example.globalcompany.ccauth"/>
+            <value n="WSDL2JAVA_ROOT_VALUE_PACKAGE" v="com.example.globalcompany.ccauth.types"/>
+            <value n="WSDL2JAVA_UNWRAP_PARAMETERS" v="false"/>
+         </hash>
+      </hash>
+      <list n="PT_">
+         <hash>
+            <value n="AUTO_SERVICE_INTERFACE"/>
+            <value n="DEFAULT_NAME" v="false"/>
+            <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.java.JavaPortType"/>
+            <value n="NAME" v="{USE_OWNER_TNS}CreditAuthorizationPort"/>
+            <list n="OP_">
+               <hash>
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.java.JavaOperation"/>
+                  <list n="OP_JAVA_EXCEPTIONS">
+                     <string v="com.example.globalcompany.ccauth.CreditAuthorizationFaultMessage"/>
+                  </list>
+                  <value n="OP_JAVA_NAME" v="authorizeCredit"/>
+                  <list n="OP_JAVA_PARAMETERS">
+                     <hash>
+                        <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.java.JavaParameter"/>
+                        <value n="NAME" v="Authorization"/>
+                        <value n="PA_MODE" v="0"/>
+                        <value n="PA_WSDL_NAME" v="AuthInformation"/>
+                        <value n="PA_WSDL_PART_NAME" v="Authorization"/>
+                        <value n="TARGET_NAMESPACE" v="http://www.globalcompany.example.com/ns/CCAuthorizationService"/>
+                        <value n="TYPE" v="com.example.globalcompany.ccauth.types.AuthInformation"/>
+                     </hash>
+                  </list>
+                  <value n="OP_JAVA_RETURN_TYPE" v="java.lang.String"/>
+                  <value n="OP_NAME" v="AuthorizeCredit"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+            </list>
+            <hash n="PROPERTY_GROUPS"/>
+            <value n="PT_CLASS" v="com.example.globalcompany.ccauth.CreditAuthorizationPortImpl"/>
+         </hash>
+      </list>
+      <value n="SERVICE_ASYNC" v="false"/>
+      <url n="TARGET_PROJECT" path="../../../../../CreditCardAuthorization.jpr"/>
+      <value n="TOPDOWN_GENERATION_OPTION" v="JAVA"/>
+      <value n="WS_ORIG_GEN_DIRECTION" v="TOP_DOWN"/>
+      <url n="WS_REFERENCE_WSDL" path="../../../../../public_html/WEB-INF/wsdl/CreditAuthorizationService.wsdl"/>
+      <value n="WS_TARGET_NAMESPACE" v="http://www.globalcompany.example.com/ns/CreditAuthorizationService"/>
+      <value n="WS_URI" v="CreditAuthorizationService"/>
+      <url n="WS_WSDL_FILE" path="../../../../../public_html/WEB-INF/wsdl/CreditAuthorizationService.wsdl"/>
+      <value n="WS_WSDL_LOC_VALUE" v="/WEB-INF/wsdl/CreditAuthorizationService.wsdl"/>
+   </hash>
+</jdevws:WebService>

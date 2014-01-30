@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="processCSOrderInfoVOSDO" Package="StoreFrontService.Types"
+          BeanClass="StoreFrontService.Types.processCSOrderInfoVOSDO"
+          isJavaBased="false">
+  <AccessorAttribute id="processData" IsCollection="false"
+                     BeanClass="StoreFrontService.processCSOrderInfoVOSDO.params.processData"/>
+  <AccessorAttribute id="processControl" IsCollection="false"
+                     BeanClass="StoreFrontService.processCSOrderInfoVOSDO.params.processControl"/>
+</JavaBean>

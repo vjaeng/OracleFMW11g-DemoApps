@@ -1,0 +1,13 @@
+<adapter-config name="WriteQuoteRequest" adapter="File Adapter" wsdlLocation="WriteQuoteRequest.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+  
+  <connection-factory location="eis/file/FODFileAdapter" adapterRef=""/>
+  <endpoint-interaction portType="Write_ptt" operation="Write">
+    <interaction-spec className="oracle.tip.adapter.file.outbound.FileInteractionSpec">
+      <property name="PhysicalDirectory" value="\tmp\quotes"/>
+      <property name="FileNamingConvention" value="quoteRequest%SEQ%.txt"/>
+      <property name="Append" value="false"/>
+      <property name="NumberMessages" value="1"/>
+    </interaction-spec>
+  </endpoint-interaction>
+
+</adapter-config>

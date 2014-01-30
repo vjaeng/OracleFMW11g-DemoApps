@@ -1,0 +1,77 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer 
+  
+  Created: Fri Sep 12 14:10:06 PDT 2008
+  Author:  lloywill
+  Purpose: Asynchronous BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<process name="ExternalPartnerSupplier"
+         targetNamespace="http://www.partnersupplier.example.com/ns/warehouse"
+         xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+         xmlns:client="http://www.partnersupplier.example.com/ns/warehouse"
+         xmlns:ora="http://schemas.oracle.com/xpath/extension"
+         xmlns:orcl="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"
+         xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20"
+         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap"
+         xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+         xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/">
+
+    <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        PARTNERLINKS                                                      
+        List of services participating in this BPEL process               
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    --> 
+    <partnerLinks>
+        <!-- 
+      The 'client' role represents the requester of this service. It is 
+      used for callback. The location and correlation information associated
+      with the client role are automatically set using WS-Addressing.
+    -->
+        <partnerLink name="externalpartnersupplier_client" partnerLinkType="client:ExternalPartnerSupplier" myRole="ExternalPartnerSupplierProvider" partnerRole="ExternalPartnerSupplierRequester"/>
+    </partnerLinks>
+
+    <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        VARIABLES                                                        
+        List of messages and XML documents used within this BPEL process 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    -->
+    <variables>
+        <!-- Reference to the message passed as input during initiation -->
+        <variable name="inputVariable" messageType="client:ExternalPartnerSupplierRequestMessage"/>
+
+        <!-- Reference to the message that will be sent back to the requester during callback -->
+        <variable name="outputVariable" messageType="client:ExternalPartnerSupplierResponseMessage"/>
+    </variables>
+
+    <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+       ORCHESTRATION LOGIC                                               
+       Set of activities coordinating the flow of messages across the    
+       services integrated within this business process                  
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    -->
+    <sequence name="main">
+        <!-- Receive input from requestor. (Note: This maps to operation defined in ExternalPartnerSupplier.wsdl) -->
+        <receive name="receiveInput" partnerLink="externalpartnersupplier_client" portType="client:ExternalPartnerSupplier" operation="process" variable="inputVariable" createInstance="yes"/>
+
+        <assign name="AssignResponse">
+            <copy>
+                <from variable="inputVariable" part="payload"
+                      query="/client:WarehouseProcessRequest/client:orderTotal"/>
+                <to variable="outputVariable" part="payload"
+                    query="/client:WarehouseProcessResponse/client:orderTotal"/>
+            </copy>
+            <copy>
+                <from expression="xp20:current-date()"/>
+                <to variable="outputVariable" part="payload"
+                    query="/client:WarehouseProcessResponse/client:deliveryDate"/>
+            </copy>
+        </assign>
+        <invoke name="callbackClient" partnerLink="externalpartnersupplier_client" portType="client:ExternalPartnerSupplierCallback" operation="processResponse" inputVariable="outputVariable"/>
+    </sequence>
+</process>

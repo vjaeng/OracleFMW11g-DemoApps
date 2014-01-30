@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<wsdl:definitions
+     name="OrderProcessor"
+     targetNamespace="http://www.globalcompany.example.com/ns/OrderBookingService"
+     xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+     xmlns:client="http://www.globalcompany.example.com/ns/OrderBookingService"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+     xmlns:ns1="/oracle/fodemo/storefront/store/queries/common/"
+    >
+    <wsdl:documentation>
+        This is the wsdl for the order processing engine, the main bpel process
+        that takes care about the order orchestration
+    </wsdl:documentation>
+    <wsdl:import namespace="/oracle/fodemo/storefront/store/queries/common/" 
+        location="../oracle/fodemo/storefront/store/service/common/serviceinterface/StoreFrontService.wsdl"/>
+        
+    <!-- type import of the OrderProcessor.xsd -->
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://www.globalcompany.example.com/ns/OrderBookingService/rules"
+             xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+             xmlns:client="http://www.globalcompany.example.com/ns/OrderBookingService"
+             xmlns:ns1="/oracle/fodemo/storefront/store/queries/common/"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns3="http://www.globalcompany.example.com/ns/InternalWarehouse"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://www.globalcompany.example.com/ns/OrderBookingService" 
+                schemaLocation="OrderProcessor.xsd"/>
+        </schema>
+    </wsdl:types>
+    <!-- request message for the OrderProcessor as defined in the OrderProcessor.xsd -->
+    <wsdl:message name="OrderProcessorRequestMessage">
+        <wsdl:part name="payload" element="client:process"/>
+    </wsdl:message>
+    <!-- response message, only containing the status field -->
+    <wsdl:message name="OrderProcessorResponseMessage">
+        <wsdl:part name="payload" element="client:processResponse"/>
+    </wsdl:message>
+    <!-- in case a fault happens -->
+    <wsdl:message name="OrderProcessorFault">
+        <wsdl:part name="fault" element="client:orderProcessFault"/>
+    </wsdl:message>
+    <!-- initiating portType, provided by the process -->
+    <wsdl:portType name="OrderProcessor">
+        <wsdl:operation name="process">
+            <wsdl:input message="client:OrderProcessorRequestMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <!-- callback portType, requested by the process -->
+    <wsdl:portType name="OrderProcessorCallback">
+        <!-- called in case of success -->
+        <wsdl:operation name="processResponse">
+            <wsdl:input message="client:OrderProcessorResponseMessage"/>
+        </wsdl:operation>
+        <!-- called in case of a fault -->
+        <wsdl:operation name="processFault">
+            <wsdl:input message="client:OrderProcessorFault"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <!-- bpel extension, for provided / requested portType -->
+    <plnk:partnerLinkType name="OrderProcessor">
+        <plnk:role name="OrderProcessorRequester">
+
+            <plnk:portType name="client:OrderProcessorCallback"/>
+        </plnk:role>
+        <plnk:role name="OrderProcessorProvider">
+            <plnk:portType name="client:OrderProcessor"/>
+        </plnk:role>
+    </plnk:partnerLinkType>
+</wsdl:definitions>

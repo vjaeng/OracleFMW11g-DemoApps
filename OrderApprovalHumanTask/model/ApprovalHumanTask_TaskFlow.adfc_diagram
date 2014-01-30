@@ -1,0 +1,56 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<SDM>
+   <OverallProperties
+      id="OverallProperties1">
+      <property
+         name="y">250.5</property>
+      <property
+         name="x">88.01758</property>
+   </OverallProperties>
+   <View
+      id="View3">
+      <property
+         name="activityId">taskDetails1_jspx</property>
+      <property
+         name="page">/taskDetails1.jspx</property>
+      <property
+         name="start">true</property>
+      <property
+         name="description">&lt;html>&lt;p align="left" style="font-family:Dialog;font-size:11pt">view - taskDetails1_jspx&lt;/p>&lt;/html></property>
+      <property
+         name="exceptionHandler">false</property>
+      <property
+         name="rawDescription">view - taskDetails1_jspx</property>
+      <property
+         name="y">165.5</property>
+      <property
+         name="x">262.1787</property>
+   </View>
+   <TaskFlowReturn
+      id="TaskFlowReturn4">
+      <property
+         name="activityId">returnCall</property>
+      <property
+         name="finish">true</property>
+      <property
+         name="description">&lt;html>&lt;p align="left" style="font-family:Dialog;font-size:11pt">task-flow-return - returnCall&lt;/p>&lt;/html></property>
+      <property
+         name="rawDescription">task-flow-return - returnCall</property>
+      <property
+         name="exceptionHandler">false</property>
+      <property
+         name="y">151.0</property>
+      <property
+         name="x">734.0</property>
+   </TaskFlowReturn>
+   <ControlFlowCase
+      islink="true"
+      id="ControlFlowCase6"
+      from="View3"
+      to="TaskFlowReturn4">
+      <property
+         name="fromOutcome">closeTaskFlow</property>
+      <property
+         name="sdm:polyPoints">R50,303.1787,165.5,693.0,151.0,L50</property>
+   </ControlFlowCase>
+</SDM>

@@ -1,0 +1,617 @@
+<?xml version="1.0"?>
+<OracleBAMExport Version="2018">
+  <DataObject Version="14" Name="ProcessTime" ID="_ProcessTimes" Path="/Demos/Fusion Order Demo" External="0">
+    <Layout>
+      <Column Name="ECID" ID="_ECID" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Column Name="InstanceID" ID="_InstanceID" Type="integer" Nullable="1" Public="1"/>
+      <Column Name="CompositeName" ID="_CompositeName" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Column Name="CompositeVersion" ID="_CompositeVersion" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Column Name="ReceiveOrder" ID="_ReceiveOrder" Type="datetime" Nullable="1" Public="1"/>
+      <Column Name="CreditCheck" ID="_CreditCheck" Type="datetime" Nullable="1" Public="1"/>
+      <Column Name="ApprovalStart" ID="_ApprovalStart" Type="datetime" Nullable="1" Public="1"/>
+      <Column Name="ApprovalEnd" ID="_ApprovalEnd" Type="datetime" Nullable="1" Public="1"/>
+      <Column Name="InvokeInternalWarehouse" ID="_InvokeInternalWarehouse" Type="datetime" Nullable="1" Public="1"/>
+      <Column Name="InvokePartnerSupplier" ID="_InvokePartnerSupplier" Type="datetime" Nullable="1" Public="1"/>
+      <Column Name="ReceiveInternalWarehouseResponse" ID="_ReceiveInternalWarehouseRespo" Type="datetime" Nullable="1" Public="1"/>
+      <Column Name="ReceivePartnerResponse" ID="_ReceivePartnerResponse" Type="datetime" Nullable="1" Public="1"/>
+      <Column Name="SelectPreferredSupplier" ID="_SelectPreferredSupplier" Type="datetime" Nullable="1" Public="1"/>
+      <Column Name="InvokeFulfillment" ID="_InvokeFulfillment" Type="datetime" Nullable="1" Public="1"/>
+      <Column Name="FulfillmentComplete" ID="_FulfillmentComplete" Type="datetime" Nullable="1" Public="1"/>
+      <Column Name="CallBackClient" ID="_CallBackClient" Type="datetime" Nullable="1" Public="1"/>
+      <Column Name="InternalWarehouseQuote" ID="_InternalWarehouseQuote" Type="float" Nullable="1" Public="1"/>
+      <Column Name="PartnerSupplierQuote" ID="_PartnerSupplierQuote" Type="float" Nullable="1" Public="1"/>
+      <Column Name="OrderID" ID="_OrderID" Type="lookup">
+        <Lookup>
+          <DataObject>
+            <Name>Order</Name>
+            <Path>/Demos/Fusion Order Demo</Path>
+            <ID>_Order</ID>
+          </DataObject>
+          <LookupFieldID>_OrderID</LookupFieldID>
+          <LookupFieldName>OrderID</LookupFieldName>
+          <MatchFields>
+            <KeyPair>
+              <PrimaryKeyID>_ECID</PrimaryKeyID>
+              <PrimaryKeyName>ECID</PrimaryKeyName>
+              <ForeignKeyID>_ECID</ForeignKeyID>
+              <ForeignKeyName>ECID</ForeignKeyName>
+            </KeyPair>
+          </MatchFields>
+        </Lookup>
+      </Column>
+      <Column Name="OrderPrice" ID="_OrderPrice" Type="lookup">
+        <Lookup>
+          <DataObject>
+            <Name>Order</Name>
+            <Path>/Demos/Fusion Order Demo</Path>
+            <ID>_Order</ID>
+          </DataObject>
+          <LookupFieldID>_OrderPrice</LookupFieldID>
+          <LookupFieldName>OrderPrice</LookupFieldName>
+          <MatchFields>
+            <KeyPair>
+              <PrimaryKeyID>_ECID</PrimaryKeyID>
+              <PrimaryKeyName>ECID</PrimaryKeyName>
+              <ForeignKeyID>_ECID</ForeignKeyID>
+              <ForeignKeyName>ECID</ForeignKeyName>
+            </KeyPair>
+          </MatchFields>
+        </Lookup>
+      </Column>
+      <Column Name="ReceiveOrderCode" ID="_ReceiveOrderCode" Type="calculated" CalculatedExpression="&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_ReceiveOrder&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;EQ&lt;/operator&gt;&lt;value&gt;&lt;type&gt;NONE&lt;/type&gt;&lt;ivalue/&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;1&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;" ExpressionUserText="If(ReceiveOrder==NULL)then (0) else (1)"/>
+      <Column Name="CreditCheckCode" ID="_CreditCheckCode" Type="calculated" CalculatedExpression="&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_CreditCheck&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;EQ&lt;/operator&gt;&lt;value&gt;&lt;type&gt;NONE&lt;/type&gt;&lt;ivalue/&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;1&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;" ExpressionUserText="If(CreditCheck==NULL)then (0) else (1)"/>
+      <Column Name="ApprovalCode" ID="_ApprovalCode" Type="calculated" CalculatedExpression="&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;LogicalExpression&quot;&gt;&lt;operator&gt;AND&lt;/operator&gt;&lt;left&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_ApprovalStart&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;NE&lt;/operator&gt;&lt;value&gt;&lt;type&gt;NONE&lt;/type&gt;&lt;ivalue/&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/left&gt;&lt;right&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_ApprovalEnd&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;NE&lt;/operator&gt;&lt;value&gt;&lt;type&gt;NONE&lt;/type&gt;&lt;ivalue/&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/right&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;1&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_ApprovalStart&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;EQ&lt;/operator&gt;&lt;value&gt;&lt;type&gt;NONE&lt;/type&gt;&lt;ivalue/&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;2&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;" ExpressionUserText="If ((ApprovalStart!=NULL) &amp;&amp; (ApprovalEnd!=NULL)) then (1) else (if (ApprovalStart==NULL) then (0) else (2))"/>
+      <Column Name="InvokeQuoteCode" ID="_InvokeQuoteCode" Type="calculated" CalculatedExpression="&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;LogicalExpression&quot;&gt;&lt;operator&gt;AND&lt;/operator&gt;&lt;left&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_InvokeInternalWarehouse&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;NE&lt;/operator&gt;&lt;value&gt;&lt;type&gt;NONE&lt;/type&gt;&lt;ivalue/&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/left&gt;&lt;right&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_InvokePartnerSupplier&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;NE&lt;/operator&gt;&lt;value&gt;&lt;type&gt;NONE&lt;/type&gt;&lt;ivalue/&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/right&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;1&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;LogicalExpression&quot;&gt;&lt;operator&gt;OR&lt;/operator&gt;&lt;left&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_InvokeInternalWarehouse&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;NE&lt;/operator&gt;&lt;value&gt;&lt;type&gt;NONE&lt;/type&gt;&lt;ivalue/&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/left&gt;&lt;right&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_InvokePartnerSupplier&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;NE&lt;/operator&gt;&lt;value&gt;&lt;type&gt;NONE&lt;/type&gt;&lt;ivalue/&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/right&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;2&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;" ExpressionUserText="If (InvokeInternalWarehouse!=NULL) &amp;&amp; (InvokePartnerSupplier!=NULL) then (1) else (if (InvokeInternalWarehouse!=NULL) || (InvokePartnerSupplier!=NULL) then (2) else (0))"/>
+      <Column Name="QuoteCompleteCode" ID="_QuoteCompleteCode" Type="calculated" CalculatedExpression="&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;LogicalExpression&quot;&gt;&lt;operator&gt;AND&lt;/operator&gt;&lt;left&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_ReceiveInternalWarehouseRespo&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;NE&lt;/operator&gt;&lt;value&gt;&lt;type&gt;NONE&lt;/type&gt;&lt;ivalue/&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/left&gt;&lt;right&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_ReceivePartnerResponse&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;NE&lt;/operator&gt;&lt;value&gt;&lt;type&gt;NONE&lt;/type&gt;&lt;ivalue/&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/right&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;1&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;LogicalExpression&quot;&gt;&lt;operator&gt;OR&lt;/operator&gt;&lt;left&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_ReceiveInternalWarehouseRespo&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;EQ&lt;/operator&gt;&lt;value&gt;&lt;type&gt;NONE&lt;/type&gt;&lt;ivalue/&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/left&gt;&lt;right&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_ReceivePartnerResponse&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;EQ&lt;/operator&gt;&lt;value&gt;&lt;type&gt;NONE&lt;/type&gt;&lt;ivalue/&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/right&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;2&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;" ExpressionUserText="If(ReceiveInternalWarehouseResponse!=NULL) &amp;&amp; (ReceivePartnerResponse!=NULL) then (1) else (if(ReceiveInternalWarehouseResponse==NULL) || (ReceivePartnerResponse==NULL) then (2) else (0))"/>
+      <Column Name="InvokeFulfillmentCode" ID="_InvokeFulfillmentCode" Type="calculated" CalculatedExpression="&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_InvokeFulfillment&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;EQ&lt;/operator&gt;&lt;value&gt;&lt;type&gt;NONE&lt;/type&gt;&lt;ivalue/&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;1&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;" ExpressionUserText="If (InvokeFulfillment==NULL) then (0) else (1)"/>
+      <Column Name="FulfillmentCompleteCode" ID="_FulfillmentCompleteCode" Type="calculated" CalculatedExpression="&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_FulfillmentComplete&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;EQ&lt;/operator&gt;&lt;value&gt;&lt;type&gt;NONE&lt;/type&gt;&lt;ivalue/&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;1&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;" ExpressionUserText="If (FulfillmentComplete==NULL) then (0) else (1)"/>
+      <Column Name="CallBackClientCode" ID="_CallBackClientCode" Type="calculated" CalculatedExpression="&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_CallBackClient&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;EQ&lt;/operator&gt;&lt;value&gt;&lt;type&gt;NONE&lt;/type&gt;&lt;ivalue/&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;1&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;" ExpressionUserText="If (CallBackClient==NULL) then (0) else (1)"/>
+      <Column Name="AlertTimeSpan" ID="_AlertTimeSpan" Type="calculated" CalculatedExpression="&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_End2EndTime&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;EQ&lt;/operator&gt;&lt;value&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;MathExpression&quot;&gt;&lt;operation&gt;&lt;left&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;NOW&lt;/name&gt;&lt;argumentlist/&gt;&lt;/call&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/left&gt;&lt;operator&gt;-&lt;/operator&gt;&lt;right&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_ReceiveOrder&lt;/ivalue&gt;&lt;/right&gt;&lt;/operation&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;" ExpressionUserText="If(End2EndTime==0) then (now() - ReceiveOrder) else (0)"/>
+      <Column Name="End2EndTime" ID="_End2EndTime" Type="calculated" CalculatedExpression="&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_CallBackClient&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;EQ&lt;/operator&gt;&lt;value&gt;&lt;type&gt;NONE&lt;/type&gt;&lt;ivalue/&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;MathExpression&quot;&gt;&lt;operation&gt;&lt;left&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_CallBackClient&lt;/ivalue&gt;&lt;/left&gt;&lt;operator&gt;-&lt;/operator&gt;&lt;right&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_ReceiveOrder&lt;/ivalue&gt;&lt;/right&gt;&lt;/operation&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;" ExpressionUserText="If(CallBackClient==NULL) then (0) else (CallBackClient-ReceiveOrder)"/>
+      <Column Name="ProcessStep" ID="_ProcessStep" Type="calculated" CalculatedExpression="&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_CallBackClientCode&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;EQ&lt;/operator&gt;&lt;value&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;1&lt;/ivalue&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;7&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_QuoteCompleteCode&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;EQ&lt;/operator&gt;&lt;value&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;1&lt;/ivalue&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;6&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_InvokeQuoteCode&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;EQ&lt;/operator&gt;&lt;value&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;1&lt;/ivalue&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;5&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_ApprovalCode&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;EQ&lt;/operator&gt;&lt;value&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;1&lt;/ivalue&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;4&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_ApprovalCode&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;EQ&lt;/operator&gt;&lt;value&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;2&lt;/ivalue&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;3&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_CreditCheckCode&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;EQ&lt;/operator&gt;&lt;value&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;1&lt;/ivalue&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;2&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_ReceiveOrderCode&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;EQ&lt;/operator&gt;&lt;value&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;1&lt;/ivalue&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;1&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;" ExpressionUserText="If(CallBackClientCode==1) then (7) else (If(QuoteCompleteCode==1) then (6) else (if(InvokeQuoteCode==1) then (5) else (if (ApprovalCode==1) then (4) else (if (ApprovalCode==2) then (3) else (if (CreditCheckCode==1) then (2) else (if (ReceiveOrderCode==1) then (1) else (0)))))))"/>
+      <Column Name="CompletionType" ID="_CompletionType" Type="calculated" CalculatedExpression="&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_End2EndTime&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;EQ&lt;/operator&gt;&lt;value&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_End2EndTime&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;GT&lt;/operator&gt;&lt;value&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;300&lt;/ivalue&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;1&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;2&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;" ExpressionUserText="if (End2EndTime ==0) then (0) else (if (End2EndTime&gt;300) then (1) else (2))"/>
+      <Column Name="CustomerID" ID="_CustomerID" Type="lookup">
+        <Lookup>
+          <DataObject>
+            <Name>Order</Name>
+            <Path>/Demos/Fusion Order Demo</Path>
+            <ID>_Order</ID>
+          </DataObject>
+          <LookupFieldID>_CustomerID</LookupFieldID>
+          <LookupFieldName>CustomerID</LookupFieldName>
+          <MatchFields>
+            <KeyPair>
+              <PrimaryKeyID>_ECID</PrimaryKeyID>
+              <PrimaryKeyName>ECID</PrimaryKeyName>
+              <ForeignKeyID>_ECID</ForeignKeyID>
+              <ForeignKeyName>ECID</ForeignKeyName>
+            </KeyPair>
+          </MatchFields>
+        </Lookup>
+      </Column>
+      <Column Name="AssigneeID" ID="_AssigneeID" Type="string" MaxSize="100" Nullable="1" Public="1"/>
+      <Column Name="ViolationRiskFlag" ID="_ViolationRiskFlag" Type="calculated" CalculatedExpression="&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_End2EndTime&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;NE&lt;/operator&gt;&lt;value&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;IF&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;LogicalExpression&quot;&gt;&lt;operator&gt;AND&lt;/operator&gt;&lt;left&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;NOW&lt;/name&gt;&lt;argumentlist/&gt;&lt;/call&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;GT&lt;/operator&gt;&lt;value&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;DATEADD&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_ReceiveOrder&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;3&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/left&gt;&lt;right&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;ComparisonExpression&quot;&gt;&lt;column&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;NOW&lt;/name&gt;&lt;argumentlist/&gt;&lt;/call&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/column&gt;&lt;operator&gt;LT&lt;/operator&gt;&lt;value&gt;&lt;type&gt;Expression&lt;/type&gt;&lt;ivalue&gt;&lt;expression type=&quot;FunctionExpression&quot;&gt;&lt;call&gt;&lt;name&gt;DATEADD&lt;/name&gt;&lt;argumentlist&gt;&lt;argument&gt;&lt;type&gt;FieldID&lt;/type&gt;&lt;ivalue&gt;_ReceiveOrder&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;5&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/value&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/right&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;1&lt;/ivalue&gt;&lt;/argument&gt;&lt;argument&gt;&lt;type&gt;INTEGER&lt;/type&gt;&lt;ivalue&gt;0&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;&lt;/ivalue&gt;&lt;/argument&gt;&lt;/argumentlist&gt;&lt;/call&gt;&lt;/expression&gt;" ExpressionUserText="If (End2EndTime!=0) then (0) else (if &#xA;(NOW() &gt; DateAdd({ReceiveOrder},0,0,0,0,3,0,0))  &amp;&amp; (NOW() &lt; DateAdd({ReceiveOrder},0,0,0,0,5,0,0)) then (1) else (0))"/>
+      <Indexes/>
+    </Layout>
+    <Contents>
+      <Row ID="1">
+        <Column ID="_ECID" Value="20058"/>
+        <Column ID="_InstanceID" Value="268"/>
+        <Column ID="_CompositeName" Null="1"/>
+        <Column ID="_CompositeVersion" Value="1.0"/>
+        <Column ID="_ReceiveOrder" Value="2008-12-09T12:41:41.0000000PST"/>
+        <Column ID="_CreditCheck" Value="2008-12-09T12:41:44.0000000PST"/>
+        <Column ID="_ApprovalStart" Null="1"/>
+        <Column ID="_ApprovalEnd" Null="1"/>
+        <Column ID="_InvokeInternalWarehouse" Value="2008-12-09T12:41:46.0000000PST"/>
+        <Column ID="_InvokePartnerSupplier" Value="2008-12-09T12:41:46.0000000PST"/>
+        <Column ID="_ReceiveInternalWarehouseRespo" Value="2008-12-09T12:41:47.0000000PST"/>
+        <Column ID="_ReceivePartnerResponse" Value="2008-12-09T12:41:48.0000000PST"/>
+        <Column ID="_SelectPreferredSupplier" Value="2008-12-09T12:41:48.0000000PST"/>
+        <Column ID="_InvokeFulfillment" Value="2008-12-09T12:41:48.0000000PST"/>
+        <Column ID="_FulfillmentComplete" Null="1"/>
+        <Column ID="_CallBackClient" Null="1"/>
+        <Column ID="_InternalWarehouseQuote" Value="1000.0"/>
+        <Column ID="_PartnerSupplierQuote" Value="1999.0"/>
+        <Column ID="_OrderID" Null="1"/>
+        <Column ID="_OrderPrice" Null="1"/>
+        <Column ID="_ReceiveOrderCode" Value="1"/>
+        <Column ID="_CreditCheckCode" Value="1"/>
+        <Column ID="_ApprovalCode" Value="0"/>
+        <Column ID="_InvokeQuoteCode" Value="1"/>
+        <Column ID="_QuoteCompleteCode" Value="1"/>
+        <Column ID="_InvokeFulfillmentCode" Value="1"/>
+        <Column ID="_FulfillmentCompleteCode" Value="0"/>
+        <Column ID="_CallBackClientCode" Value="0"/>
+        <Column ID="_AlertTimeSpan" Value="261940"/>
+        <Column ID="_End2EndTime" Value="0"/>
+        <Column ID="_ProcessStep" Value="6"/>
+        <Column ID="_CompletionType" Value="0"/>
+        <Column ID="_CustomerID" Null="1"/>
+        <Column ID="_AssigneeID" Null="1"/>
+        <Column ID="_ViolationRiskFlag" Value="0"/>
+      </Row>
+      <Row ID="2">
+        <Column ID="_ECID" Value="20063"/>
+        <Column ID="_InstanceID" Value="274"/>
+        <Column ID="_CompositeName" Null="1"/>
+        <Column ID="_CompositeVersion" Value="1.0"/>
+        <Column ID="_ReceiveOrder" Value="2008-12-09T12:45:16.0000000PST"/>
+        <Column ID="_CreditCheck" Value="2008-12-09T12:45:22.0000000PST"/>
+        <Column ID="_ApprovalStart" Null="1"/>
+        <Column ID="_ApprovalEnd" Null="1"/>
+        <Column ID="_InvokeInternalWarehouse" Value="2008-12-09T12:45:24.0000000PST"/>
+        <Column ID="_InvokePartnerSupplier" Value="2008-12-09T12:45:24.0000000PST"/>
+        <Column ID="_ReceiveInternalWarehouseRespo" Value="2008-12-09T12:45:25.0000000PST"/>
+        <Column ID="_ReceivePartnerResponse" Value="2008-12-09T12:45:26.0000000PST"/>
+        <Column ID="_SelectPreferredSupplier" Value="2008-12-09T12:45:26.0000000PST"/>
+        <Column ID="_InvokeFulfillment" Value="2008-12-09T12:45:26.0000000PST"/>
+        <Column ID="_FulfillmentComplete" Null="1"/>
+        <Column ID="_CallBackClient" Null="1"/>
+        <Column ID="_InternalWarehouseQuote" Value="1000.0"/>
+        <Column ID="_PartnerSupplierQuote" Value="1999.0"/>
+        <Column ID="_OrderID" Null="1"/>
+        <Column ID="_OrderPrice" Null="1"/>
+        <Column ID="_ReceiveOrderCode" Value="1"/>
+        <Column ID="_CreditCheckCode" Value="1"/>
+        <Column ID="_ApprovalCode" Value="0"/>
+        <Column ID="_InvokeQuoteCode" Value="1"/>
+        <Column ID="_QuoteCompleteCode" Value="1"/>
+        <Column ID="_InvokeFulfillmentCode" Value="1"/>
+        <Column ID="_FulfillmentCompleteCode" Value="0"/>
+        <Column ID="_CallBackClientCode" Value="0"/>
+        <Column ID="_AlertTimeSpan" Value="261725"/>
+        <Column ID="_End2EndTime" Value="0"/>
+        <Column ID="_ProcessStep" Value="6"/>
+        <Column ID="_CompletionType" Value="0"/>
+        <Column ID="_CustomerID" Null="1"/>
+        <Column ID="_AssigneeID" Null="1"/>
+        <Column ID="_ViolationRiskFlag" Value="0"/>
+      </Row>
+      <Row ID="3">
+        <Column ID="_ECID" Value="30001"/>
+        <Column ID="_InstanceID" Value="301"/>
+        <Column ID="_CompositeName" Null="1"/>
+        <Column ID="_CompositeVersion" Value="1.0"/>
+        <Column ID="_ReceiveOrder" Value="2008-12-09T12:54:55.0000000PST"/>
+        <Column ID="_CreditCheck" Value="2008-12-09T12:55:24.0000000PST"/>
+        <Column ID="_ApprovalStart" Null="1"/>
+        <Column ID="_ApprovalEnd" Null="1"/>
+        <Column ID="_InvokeInternalWarehouse" Value="2008-12-09T12:55:35.0000000PST"/>
+        <Column ID="_InvokePartnerSupplier" Value="2008-12-09T12:55:35.0000000PST"/>
+        <Column ID="_ReceiveInternalWarehouseRespo" Value="2008-12-09T12:55:39.0000000PST"/>
+        <Column ID="_ReceivePartnerResponse" Value="2008-12-09T12:55:39.0000000PST"/>
+        <Column ID="_SelectPreferredSupplier" Value="2008-12-09T12:55:39.0000000PST"/>
+        <Column ID="_InvokeFulfillment" Value="2008-12-09T12:55:40.0000000PST"/>
+        <Column ID="_FulfillmentComplete" Value="2008-12-09T12:55:56.0000000PST"/>
+        <Column ID="_CallBackClient" Value="2008-12-09T12:55:56.0000000PST"/>
+        <Column ID="_InternalWarehouseQuote" Value="1000.0"/>
+        <Column ID="_PartnerSupplierQuote" Value="1999.0"/>
+        <Column ID="_OrderID" Null="1"/>
+        <Column ID="_OrderPrice" Null="1"/>
+        <Column ID="_ReceiveOrderCode" Value="1"/>
+        <Column ID="_CreditCheckCode" Value="1"/>
+        <Column ID="_ApprovalCode" Value="0"/>
+        <Column ID="_InvokeQuoteCode" Value="1"/>
+        <Column ID="_QuoteCompleteCode" Value="1"/>
+        <Column ID="_InvokeFulfillmentCode" Value="1"/>
+        <Column ID="_FulfillmentCompleteCode" Value="1"/>
+        <Column ID="_CallBackClientCode" Value="1"/>
+        <Column ID="_AlertTimeSpan" Value="0"/>
+        <Column ID="_End2EndTime" Value="61"/>
+        <Column ID="_ProcessStep" Value="7"/>
+        <Column ID="_CompletionType" Value="2"/>
+        <Column ID="_CustomerID" Null="1"/>
+        <Column ID="_AssigneeID" Null="1"/>
+        <Column ID="_ViolationRiskFlag" Value="0"/>
+      </Row>
+      <Row ID="4">
+        <Column ID="_ECID" Value="30002"/>
+        <Column ID="_InstanceID" Value="302"/>
+        <Column ID="_CompositeName" Null="1"/>
+        <Column ID="_CompositeVersion" Value="1.0"/>
+        <Column ID="_ReceiveOrder" Value="2008-12-09T12:55:14.0000000PST"/>
+        <Column ID="_CreditCheck" Value="2008-12-09T12:55:24.0000000PST"/>
+        <Column ID="_ApprovalStart" Null="1"/>
+        <Column ID="_ApprovalEnd" Null="1"/>
+        <Column ID="_InvokeInternalWarehouse" Value="2008-12-09T12:55:35.0000000PST"/>
+        <Column ID="_InvokePartnerSupplier" Value="2008-12-09T12:55:35.0000000PST"/>
+        <Column ID="_ReceiveInternalWarehouseRespo" Value="2008-12-09T12:55:37.0000000PST"/>
+        <Column ID="_ReceivePartnerResponse" Value="2008-12-09T12:55:39.0000000PST"/>
+        <Column ID="_SelectPreferredSupplier" Value="2008-12-09T12:55:39.0000000PST"/>
+        <Column ID="_InvokeFulfillment" Value="2008-12-09T12:55:41.0000000PST"/>
+        <Column ID="_FulfillmentComplete" Value="2008-12-09T12:55:56.0000000PST"/>
+        <Column ID="_CallBackClient" Value="2008-12-09T12:55:56.0000000PST"/>
+        <Column ID="_InternalWarehouseQuote" Value="1000.0"/>
+        <Column ID="_PartnerSupplierQuote" Value="1999.0"/>
+        <Column ID="_OrderID" Null="1"/>
+        <Column ID="_OrderPrice" Null="1"/>
+        <Column ID="_ReceiveOrderCode" Value="1"/>
+        <Column ID="_CreditCheckCode" Value="1"/>
+        <Column ID="_ApprovalCode" Value="0"/>
+        <Column ID="_InvokeQuoteCode" Value="1"/>
+        <Column ID="_QuoteCompleteCode" Value="1"/>
+        <Column ID="_InvokeFulfillmentCode" Value="1"/>
+        <Column ID="_FulfillmentCompleteCode" Value="1"/>
+        <Column ID="_CallBackClientCode" Value="1"/>
+        <Column ID="_AlertTimeSpan" Value="0"/>
+        <Column ID="_End2EndTime" Value="42"/>
+        <Column ID="_ProcessStep" Value="7"/>
+        <Column ID="_CompletionType" Value="2"/>
+        <Column ID="_CustomerID" Null="1"/>
+        <Column ID="_AssigneeID" Null="1"/>
+        <Column ID="_ViolationRiskFlag" Value="0"/>
+      </Row>
+      <Row ID="5">
+        <Column ID="_ECID" Value="30013"/>
+        <Column ID="_InstanceID" Value="315"/>
+        <Column ID="_CompositeName" Null="1"/>
+        <Column ID="_CompositeVersion" Value="1.0"/>
+        <Column ID="_ReceiveOrder" Value="2008-12-09T12:59:06.0000000PST"/>
+        <Column ID="_CreditCheck" Value="2008-12-09T12:59:07.0000000PST"/>
+        <Column ID="_ApprovalStart" Value="2008-12-09T12:59:07.0000000PST"/>
+        <Column ID="_ApprovalEnd" Null="1"/>
+        <Column ID="_InvokeInternalWarehouse" Null="1"/>
+        <Column ID="_InvokePartnerSupplier" Null="1"/>
+        <Column ID="_ReceiveInternalWarehouseRespo" Null="1"/>
+        <Column ID="_ReceivePartnerResponse" Null="1"/>
+        <Column ID="_SelectPreferredSupplier" Null="1"/>
+        <Column ID="_InvokeFulfillment" Null="1"/>
+        <Column ID="_FulfillmentComplete" Null="1"/>
+        <Column ID="_CallBackClient" Null="1"/>
+        <Column ID="_InternalWarehouseQuote" Null="1"/>
+        <Column ID="_PartnerSupplierQuote" Null="1"/>
+        <Column ID="_OrderID" Null="1"/>
+        <Column ID="_OrderPrice" Null="1"/>
+        <Column ID="_ReceiveOrderCode" Value="1"/>
+        <Column ID="_CreditCheckCode" Value="1"/>
+        <Column ID="_ApprovalCode" Value="2"/>
+        <Column ID="_InvokeQuoteCode" Value="0"/>
+        <Column ID="_QuoteCompleteCode" Value="2"/>
+        <Column ID="_InvokeFulfillmentCode" Value="0"/>
+        <Column ID="_FulfillmentCompleteCode" Value="0"/>
+        <Column ID="_CallBackClientCode" Value="0"/>
+        <Column ID="_AlertTimeSpan" Value="260895"/>
+        <Column ID="_End2EndTime" Value="0"/>
+        <Column ID="_ProcessStep" Value="3"/>
+        <Column ID="_CompletionType" Value="0"/>
+        <Column ID="_CustomerID" Null="1"/>
+        <Column ID="_AssigneeID" Null="1"/>
+        <Column ID="_ViolationRiskFlag" Value="0"/>
+      </Row>
+      <Row ID="6">
+        <Column ID="_ECID" Value="30033"/>
+        <Column ID="_InstanceID" Value="332"/>
+        <Column ID="_CompositeName" Null="1"/>
+        <Column ID="_CompositeVersion" Value="1.0"/>
+        <Column ID="_ReceiveOrder" Value="2008-12-11T18:12:41.0000116PST"/>
+        <Column ID="_CreditCheck" Value="2008-12-11T18:12:47.0000033PST"/>
+        <Column ID="_ApprovalStart" Value="2008-12-11T18:12:47.0000877PST"/>
+        <Column ID="_ApprovalEnd" Null="1"/>
+        <Column ID="_InvokeInternalWarehouse" Null="1"/>
+        <Column ID="_InvokePartnerSupplier" Null="1"/>
+        <Column ID="_ReceiveInternalWarehouseRespo" Null="1"/>
+        <Column ID="_ReceivePartnerResponse" Null="1"/>
+        <Column ID="_SelectPreferredSupplier" Null="1"/>
+        <Column ID="_InvokeFulfillment" Null="1"/>
+        <Column ID="_FulfillmentComplete" Null="1"/>
+        <Column ID="_CallBackClient" Null="1"/>
+        <Column ID="_InternalWarehouseQuote" Null="1"/>
+        <Column ID="_PartnerSupplierQuote" Null="1"/>
+        <Column ID="_OrderID" Value="5264029"/>
+        <Column ID="_OrderPrice" Value="2001"/>
+        <Column ID="_ReceiveOrderCode" Value="1"/>
+        <Column ID="_CreditCheckCode" Value="1"/>
+        <Column ID="_ApprovalCode" Value="2"/>
+        <Column ID="_InvokeQuoteCode" Value="0"/>
+        <Column ID="_QuoteCompleteCode" Value="2"/>
+        <Column ID="_InvokeFulfillmentCode" Value="0"/>
+        <Column ID="_FulfillmentCompleteCode" Value="0"/>
+        <Column ID="_CallBackClientCode" Value="0"/>
+        <Column ID="_AlertTimeSpan" Value="69280"/>
+        <Column ID="_End2EndTime" Value="0"/>
+        <Column ID="_ProcessStep" Value="3"/>
+        <Column ID="_CompletionType" Value="0"/>
+        <Column ID="_CustomerID" Value="20"/>
+        <Column ID="_AssigneeID" Null="1"/>
+        <Column ID="_ViolationRiskFlag" Value="0"/>
+      </Row>
+      <Row ID="9">
+        <Column ID="_ECID" Value="30041"/>
+        <Column ID="_InstanceID" Value="337"/>
+        <Column ID="_CompositeName" Null="1"/>
+        <Column ID="_CompositeVersion" Value="1.0"/>
+        <Column ID="_ReceiveOrder" Value="2008-12-11T18:20:54.0000938PST"/>
+        <Column ID="_CreditCheck" Value="2008-12-11T18:20:58.0000536PST"/>
+        <Column ID="_ApprovalStart" Null="1"/>
+        <Column ID="_ApprovalEnd" Null="1"/>
+        <Column ID="_InvokeInternalWarehouse" Value="2008-12-11T18:20:59.0000390PST"/>
+        <Column ID="_InvokePartnerSupplier" Value="2008-12-11T18:20:59.0000385PST"/>
+        <Column ID="_ReceiveInternalWarehouseRespo" Value="2008-12-11T18:21:00.0000627PST"/>
+        <Column ID="_ReceivePartnerResponse" Value="2008-12-11T18:21:00.0000498PST"/>
+        <Column ID="_SelectPreferredSupplier" Value="2008-12-11T18:21:00.0000701PST"/>
+        <Column ID="_InvokeFulfillment" Value="2008-12-11T18:21:01.0000121PST"/>
+        <Column ID="_FulfillmentComplete" Null="1"/>
+        <Column ID="_CallBackClient" Null="1"/>
+        <Column ID="_InternalWarehouseQuote" Value="1000.0"/>
+        <Column ID="_PartnerSupplierQuote" Value="1999.0"/>
+        <Column ID="_OrderID" Value="999"/>
+        <Column ID="_OrderPrice" Value="1999"/>
+        <Column ID="_ReceiveOrderCode" Value="1"/>
+        <Column ID="_CreditCheckCode" Value="1"/>
+        <Column ID="_ApprovalCode" Value="0"/>
+        <Column ID="_InvokeQuoteCode" Value="1"/>
+        <Column ID="_QuoteCompleteCode" Value="1"/>
+        <Column ID="_InvokeFulfillmentCode" Value="1"/>
+        <Column ID="_FulfillmentCompleteCode" Value="0"/>
+        <Column ID="_CallBackClientCode" Value="0"/>
+        <Column ID="_AlertTimeSpan" Value="68786"/>
+        <Column ID="_End2EndTime" Value="0"/>
+        <Column ID="_ProcessStep" Value="6"/>
+        <Column ID="_CompletionType" Value="0"/>
+        <Column ID="_CustomerID" Value="10"/>
+        <Column ID="_AssigneeID" Null="1"/>
+        <Column ID="_ViolationRiskFlag" Value="0"/>
+      </Row>
+      <Row ID="19">
+        <Column ID="_ECID" Value="30046"/>
+        <Column ID="_InstanceID" Value="343"/>
+        <Column ID="_CompositeName" Null="1"/>
+        <Column ID="_CompositeVersion" Value="1.0"/>
+        <Column ID="_ReceiveOrder" Value="2008-12-12T10:15:00.0000517PST"/>
+        <Column ID="_CreditCheck" Value="2008-12-12T10:15:06.0000651PST"/>
+        <Column ID="_ApprovalStart" Null="1"/>
+        <Column ID="_ApprovalEnd" Null="1"/>
+        <Column ID="_InvokeInternalWarehouse" Value="2008-12-12T10:15:08.0000197PST"/>
+        <Column ID="_InvokePartnerSupplier" Value="2008-12-12T10:15:08.0000189PST"/>
+        <Column ID="_ReceiveInternalWarehouseRespo" Value="2008-12-12T10:15:10.0000165PST"/>
+        <Column ID="_ReceivePartnerResponse" Value="2008-12-12T10:15:09.0000765PST"/>
+        <Column ID="_SelectPreferredSupplier" Value="2008-12-12T10:15:10.0000370PST"/>
+        <Column ID="_InvokeFulfillment" Value="2008-12-12T10:15:10.0000908PST"/>
+        <Column ID="_FulfillmentComplete" Value="2008-12-12T10:15:11.0000000PST"/>
+        <Column ID="_CallBackClient" Value="2008-12-12T10:15:11.0000835PST"/>
+        <Column ID="_InternalWarehouseQuote" Value="1000.0"/>
+        <Column ID="_PartnerSupplierQuote" Value="1999.0"/>
+        <Column ID="_OrderID" Value="123"/>
+        <Column ID="_OrderPrice" Value="1999"/>
+        <Column ID="_ReceiveOrderCode" Value="1"/>
+        <Column ID="_CreditCheckCode" Value="1"/>
+        <Column ID="_ApprovalCode" Value="0"/>
+        <Column ID="_InvokeQuoteCode" Value="1"/>
+        <Column ID="_QuoteCompleteCode" Value="1"/>
+        <Column ID="_InvokeFulfillmentCode" Value="1"/>
+        <Column ID="_FulfillmentCompleteCode" Value="1"/>
+        <Column ID="_CallBackClientCode" Value="1"/>
+        <Column ID="_AlertTimeSpan" Value="0"/>
+        <Column ID="_End2EndTime" Value="11"/>
+        <Column ID="_ProcessStep" Value="7"/>
+        <Column ID="_CompletionType" Value="2"/>
+        <Column ID="_CustomerID" Value="10"/>
+        <Column ID="_AssigneeID" Null="1"/>
+        <Column ID="_ViolationRiskFlag" Value="0"/>
+      </Row>
+      <Row ID="32">
+        <Column ID="_ECID" Value="30052"/>
+        <Column ID="_InstanceID" Value="350"/>
+        <Column ID="_CompositeName" Null="1"/>
+        <Column ID="_CompositeVersion" Value="1.0"/>
+        <Column ID="_ReceiveOrder" Value="2008-12-12T10:26:33.0000903PST"/>
+        <Column ID="_CreditCheck" Value="2008-12-12T10:26:38.0000086PST"/>
+        <Column ID="_ApprovalStart" Value="2008-12-12T10:26:39.0000101PST"/>
+        <Column ID="_ApprovalEnd" Null="1"/>
+        <Column ID="_InvokeInternalWarehouse" Null="1"/>
+        <Column ID="_InvokePartnerSupplier" Null="1"/>
+        <Column ID="_ReceiveInternalWarehouseRespo" Null="1"/>
+        <Column ID="_ReceivePartnerResponse" Null="1"/>
+        <Column ID="_SelectPreferredSupplier" Null="1"/>
+        <Column ID="_InvokeFulfillment" Null="1"/>
+        <Column ID="_FulfillmentComplete" Null="1"/>
+        <Column ID="_CallBackClient" Null="1"/>
+        <Column ID="_InternalWarehouseQuote" Null="1"/>
+        <Column ID="_PartnerSupplierQuote" Null="1"/>
+        <Column ID="_OrderID" Value="1002"/>
+        <Column ID="_OrderPrice" Value="2001"/>
+        <Column ID="_ReceiveOrderCode" Value="1"/>
+        <Column ID="_CreditCheckCode" Value="1"/>
+        <Column ID="_ApprovalCode" Value="2"/>
+        <Column ID="_InvokeQuoteCode" Value="0"/>
+        <Column ID="_QuoteCompleteCode" Value="2"/>
+        <Column ID="_InvokeFulfillmentCode" Value="0"/>
+        <Column ID="_FulfillmentCompleteCode" Value="0"/>
+        <Column ID="_CallBackClientCode" Value="0"/>
+        <Column ID="_AlertTimeSpan" Value="10847"/>
+        <Column ID="_End2EndTime" Value="0"/>
+        <Column ID="_ProcessStep" Value="3"/>
+        <Column ID="_CompletionType" Value="0"/>
+        <Column ID="_CustomerID" Value="20"/>
+        <Column ID="_AssigneeID" Null="1"/>
+        <Column ID="_ViolationRiskFlag" Value="0"/>
+      </Row>
+      <Row ID="35">
+        <Column ID="_ECID" Value="30058"/>
+        <Column ID="_InstanceID" Value="353"/>
+        <Column ID="_CompositeName" Null="1"/>
+        <Column ID="_CompositeVersion" Value="1.0"/>
+        <Column ID="_ReceiveOrder" Value="2008-12-12T10:33:22.0000078PST"/>
+        <Column ID="_CreditCheck" Value="2008-12-12T10:33:25.0000500PST"/>
+        <Column ID="_ApprovalStart" Value="2008-12-12T10:33:25.0000981PST"/>
+        <Column ID="_ApprovalEnd" Null="1"/>
+        <Column ID="_InvokeInternalWarehouse" Null="1"/>
+        <Column ID="_InvokePartnerSupplier" Null="1"/>
+        <Column ID="_ReceiveInternalWarehouseRespo" Null="1"/>
+        <Column ID="_ReceivePartnerResponse" Null="1"/>
+        <Column ID="_SelectPreferredSupplier" Null="1"/>
+        <Column ID="_InvokeFulfillment" Null="1"/>
+        <Column ID="_FulfillmentComplete" Null="1"/>
+        <Column ID="_CallBackClient" Null="1"/>
+        <Column ID="_InternalWarehouseQuote" Null="1"/>
+        <Column ID="_PartnerSupplierQuote" Null="1"/>
+        <Column ID="_OrderID" Value="1003"/>
+        <Column ID="_OrderPrice" Value="2001"/>
+        <Column ID="_ReceiveOrderCode" Value="1"/>
+        <Column ID="_CreditCheckCode" Value="1"/>
+        <Column ID="_ApprovalCode" Value="2"/>
+        <Column ID="_InvokeQuoteCode" Value="0"/>
+        <Column ID="_QuoteCompleteCode" Value="2"/>
+        <Column ID="_InvokeFulfillmentCode" Value="0"/>
+        <Column ID="_FulfillmentCompleteCode" Value="0"/>
+        <Column ID="_CallBackClientCode" Value="0"/>
+        <Column ID="_AlertTimeSpan" Value="10439"/>
+        <Column ID="_End2EndTime" Value="0"/>
+        <Column ID="_ProcessStep" Value="3"/>
+        <Column ID="_CompletionType" Value="0"/>
+        <Column ID="_CustomerID" Value="20"/>
+        <Column ID="_AssigneeID" Null="1"/>
+        <Column ID="_ViolationRiskFlag" Value="0"/>
+      </Row>
+      <Row ID="39">
+        <Column ID="_ECID" Value="30062"/>
+        <Column ID="_InstanceID" Value="356"/>
+        <Column ID="_CompositeName" Null="1"/>
+        <Column ID="_CompositeVersion" Value="1.0"/>
+        <Column ID="_ReceiveOrder" Value="2008-12-12T10:47:20.0000758PST"/>
+        <Column ID="_CreditCheck" Value="2008-12-12T10:47:24.0000425PST"/>
+        <Column ID="_ApprovalStart" Value="2008-12-12T10:47:25.0000330PST"/>
+        <Column ID="_ApprovalEnd" Null="1"/>
+        <Column ID="_InvokeInternalWarehouse" Null="1"/>
+        <Column ID="_InvokePartnerSupplier" Null="1"/>
+        <Column ID="_ReceiveInternalWarehouseRespo" Null="1"/>
+        <Column ID="_ReceivePartnerResponse" Null="1"/>
+        <Column ID="_SelectPreferredSupplier" Null="1"/>
+        <Column ID="_InvokeFulfillment" Null="1"/>
+        <Column ID="_FulfillmentComplete" Null="1"/>
+        <Column ID="_CallBackClient" Null="1"/>
+        <Column ID="_InternalWarehouseQuote" Null="1"/>
+        <Column ID="_PartnerSupplierQuote" Null="1"/>
+        <Column ID="_OrderID" Value="1004"/>
+        <Column ID="_OrderPrice" Value="2001"/>
+        <Column ID="_ReceiveOrderCode" Value="1"/>
+        <Column ID="_CreditCheckCode" Value="1"/>
+        <Column ID="_ApprovalCode" Value="2"/>
+        <Column ID="_InvokeQuoteCode" Value="0"/>
+        <Column ID="_QuoteCompleteCode" Value="2"/>
+        <Column ID="_InvokeFulfillmentCode" Value="0"/>
+        <Column ID="_FulfillmentCompleteCode" Value="0"/>
+        <Column ID="_CallBackClientCode" Value="0"/>
+        <Column ID="_AlertTimeSpan" Value="9600"/>
+        <Column ID="_End2EndTime" Value="0"/>
+        <Column ID="_ProcessStep" Value="3"/>
+        <Column ID="_CompletionType" Value="0"/>
+        <Column ID="_CustomerID" Value="20"/>
+        <Column ID="_AssigneeID" Null="1"/>
+        <Column ID="_ViolationRiskFlag" Value="0"/>
+      </Row>
+      <Row ID="40">
+        <Column ID="_ECID" Value="40002"/>
+        <Column ID="_InstanceID" Value="402"/>
+        <Column ID="_CompositeName" Null="1"/>
+        <Column ID="_CompositeVersion" Value="1.0"/>
+        <Column ID="_ReceiveOrder" Value="2008-12-12T11:15:20.0000634PST"/>
+        <Column ID="_CreditCheck" Value="2008-12-12T11:15:31.0000184PST"/>
+        <Column ID="_ApprovalStart" Value="2008-12-12T11:15:37.0000904PST"/>
+        <Column ID="_ApprovalEnd" Null="1"/>
+        <Column ID="_InvokeInternalWarehouse" Null="1"/>
+        <Column ID="_InvokePartnerSupplier" Null="1"/>
+        <Column ID="_ReceiveInternalWarehouseRespo" Null="1"/>
+        <Column ID="_ReceivePartnerResponse" Null="1"/>
+        <Column ID="_SelectPreferredSupplier" Null="1"/>
+        <Column ID="_InvokeFulfillment" Null="1"/>
+        <Column ID="_FulfillmentComplete" Null="1"/>
+        <Column ID="_CallBackClient" Null="1"/>
+        <Column ID="_InternalWarehouseQuote" Null="1"/>
+        <Column ID="_PartnerSupplierQuote" Null="1"/>
+        <Column ID="_OrderID" Value="1106"/>
+        <Column ID="_OrderPrice" Value="2001"/>
+        <Column ID="_ReceiveOrderCode" Value="1"/>
+        <Column ID="_CreditCheckCode" Value="1"/>
+        <Column ID="_ApprovalCode" Value="2"/>
+        <Column ID="_InvokeQuoteCode" Value="0"/>
+        <Column ID="_QuoteCompleteCode" Value="2"/>
+        <Column ID="_InvokeFulfillmentCode" Value="0"/>
+        <Column ID="_FulfillmentCompleteCode" Value="0"/>
+        <Column ID="_CallBackClientCode" Value="0"/>
+        <Column ID="_AlertTimeSpan" Value="7920"/>
+        <Column ID="_End2EndTime" Value="0"/>
+        <Column ID="_ProcessStep" Value="3"/>
+        <Column ID="_CompletionType" Value="0"/>
+        <Column ID="_CustomerID" Value="20"/>
+        <Column ID="_AssigneeID" Null="1"/>
+        <Column ID="_ViolationRiskFlag" Value="0"/>
+      </Row>
+      <Row ID="41">
+        <Column ID="_ECID" Value="40001"/>
+        <Column ID="_InstanceID" Value="401"/>
+        <Column ID="_CompositeName" Null="1"/>
+        <Column ID="_CompositeVersion" Value="1.0"/>
+        <Column ID="_ReceiveOrder" Value="2008-12-12T11:14:51.0000816PST"/>
+        <Column ID="_CreditCheck" Value="2008-12-12T11:15:31.0000200PST"/>
+        <Column ID="_ApprovalStart" Null="1"/>
+        <Column ID="_ApprovalEnd" Null="1"/>
+        <Column ID="_InvokeInternalWarehouse" Value="2008-12-12T11:15:42.0000798PST"/>
+        <Column ID="_InvokePartnerSupplier" Value="2008-12-12T11:15:42.0000731PST"/>
+        <Column ID="_ReceiveInternalWarehouseRespo" Null="1"/>
+        <Column ID="_ReceivePartnerResponse" Null="1"/>
+        <Column ID="_SelectPreferredSupplier" Null="1"/>
+        <Column ID="_InvokeFulfillment" Null="1"/>
+        <Column ID="_FulfillmentComplete" Null="1"/>
+        <Column ID="_CallBackClient" Null="1"/>
+        <Column ID="_InternalWarehouseQuote" Null="1"/>
+        <Column ID="_PartnerSupplierQuote" Null="1"/>
+        <Column ID="_OrderID" Value="106"/>
+        <Column ID="_OrderPrice" Value="1999"/>
+        <Column ID="_ReceiveOrderCode" Value="1"/>
+        <Column ID="_CreditCheckCode" Value="1"/>
+        <Column ID="_ApprovalCode" Value="0"/>
+        <Column ID="_InvokeQuoteCode" Value="1"/>
+        <Column ID="_QuoteCompleteCode" Value="2"/>
+        <Column ID="_InvokeFulfillmentCode" Value="0"/>
+        <Column ID="_FulfillmentCompleteCode" Value="0"/>
+        <Column ID="_CallBackClientCode" Value="0"/>
+        <Column ID="_AlertTimeSpan" Value="7949"/>
+        <Column ID="_End2EndTime" Value="0"/>
+        <Column ID="_ProcessStep" Value="5"/>
+        <Column ID="_CompletionType" Value="0"/>
+        <Column ID="_CustomerID" Value="10"/>
+        <Column ID="_AssigneeID" Null="1"/>
+        <Column ID="_ViolationRiskFlag" Value="0"/>
+      </Row>
+      <Row ID="48">
+        <Column ID="_ECID" Value="40011"/>
+        <Column ID="_InstanceID" Value="407"/>
+        <Column ID="_CompositeName" Null="1"/>
+        <Column ID="_CompositeVersion" Value="1.0"/>
+        <Column ID="_ReceiveOrder" Value="2008-12-12T11:20:25.0000262PST"/>
+        <Column ID="_CreditCheck" Value="2008-12-12T11:20:27.0000128PST"/>
+        <Column ID="_ApprovalStart" Null="1"/>
+        <Column ID="_ApprovalEnd" Null="1"/>
+        <Column ID="_InvokeInternalWarehouse" Value="2008-12-12T11:20:27.0000655PST"/>
+        <Column ID="_InvokePartnerSupplier" Value="2008-12-12T11:20:27.0000650PST"/>
+        <Column ID="_ReceiveInternalWarehouseRespo" Value="2008-12-12T11:20:28.0000815PST"/>
+        <Column ID="_ReceivePartnerResponse" Value="2008-12-12T11:20:28.0000724PST"/>
+        <Column ID="_SelectPreferredSupplier" Value="2008-12-12T11:20:28.0000874PST"/>
+        <Column ID="_InvokeFulfillment" Value="2008-12-12T11:20:29.0000322PST"/>
+        <Column ID="_FulfillmentComplete" Value="2008-12-12T11:20:39.0000000PST"/>
+        <Column ID="_CallBackClient" Value="2008-12-12T11:20:42.0000001PST"/>
+        <Column ID="_InternalWarehouseQuote" Value="1000.0"/>
+        <Column ID="_PartnerSupplierQuote" Value="1999.0"/>
+        <Column ID="_OrderID" Value="107"/>
+        <Column ID="_OrderPrice" Value="1999"/>
+        <Column ID="_ReceiveOrderCode" Value="1"/>
+        <Column ID="_CreditCheckCode" Value="1"/>
+        <Column ID="_ApprovalCode" Value="0"/>
+        <Column ID="_InvokeQuoteCode" Value="1"/>
+        <Column ID="_QuoteCompleteCode" Value="1"/>
+        <Column ID="_InvokeFulfillmentCode" Value="1"/>
+        <Column ID="_FulfillmentCompleteCode" Value="1"/>
+        <Column ID="_CallBackClientCode" Value="1"/>
+        <Column ID="_AlertTimeSpan" Value="0"/>
+        <Column ID="_End2EndTime" Value="17"/>
+        <Column ID="_ProcessStep" Value="7"/>
+        <Column ID="_CompletionType" Value="2"/>
+        <Column ID="_CustomerID" Value="10"/>
+        <Column ID="_AssigneeID" Null="1"/>
+        <Column ID="_ViolationRiskFlag" Value="0"/>
+      </Row>
+    </Contents>
+  </DataObject>
+</OracleBAMExport>

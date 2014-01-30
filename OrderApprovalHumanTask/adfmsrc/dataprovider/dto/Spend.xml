@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.53.80"
+          id="Spend" Package="dataprovider.dto"
+          BeanClass="dataprovider.dto.Spend" isJavaBased="true">
+  <Attribute Name="period" Type="java.lang.String"/>
+  <Attribute Name="customer" Type="java.lang.Double"/>
+  <Attribute Name="average" Type="java.lang.Double"/>
+  <ConstructorMethod IsCollection="true" Type="dataprovider.dto.Spend"
+                     BeanClass="dataprovider.dto.Spend" id="Spend"/>
+</JavaBean>

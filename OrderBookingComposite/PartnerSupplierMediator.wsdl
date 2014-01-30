@@ -1,0 +1,33 @@
+<?xml version= '1.0' encoding= 'UTF-8' ?>
+<wsdl:definitions
+     name="PartnerSupplierMediator"
+     targetNamespace="http://xmlns.oracle.com/WebLogicFusionOrderDemo/OrderBookingComposite/PartnerSupplierMediator"
+     xmlns:cb1="http://www.globalcompany.example.com/ns/InternalWarehouse"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:inp1="/oracle/fodemo/storefront/store/queries/common/"
+     xmlns:tns="http://xmlns.oracle.com/WebLogicFusionOrderDemo/OrderBookingComposite/PartnerSupplierMediator"
+    >
+    <wsdl:import namespace="http://www.globalcompany.example.com/ns/InternalWarehouse" location="InternalWarehouseService.wsdl"/>
+    <wsdl:types>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema" >
+        <import namespace="/oracle/fodemo/storefront/store/queries/common/" schemaLocation="oramds:/apps/FusionOrderDemoShared/services/oracle/fodemo/storefront/store/queries/common/OrderInfoVOSDO.xsd" />
+        <import namespace="http://www.globalcompany.example.com/ns/InternalWarehouse" schemaLocation="xsd/InternalWarehouse.xsd"/>
+      </schema>
+    </wsdl:types>
+    <wsdl:message name="callbackMessage">
+        <wsdl:part name="callback" element="cb1:WarehouseResponse"/>
+    </wsdl:message>
+    <wsdl:message name="requestMessage">
+        <wsdl:part name="request" element="inp1:orderInfoVOSDO"/>
+    </wsdl:message>
+    <wsdl:portType name="callback_ptt">
+        <wsdl:operation name="callback">
+            <wsdl:input message="tns:callbackMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:portType name="execute_ptt">
+        <wsdl:operation name="execute">
+            <wsdl:input message="tns:requestMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

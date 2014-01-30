@@ -1,0 +1,41 @@
+#------------------------------------------------------------------------------
+# WSADMIN Python script that seeds bam adapter resources for fusion order demo
+#------------------------------------------------------------------------------
+print "Removing FODBamAdapterJ2CSoap if it exists" 
+oldcf = AdminConfig.getid('/J2CConnectionFactory:FODBamAdapterJ2CSoap/')
+if oldcf != "":
+	AdminConfig.remove(oldcf)
+
+newra = AdminConfig.getid('/Cell:@was.cell@/Node:@was.node@/Server:@server.targets@/J2CResourceAdapter:OracleBamAdapter/')
+print "adapter: " + newra
+
+# create the connection factory with base params
+cf= AdminTask.createJ2CConnectionFactory(newra, '[-name FODBamAdapterJ2CSoap -jndiName eis/bam/soap -connectionFactoryInterface oracle.bam.adapter.adc.soap.SOAPConnectionFactory]')
+print "Done Creating new FODBamAdapterJ2CSoap: " + cf
+
+newcf = AdminConfig.getid('/J2CConnectionFactory:FODBamAdapterJ2CSoap/')
+#print newcf
+
+propSet = AdminConfig.showAttribute(newcf, 'propertySet')
+#print propSet
+
+custProps = AdminConfig.list('J2EEResourceProperty', propSet).split("\n")
+#print custProps
+
+for cust in custProps:
+	customName = AdminConfig.showAttribute(cust, 'name')
+	print customName
+	if customName == "HostName":
+		AdminConfig.modify(cust, [['value', '@bam.server.host@']])
+	if customName == "IsHTTPSEnabledWebService":
+		AdminConfig.modify(cust, [['value', '@bam.use.https@']])
+	if customName == "Password":
+		AdminConfig.modify(cust, [['value', '@bam.server.password@']])
+	if customName == "PortNumber":
+		AdminConfig.modify(cust, [['value', '@bam.server.port@']])
+	if customName == "UserName":
+		AdminConfig.modify(cust, [['value', '@bam.server.username@']])
+	continue
+
+print "Done setting custom props for FODBamAdapterJ2CSoap"
+AdminConfig.save()

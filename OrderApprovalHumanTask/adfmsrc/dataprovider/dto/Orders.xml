@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.53.80"
+          id="Orders" Package="dataprovider.dto"
+          BeanClass="dataprovider.dto.Orders" isJavaBased="true">
+  <AccessorAttribute id="spendHistory" IsCollection="true"
+                     BeanClass="dataprovider.dto.Spend"
+                     CollectionBeanClass="UpdateableCollection"/>
+  <AccessorAttribute id="payments" IsCollection="true"
+                     BeanClass="dataprovider.dto.PaymentStatus"
+                     CollectionBeanClass="UpdateableCollection"/>
+  <AccessorAttribute id="daysOutstanding" IsCollection="true"
+                     BeanClass="dataprovider.dto.DaysOutstanding"
+                     CollectionBeanClass="UpdateableCollection"/>
+  <AccessorAttribute id="item" IsCollection="true"
+                     BeanClass="dataprovider.dto.Item"
+                     CollectionBeanClass="UpdateableCollection"/>
+  <AccessorAttribute id="orderHistory" IsCollection="true"
+                     BeanClass="dataprovider.dto.OrderHistory"
+                     CollectionBeanClass="UpdateableCollection"/>
+  <ConstructorMethod IsCollection="true" Type="dataprovider.dto.Orders"
+                     BeanClass="dataprovider.dto.Orders" id="Orders"/>
+</JavaBean>

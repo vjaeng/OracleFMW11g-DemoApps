@@ -1,0 +1,59 @@
+"""
+   WLST Python script that seeds jms resources for fusion order demo
+"""   
+import sys
+from java.lang import System
+
+print "Starting creation of JMS resources .."
+connect('@server.user@','@server.password@','t3://@admin.server.host@:@admin.server.port@') 
+edit()
+startEdit()
+
+# get the server mbean to lookup the jms resources
+servermb=getMBean("Servers/@server.target@")
+if servermb is None:
+    print 'Could not find a reference to Servers/@server.target@'
+
+else:
+    # lookup the SOAJMSModule - it's a system resource
+    jmsSOASystemResource = lookup("SOAJMSModule","JMSSystemResource")
+        
+    jmsResource = jmsSOASystemResource.getJMSResource()
+    
+    cfbean = jmsResource.lookupConnectionFactory('DemoSupplierTopicCF')
+    if cfbean is None:
+        print "Creating DemoSupplierTopicCF connection factory"
+        demoConnectionFactory = jmsResource.createConnectionFactory('DemoSupplierTopicCF')
+        demoConnectionFactory.setJNDIName('jms/DemoSupplierTopicCF')
+        demoConnectionFactory.setSubDeploymentName('SOASubDeployment')
+    else:
+        print "Found DemoSupplierTopicCF connection factory - noop"
+        
+    topicbean = jmsResource.lookupUniformDistributedTopic('DemoSupplierTopic_UDD')
+    if topicbean is None:
+        print "Creating DemoSupplierTopic jms topic"
+        # create a udd - so clustering is automatically working and done with
+        demoJMSTopic = jmsResource.createUniformDistributedTopic("DemoSupplierTopic_UDD") 
+        demoJMSTopic.setJNDIName('@jms.topic.jndi@')
+        demoJMSTopic.setSubDeploymentName('SOASubDeployment')
+    else:
+        print "Found DemoSupplierTopic_UDD topic - noop"
+        
+try:
+    save()
+    # activate the changes
+    activate(block="true")
+    print "jms topic and factory for SOA Fusion Order Demo successfully created"   
+except:
+    print "Error while trying to save and/or activate!!!"
+    dumpStack()
+    undo()
+    
+print "Creating jms adapter connection factory information"
+try:
+     # updateApplication('JmsAdapter', '@deployment.plan@', upload='true', stageMode='stage') 
+     redeploy('JmsAdapter', '@deployment.plan@', upload='true', stageMode='stage') 
+    
+except:
+     print "Error while modifying jms adapter connection factory"
+     

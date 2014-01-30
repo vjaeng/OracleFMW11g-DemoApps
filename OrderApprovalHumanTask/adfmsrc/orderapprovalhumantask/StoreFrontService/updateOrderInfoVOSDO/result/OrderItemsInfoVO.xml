@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="OrderItemsInfoVO"
+          Package="orderapprovalhumantask.StoreFrontService.updateOrderInfoVOSDO.result"
+          BeanClass="orderapprovalhumantask.StoreFrontService.updateOrderInfoVOSDO.result.OrderItemsInfoVO"
+          isJavaBased="false">
+  <Attribute Name="OrderId" IsUpdateable="0" Type="java.lang.Long"/>
+  <Attribute Name="LineItemId" IsUpdateable="0" Type="java.lang.Integer"/>
+  <Attribute Name="ProductId" IsUpdateable="0" Type="java.lang.Long"/>
+  <Attribute Name="Quantity" IsUpdateable="0" Type="java.lang.Integer"/>
+  <Attribute Name="UnitPrice" IsUpdateable="0" Type="java.math.BigDecimal"/>
+  <Attribute Name="ProductName" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="SupplierName" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="ProductId1" IsUpdateable="0" Type="java.lang.Integer"/>
+  <Attribute Name="SupplierId1" IsUpdateable="0" Type="java.lang.Long"/>
+</JavaBean>

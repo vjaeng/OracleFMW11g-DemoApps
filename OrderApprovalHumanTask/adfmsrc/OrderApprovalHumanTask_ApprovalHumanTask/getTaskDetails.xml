@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="getTaskDetails"
+          Package="OrderApprovalHumanTask_ApprovalHumanTask"
+          BeanClass="OrderApprovalHumanTask_ApprovalHumanTask.getTaskDetails"
+          isJavaBased="false">
+  <AccessorAttribute id="task" IsCollection="true"
+                     BeanClass="OrderApprovalHumanTask_ApprovalHumanTask.task"
+                     CollectionBeanClass="OrderApprovalHumanTask_ApprovalHumanTask.getTaskDetails_Operations">
+    <Properties>
+      <Property Name="minOccurs" Value="1"/>
+      <Property Name="maxOccurs" Value="1"/>
+      <Property Name="LABEL" Value="Task"/>
+      <Property Name="nillable" Value="false"/>
+      <Property Name="targetNamespace"
+                Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+    </Properties>
+  </AccessorAttribute>
+</JavaBean>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="sortAttribute"
+          Package="StoreFrontService.findCustomerInfoVO1.params.findCriteria.sortOrder"
+          BeanClass="StoreFrontService.findCustomerInfoVO1.params.findCriteria.sortOrder.sortAttribute"
+          isJavaBased="false">
+  <Attribute Name="name" Type="java.lang.String"/>
+  <Attribute Name="descending" Type="java.lang.Boolean"/>
+</JavaBean>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="result"
+          Package="orderapprovalhumantask.StoreFrontService.findCustomerInfoVO1CustomerInfoVOCriteria"
+          BeanClass="orderapprovalhumantask.StoreFrontService.findCustomerInfoVO1CustomerInfoVOCriteria.result"
+          isJavaBased="false">
+  <Attribute Name="PersonId" IsUpdateable="0" Type="java.math.BigDecimal"/>
+  <Attribute Name="FirstName" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="LastName" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="ConfirmedEmail" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="MobilePhoneNumber" IsUpdateable="0" Type="java.lang.String"/>
+  <Attribute Name="MembershipId" IsUpdateable="0" Type="java.math.BigDecimal"/>
+  <Attribute Name="MembershipTypeCode" IsUpdateable="0"
+             Type="java.lang.String"/>
+</JavaBean>

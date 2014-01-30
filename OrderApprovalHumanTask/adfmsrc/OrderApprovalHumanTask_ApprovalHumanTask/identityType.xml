@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="identityType" Package="OrderApprovalHumanTask_ApprovalHumanTask"
+          BeanClass="OrderApprovalHumanTask_ApprovalHumanTask.identityType"
+          isJavaBased="false">
+  <Attribute Name="id" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="displayName"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Id"/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="displayName" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="type"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Display Name"/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="type" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="nextSiblingNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="nextSibling" Value="systemVersionFlag"/>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="Type"/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+        <Property Name="enumeration" Value="[user, group, application_role]"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+  <Attribute Name="systemVersionFlag" Type="java.lang.String">
+    <Properties>
+      <CustomProperties>
+        <Property Name="minOccurs" Value="0"/>
+        <Property Name="maxOccurs" Value="1"/>
+        <Property Name="LABEL" Value="System Version Flag"/>
+        <Property Name="LeafElement_hint" Value="LeafElement_no_attribute"/>
+        <Property Name="nillable" Value="false"/>
+        <Property Name="targetNamespace"
+                  Value="http://xmlns.oracle.com/bpel/workflow/task"/>
+        <Property Name="type" Value="string"/>
+      </CustomProperties>
+    </Properties>
+  </Attribute>
+</JavaBean>

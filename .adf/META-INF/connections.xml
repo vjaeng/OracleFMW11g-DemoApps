@@ -1,0 +1,1088 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<!--
+    Template for connections.xml - jdev goes wiled with templated (@xx@) tokens
+    in the real one - so we need to ship one that is syntactically valid.
+    As part of the setupDeploymentEnvironment task - we copy that over the 
+    existing one and replace the tokens.
+    
+    The bam ones get replaced from the BamOrderBooking
+-->
+<References xmlns="http://xmlns.oracle.com/adf/jndi">
+   <Reference name="StoreFrontService" className="oracle.adf.model.connection.webservice.impl.WebServiceConnectionImpl" xmlns="">
+      <Factory className="oracle.adf.model.connection.webservice.api.WebServiceConnectionFactory"/>
+      <RefAddresses>
+         <XmlRefAddr addrType="WebServiceConnection">
+            <Contents>
+               <wsconnection description="http://localhost:8001/soa-infra/services/soaFusionOrderDemo/OrderSDOComposite!1.0/StoreFrontService?WSDL" service="{www.globalcompany.example.com}StoreFrontService">
+            <model name="{www.globalcompany.example.com}StoreFrontService" xmlns="http://oracle.com/ws/model">
+              <types xmlns="http://oracle.com/oracle/webservices/mdds">
+                <complexType elementQualified="true" namespace="http://xmlns.oracle.com/adf/svc/errors/" localPart="ServiceMessage" xmlns="">
+                  <sequence minOccurs="1" maxOccurs="1">
+                    <part name="code" required="false" namespace="http://xmlns.oracle.com/adf/svc/errors/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="message" required="false" namespace="http://xmlns.oracle.com/adf/svc/errors/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="severity" required="false" namespace="http://xmlns.oracle.com/adf/svc/errors/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="detail" required="false" namespace="http://xmlns.oracle.com/adf/svc/errors/" elementQualified="true">
+                      <array dimensions="1" type="2">
+                        <type namespace="http://xmlns.oracle.com/adf/svc/errors/" localPart="ServiceMessage"/>
+                      </array>
+                    </part>
+                  </sequence>
+                </complexType>
+                <complexType elementQualified="false" namespace="commonj.sdo" localPart="ChangeSummaryType" xmlns="">
+                  <att name="create" required="false">
+                    <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                  </att>
+                  <att name="delete" required="false">
+                    <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                  </att>
+                  <att name="logging" required="false">
+                    <type namespace="http://www.w3.org/2001/XMLSchema" localPart="boolean"/>
+                  </att>
+                  <sequence minOccurs="1" maxOccurs="1">
+                    <part name="any" required="false" namespace="commonj.sdo" elementQualified="false">
+                      <type>
+                        <complexType elementQualified="false"/>
+                      </type>
+                    </part>
+                  </sequence>
+                </complexType>
+                <complexType elementQualified="true" namespace="/oracle/fodemo/storefront/store/queries/common/" localPart="OrderInfoVOSDO" xmlns="">
+                  <sequence minOccurs="1" maxOccurs="1">
+                    <part name="OrderId" required="false" nillable="true" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="integer"/>
+                    </part>
+                    <part name="OrderDate" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="dateTime-Timestamp"/>
+                    </part>
+                    <part name="OrderShippedDate" required="false" nillable="true" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="dateTime-Timestamp"/>
+                    </part>
+                    <part name="OrderStatusCode" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="OrderTotal" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="decimal"/>
+                    </part>
+                    <part name="CustomerId" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="long"/>
+                    </part>
+                    <part name="ShipToName" required="false" nillable="true" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="ShipToPhoneNumber" required="false" nillable="true" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="AddressId" required="false" nillable="true" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="integer"/>
+                    </part>
+                    <part name="Address1" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="Address2" required="false" nillable="true" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="City" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="PostalCode" required="false" nillable="true" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="StateProvince" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="CountryId" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="PaymentOptionId" required="false" nillable="true" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="long"/>
+                    </part>
+                    <part name="BillingAddressId" required="false" nillable="true" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="integer"/>
+                    </part>
+                    <part name="AccountNumber" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="integer"/>
+                    </part>
+                    <part name="CardTypeCode" required="false" nillable="true" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="ExpireDate" required="false" nillable="true" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="dateTime-Timestamp"/>
+                    </part>
+                    <part name="CheckDigits" required="false" nillable="true" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="int"/>
+                    </part>
+                    <part name="RoutingIdentifier" required="false" nillable="true" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="InstitutionName" required="false" nillable="true" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="ShipToAddressId" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="long"/>
+                    </part>
+                    <part name="ObjectVersionId" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="long"/>
+                    </part>
+                    <part name="ShippingOptionId" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="long"/>
+                    </part>
+                    <part name="ObjectVersionId1" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="long"/>
+                    </part>
+                    <part name="FreeShippingFlag" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="ObjectVersionId2" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="long"/>
+                    </part>
+                    <part name="CustomerCollectFlag" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="GiftwrapFlag" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="PaymentOptionId1" required="false" nillable="true" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="integer"/>
+                    </part>
+                    <part name="OrderItemsInfoVO" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <array dimensions="1" type="2">
+                        <type namespace="/oracle/fodemo/storefront/store/queries/common/" localPart="OrderItemsInfoVOSDO"/>
+                      </array>
+                    </part>
+                  </sequence>
+                </complexType>
+                <complexType elementQualified="true" namespace="/oracle/fodemo/storefront/store/queries/common/" localPart="OrderItemsInfoVOSDO" xmlns="">
+                  <sequence minOccurs="1" maxOccurs="1">
+                    <part name="OrderId" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="long"/>
+                    </part>
+                    <part name="LineItemId" required="false" nillable="true" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="integer"/>
+                    </part>
+                    <part name="ProductId" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="long"/>
+                    </part>
+                    <part name="Quantity" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="int"/>
+                    </part>
+                    <part name="UnitPrice" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="decimal"/>
+                    </part>
+                    <part name="ProductName" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="SupplierName" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="ProductId1" required="false" nillable="true" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="integer"/>
+                    </part>
+                    <part name="SupplierId1" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="long"/>
+                    </part>
+                  </sequence>
+                </complexType>
+                <enumeration namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="Conjunction" xsdType="string" xmlns="">
+                  <value value="And"/>
+                  <value value="Or"/>
+                  <value value="Not"/>
+                  <value value="AndNot"/>
+                  <value value="OrNot"/>
+                </enumeration>
+                <complexType elementQualified="true" namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="FindControl" xmlns="">
+                  <sequence minOccurs="1" maxOccurs="1">
+                    <part name="retrieveAllTranslations" required="true" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="boolean"/>
+                    </part>
+                  </sequence>
+                </complexType>
+                <enumeration namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="ReturnMode" xsdType="string" xmlns="">
+                  <value value="Full"/>
+                  <value value="Key"/>
+                  <value value="None"/>
+                </enumeration>
+                <complexType elementQualified="true" namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="MethodResult" xmlns="">
+                  <sequence minOccurs="1" maxOccurs="1">
+                    <part name="Message" required="false" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <array dimensions="1" type="2">
+                        <type namespace="http://xmlns.oracle.com/adf/svc/errors/" localPart="ServiceMessage"/>
+                      </array>
+                    </part>
+                  </sequence>
+                </complexType>
+                <complexType elementQualified="true" namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="ViewCriteriaRow" xmlns="">
+                  <sequence minOccurs="1" maxOccurs="1">
+                    <part name="conjunction" required="false" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="Conjunction"/>
+                    </part>
+                    <part name="upperCaseCompare" required="true" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="boolean"/>
+                    </part>
+                    <part name="item" required="true" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <array dimensions="1" type="2">
+                        <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="ViewCriteriaItem"/>
+                      </array>
+                    </part>
+                  </sequence>
+                </complexType>
+                <complexType elementQualified="true" namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="ProcessControl" xmlns="">
+                  <sequence minOccurs="1" maxOccurs="1">
+                    <part name="exceptionReturnMode" required="false" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="ReturnMode"/>
+                    </part>
+                    <part name="partialFailureAllowed" required="true" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="boolean"/>
+                    </part>
+                  </sequence>
+                </complexType>
+                <complexType elementQualified="true" namespace="http://xmlns.oracle.com/adf/svc/errors/" localPart="ServiceErrorMessage" xmlns="">
+                  <sequence minOccurs="0" maxOccurs="0">
+                    <part name="code" required="false" namespace="http://xmlns.oracle.com/adf/svc/errors/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="message" required="false" namespace="http://xmlns.oracle.com/adf/svc/errors/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="severity" required="false" namespace="http://xmlns.oracle.com/adf/svc/errors/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="detail" required="false" namespace="http://xmlns.oracle.com/adf/svc/errors/" elementQualified="true">
+                      <array dimensions="1" type="2">
+                        <type namespace="http://xmlns.oracle.com/adf/svc/errors/" localPart="ServiceMessage"/>
+                      </array>
+                    </part>
+                    <part name="sdoObject" required="false" namespace="http://xmlns.oracle.com/adf/svc/errors/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="anyType"/>
+                    </part>
+                    <part name="exceptionClassName" required="false" namespace="http://xmlns.oracle.com/adf/svc/errors/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                  </sequence>
+                </complexType>
+                <complexType elementQualified="true" namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="SortAttribute" xmlns="">
+                  <sequence minOccurs="1" maxOccurs="1">
+                    <part name="name" required="true" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="descending" required="true" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="boolean"/>
+                    </part>
+                  </sequence>
+                </complexType>
+                <complexType elementQualified="true" namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="FindCriteria" xmlns="">
+                  <sequence minOccurs="1" maxOccurs="1">
+                    <part name="fetchStart" required="true" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="int"/>
+                    </part>
+                    <part name="fetchSize" required="true" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="int"/>
+                    </part>
+                    <part name="filter" required="false" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="ViewCriteria"/>
+                    </part>
+                    <part name="sortOrder" required="false" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="SortOrder"/>
+                    </part>
+                    <part name="findAttribute" required="false" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <array dimensions="1" type="2">
+                        <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                      </array>
+                    </part>
+                    <part name="excludeAttribute" required="true" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="boolean"/>
+                    </part>
+                    <part name="childFindCriteria" required="false" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <array dimensions="1" type="2">
+                        <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="ChildFindCriteria"/>
+                      </array>
+                    </part>
+                  </sequence>
+                </complexType>
+                <complexType elementQualified="true" namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="SortOrder" xmlns="">
+                  <sequence minOccurs="1" maxOccurs="1">
+                    <part name="sortAttribute" required="true" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <array dimensions="1" type="2">
+                        <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="SortAttribute"/>
+                      </array>
+                    </part>
+                  </sequence>
+                </complexType>
+                <simpleType namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="dateTime-Timestamp" xsdType="dateTime" xmlns=""/>
+                <complexType elementQualified="true" namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="ViewCriteriaItem" xmlns="">
+                  <sequence minOccurs="1" maxOccurs="1">
+                    <part name="conjunction" required="false" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="Conjunction"/>
+                    </part>
+                    <part name="upperCaseCompare" required="true" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="boolean"/>
+                    </part>
+                    <part name="attribute" required="true" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="operator" required="true" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <choice minOccurs="1" maxOccurs="1">
+                      <part name="value" required="false" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                        <array dimensions="1" type="2">
+                          <type namespace="http://www.w3.org/2001/XMLSchema" localPart="anySimpleType"/>
+                        </array>
+                      </part>
+                      <part name="nested" required="false" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                        <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="ViewCriteria"/>
+                      </part>
+                    </choice>
+                  </sequence>
+                </complexType>
+                <complexType elementQualified="true" namespace="/oracle/fodemo/storefront/store/queries/common/" localPart="CustomerInfoVOSDO" xmlns="">
+                  <sequence minOccurs="1" maxOccurs="1">
+                    <part name="PersonId" required="false" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="decimal"/>
+                    </part>
+                    <part name="FirstName" required="false" nillable="true" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="LastName" required="false" nillable="true" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="ConfirmedEmail" required="false" nillable="true" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="MobilePhoneNumber" required="false" nillable="true" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                    <part name="MembershipId" required="false" nillable="true" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="decimal"/>
+                    </part>
+                    <part name="MembershipTypeCode" required="false" nillable="true" namespace="/oracle/fodemo/storefront/store/queries/common/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                  </sequence>
+                </complexType>
+                <complexType elementQualified="true" namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="ViewCriteria" xmlns="">
+                  <sequence minOccurs="1" maxOccurs="1">
+                    <part name="conjunction" required="false" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="Conjunction"/>
+                    </part>
+                    <part name="group" required="true" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <array dimensions="1" type="2">
+                        <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="ViewCriteriaRow"/>
+                      </array>
+                    </part>
+                    <part name="nested" required="false" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <array dimensions="1" type="2">
+                        <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="ViewCriteria"/>
+                      </array>
+                    </part>
+                  </sequence>
+                </complexType>
+                <complexType elementQualified="true" namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="ProcessData" xmlns="">
+                  <sequence minOccurs="0" maxOccurs="0">
+                    <part name="Message" required="false" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <array dimensions="1" type="2">
+                        <type namespace="http://xmlns.oracle.com/adf/svc/errors/" localPart="ServiceMessage"/>
+                      </array>
+                    </part>
+                    <part name="Value" required="false" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <array dimensions="1" type="2">
+                        <type namespace="http://www.w3.org/2001/XMLSchema" localPart="anyType"/>
+                      </array>
+                    </part>
+                    <part name="ChangeSummary" required="false" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="commonj.sdo" localPart="ChangeSummaryType"/>
+                    </part>
+                  </sequence>
+                </complexType>
+                <complexType elementQualified="true" namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="ChildFindCriteria" xmlns="">
+                  <sequence minOccurs="0" maxOccurs="0">
+                    <part name="fetchStart" required="true" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="int"/>
+                    </part>
+                    <part name="fetchSize" required="true" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="int"/>
+                    </part>
+                    <part name="filter" required="false" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="ViewCriteria"/>
+                    </part>
+                    <part name="sortOrder" required="false" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="SortOrder"/>
+                    </part>
+                    <part name="findAttribute" required="false" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <array dimensions="1" type="2">
+                        <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                      </array>
+                    </part>
+                    <part name="excludeAttribute" required="true" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="boolean"/>
+                    </part>
+                    <part name="childAttrName" required="true" namespace="http://xmlns.oracle.com/adf/svc/types/" elementQualified="true">
+                      <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                    </part>
+                  </sequence>
+                </complexType>
+                <types-in-elements/>
+              </types>
+              <service name="{www.globalcompany.example.com}StoreFrontService">
+                <port name="StoreFrontServiceSoapHttpPort" binding="{www.globalcompany.example.com}StoreFrontServiceBinding" portType="{www.globalcompany.example.com}StoreFrontService">
+                  <soap addressUrl="http://localhost:8001/soa-infra/services/soaFusionOrderDemo/OrderSDOComposite!1.0/StoreFrontService" xmlns="http://schemas.xmlsoap.org/wsdl/soap/"/>
+                  <operation name="processOrderInfoVOSDO">
+                    <soap soapAction="www.globalcompany.example.com/processOrderInfoVOSDO" xmlns="http://schemas.xmlsoap.org/wsdl/soap/"/>
+                    <output name="" message="{www.globalcompany.example.com}StoreFrontService_processOrderInfoVOSDOResponse">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="true" namespace="www.globalcompany.example.com/types/" localPart="processOrderInfoVOSDOResponse" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="parameters" required="true" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <sequence minOccurs="1" maxOccurs="1">
+                                <part name="result" required="false" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <array dimensions="1" type="2">
+                                    <type namespace="/oracle/fodemo/storefront/store/queries/common/" localPart="OrderInfoVOSDO"/>
+                                  </array>
+                                </part>
+                              </sequence>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </output>
+                    <input name="" message="{www.globalcompany.example.com}StoreFrontService_processOrderInfoVOSDO">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="true" namespace="www.globalcompany.example.com/types/" localPart="processOrderInfoVOSDO" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="parameters" required="true" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <sequence minOccurs="1" maxOccurs="1">
+                                <part name="changeOperation" required="true" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                                </part>
+                                <part name="orderInfoVO1" required="false" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <array dimensions="1" type="2">
+                                    <type namespace="/oracle/fodemo/storefront/store/queries/common/" localPart="OrderInfoVOSDO"/>
+                                  </array>
+                                </part>
+                                <part name="processControl" required="true" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="ProcessControl"/>
+                                </part>
+                              </sequence>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </input>
+                    <fault name="ServiceException" message="{http://xmlns.oracle.com/adf/svc/errors/}ServiceException">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="false" namespace="http://schemas.xmlsoap.org/soap/envelope/" localPart="Fault" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="fault" required="false" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <part name="faultcode" required="false" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                              </part>
+                              <part name="faultstring" required="false" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                              </part>
+                              <part name="detail" required="true" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type>
+                                  <complexType elementQualified="true">
+                                    <part name="ServiceErrorMessage" required="true" elementQualified="false">
+                                      <type namespace="http://xmlns.oracle.com/adf/svc/errors/" localPart="ServiceErrorMessage"/>
+                                    </part>
+                                  </complexType>
+                                </type>
+                              </part>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </fault>
+                  </operation>
+                  <operation name="updateOrderInfoVOSDO">
+                    <soap soapAction="www.globalcompany.example.com/updateOrderInfoVOSDO" xmlns="http://schemas.xmlsoap.org/wsdl/soap/"/>
+                    <output name="" message="{www.globalcompany.example.com}StoreFrontService_updateOrderInfoVOSDOResponse">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="true" namespace="www.globalcompany.example.com/types/" localPart="updateOrderInfoVOSDOResponse" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="parameters" required="true" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <sequence minOccurs="1" maxOccurs="1">
+                                <part name="result" required="true" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <type namespace="/oracle/fodemo/storefront/store/queries/common/" localPart="OrderInfoVOSDO"/>
+                                </part>
+                              </sequence>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </output>
+                    <input name="" message="{www.globalcompany.example.com}StoreFrontService_updateOrderInfoVOSDO">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="true" namespace="www.globalcompany.example.com/types/" localPart="updateOrderInfoVOSDO" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="parameters" required="true" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <sequence minOccurs="1" maxOccurs="1">
+                                <part name="orderInfoVO1" required="true" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <type namespace="/oracle/fodemo/storefront/store/queries/common/" localPart="OrderInfoVOSDO"/>
+                                </part>
+                              </sequence>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </input>
+                    <fault name="ServiceException" message="{http://xmlns.oracle.com/adf/svc/errors/}ServiceException">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="false" namespace="http://schemas.xmlsoap.org/soap/envelope/" localPart="Fault" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="fault" required="false" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <part name="faultcode" required="false" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                              </part>
+                              <part name="faultstring" required="false" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                              </part>
+                              <part name="detail" required="true" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type>
+                                  <complexType elementQualified="true">
+                                    <part name="ServiceErrorMessage" required="true" elementQualified="false">
+                                      <type namespace="http://xmlns.oracle.com/adf/svc/errors/" localPart="ServiceErrorMessage"/>
+                                    </part>
+                                  </complexType>
+                                </type>
+                              </part>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </fault>
+                  </operation>
+                  <operation name="getOrderInfoVOSDO">
+                    <soap soapAction="www.globalcompany.example.com/getOrderInfoVOSDO" xmlns="http://schemas.xmlsoap.org/wsdl/soap/"/>
+                    <output name="" message="{www.globalcompany.example.com}StoreFrontService_getOrderInfoVOSDOResponse">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="true" namespace="www.globalcompany.example.com/types/" localPart="getOrderInfoVOSDOResponse" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="parameters" required="true" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <sequence minOccurs="1" maxOccurs="1">
+                                <part name="result" required="true" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <type namespace="/oracle/fodemo/storefront/store/queries/common/" localPart="OrderInfoVOSDO"/>
+                                </part>
+                              </sequence>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </output>
+                    <input name="" message="{www.globalcompany.example.com}StoreFrontService_getOrderInfoVOSDO">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="true" namespace="www.globalcompany.example.com/types/" localPart="getOrderInfoVOSDO" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="parameters" required="true" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <sequence minOccurs="1" maxOccurs="1">
+                                <part name="orderId" required="true" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <type namespace="http://www.w3.org/2001/XMLSchema" localPart="integer"/>
+                                </part>
+                              </sequence>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </input>
+                    <fault name="ServiceException" message="{http://xmlns.oracle.com/adf/svc/errors/}ServiceException">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="false" namespace="http://schemas.xmlsoap.org/soap/envelope/" localPart="Fault" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="fault" required="false" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <part name="faultcode" required="false" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                              </part>
+                              <part name="faultstring" required="false" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                              </part>
+                              <part name="detail" required="true" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type>
+                                  <complexType elementQualified="true">
+                                    <part name="ServiceErrorMessage" required="true" elementQualified="false">
+                                      <type namespace="http://xmlns.oracle.com/adf/svc/errors/" localPart="ServiceErrorMessage"/>
+                                    </part>
+                                  </complexType>
+                                </type>
+                              </part>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </fault>
+                  </operation>
+                  <operation name="findOrderInfoVOSDO">
+                    <soap soapAction="www.globalcompany.example.com/findOrderInfoVOSDO" xmlns="http://schemas.xmlsoap.org/wsdl/soap/"/>
+                    <output name="" message="{www.globalcompany.example.com}StoreFrontService_findOrderInfoVOSDOResponse">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="true" namespace="www.globalcompany.example.com/types/" localPart="findOrderInfoVOSDOResponse" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="parameters" required="true" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <sequence minOccurs="1" maxOccurs="1">
+                                <part name="result" required="false" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <array dimensions="1" type="2">
+                                    <type namespace="/oracle/fodemo/storefront/store/queries/common/" localPart="OrderInfoVOSDO"/>
+                                  </array>
+                                </part>
+                              </sequence>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </output>
+                    <input name="" message="{www.globalcompany.example.com}StoreFrontService_findOrderInfoVOSDO">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="true" namespace="www.globalcompany.example.com/types/" localPart="findOrderInfoVOSDO" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="parameters" required="true" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <sequence minOccurs="1" maxOccurs="1">
+                                <part name="findCriteria" required="true" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="FindCriteria"/>
+                                </part>
+                                <part name="findControl" required="true" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="FindControl"/>
+                                </part>
+                              </sequence>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </input>
+                    <fault name="ServiceException" message="{http://xmlns.oracle.com/adf/svc/errors/}ServiceException">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="false" namespace="http://schemas.xmlsoap.org/soap/envelope/" localPart="Fault" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="fault" required="false" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <part name="faultcode" required="false" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                              </part>
+                              <part name="faultstring" required="false" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                              </part>
+                              <part name="detail" required="true" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type>
+                                  <complexType elementQualified="true">
+                                    <part name="ServiceErrorMessage" required="true" elementQualified="false">
+                                      <type namespace="http://xmlns.oracle.com/adf/svc/errors/" localPart="ServiceErrorMessage"/>
+                                    </part>
+                                  </complexType>
+                                </type>
+                              </part>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </fault>
+                  </operation>
+                  <operation name="deleteOrderInfoVOSDO">
+                    <soap soapAction="www.globalcompany.example.com/deleteOrderInfoVOSDO" xmlns="http://schemas.xmlsoap.org/wsdl/soap/"/>
+                    <output name="" message="{www.globalcompany.example.com}StoreFrontService_deleteOrderInfoVOSDOResponse">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="true" namespace="www.globalcompany.example.com/types/" localPart="deleteOrderInfoVOSDOResponse" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="parameters" required="true" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <sequence minOccurs="1" maxOccurs="1"/>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </output>
+                    <input name="" message="{www.globalcompany.example.com}StoreFrontService_deleteOrderInfoVOSDO">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="true" namespace="www.globalcompany.example.com/types/" localPart="deleteOrderInfoVOSDO" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="parameters" required="true" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <sequence minOccurs="1" maxOccurs="1">
+                                <part name="orderInfoVO1" required="true" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <type namespace="/oracle/fodemo/storefront/store/queries/common/" localPart="OrderInfoVOSDO"/>
+                                </part>
+                              </sequence>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </input>
+                    <fault name="ServiceException" message="{http://xmlns.oracle.com/adf/svc/errors/}ServiceException">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="false" namespace="http://schemas.xmlsoap.org/soap/envelope/" localPart="Fault" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="fault" required="false" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <part name="faultcode" required="false" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                              </part>
+                              <part name="faultstring" required="false" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                              </part>
+                              <part name="detail" required="true" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type>
+                                  <complexType elementQualified="true">
+                                    <part name="ServiceErrorMessage" required="true" elementQualified="false">
+                                      <type namespace="http://xmlns.oracle.com/adf/svc/errors/" localPart="ServiceErrorMessage"/>
+                                    </part>
+                                  </complexType>
+                                </type>
+                              </part>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </fault>
+                  </operation>
+                  <operation name="findCustomerInfoVO1">
+                    <soap soapAction="www.globalcompany.example.com/findCustomerInfoVO1" xmlns="http://schemas.xmlsoap.org/wsdl/soap/"/>
+                    <output name="" message="{www.globalcompany.example.com}StoreFrontService_findCustomerInfoVO1Response">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="true" namespace="www.globalcompany.example.com/types/" localPart="findCustomerInfoVO1Response" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="parameters" required="true" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <sequence minOccurs="1" maxOccurs="1">
+                                <part name="result" required="false" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <array dimensions="1" type="2">
+                                    <type namespace="/oracle/fodemo/storefront/store/queries/common/" localPart="CustomerInfoVOSDO"/>
+                                  </array>
+                                </part>
+                              </sequence>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </output>
+                    <input name="" message="{www.globalcompany.example.com}StoreFrontService_findCustomerInfoVO1">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="true" namespace="www.globalcompany.example.com/types/" localPart="findCustomerInfoVO1" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="parameters" required="true" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <sequence minOccurs="1" maxOccurs="1">
+                                <part name="findCriteria" required="true" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="FindCriteria"/>
+                                </part>
+                                <part name="findControl" required="true" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="FindControl"/>
+                                </part>
+                              </sequence>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </input>
+                    <fault name="ServiceException" message="{http://xmlns.oracle.com/adf/svc/errors/}ServiceException">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="false" namespace="http://schemas.xmlsoap.org/soap/envelope/" localPart="Fault" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="fault" required="false" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <part name="faultcode" required="false" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                              </part>
+                              <part name="faultstring" required="false" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                              </part>
+                              <part name="detail" required="true" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type>
+                                  <complexType elementQualified="true">
+                                    <part name="ServiceErrorMessage" required="true" elementQualified="false">
+                                      <type namespace="http://xmlns.oracle.com/adf/svc/errors/" localPart="ServiceErrorMessage"/>
+                                    </part>
+                                  </complexType>
+                                </type>
+                              </part>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </fault>
+                  </operation>
+                  <operation name="processCSOrderInfoVOSDO">
+                    <soap soapAction="www.globalcompany.example.com/processCSOrderInfoVOSDO" xmlns="http://schemas.xmlsoap.org/wsdl/soap/"/>
+                    <output name="" message="{www.globalcompany.example.com}StoreFrontService_processCSOrderInfoVOSDOResponse">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="true" namespace="www.globalcompany.example.com/types/" localPart="processCSOrderInfoVOSDOResponse" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="parameters" required="true" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <sequence minOccurs="1" maxOccurs="1">
+                                <part name="result" required="true" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="ProcessData"/>
+                                </part>
+                              </sequence>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </output>
+                    <input name="" message="{www.globalcompany.example.com}StoreFrontService_processCSOrderInfoVOSDO">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="true" namespace="www.globalcompany.example.com/types/" localPart="processCSOrderInfoVOSDO" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="parameters" required="true" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <sequence minOccurs="1" maxOccurs="1">
+                                <part name="processData" required="true" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="ProcessData"/>
+                                </part>
+                                <part name="processControl" required="true" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="ProcessControl"/>
+                                </part>
+                              </sequence>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </input>
+                    <fault name="ServiceException" message="{http://xmlns.oracle.com/adf/svc/errors/}ServiceException">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="false" namespace="http://schemas.xmlsoap.org/soap/envelope/" localPart="Fault" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="fault" required="false" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <part name="faultcode" required="false" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                              </part>
+                              <part name="faultstring" required="false" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                              </part>
+                              <part name="detail" required="true" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type>
+                                  <complexType elementQualified="true">
+                                    <part name="ServiceErrorMessage" required="true" elementQualified="false">
+                                      <type namespace="http://xmlns.oracle.com/adf/svc/errors/" localPart="ServiceErrorMessage"/>
+                                    </part>
+                                  </complexType>
+                                </type>
+                              </part>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </fault>
+                  </operation>
+                  <operation name="findCustomerInfoVO1CustomerInfoVOCriteria">
+                    <soap soapAction="www.globalcompany.example.com/findCustomerInfoVO1CustomerInfoVOCriteria" xmlns="http://schemas.xmlsoap.org/wsdl/soap/"/>
+                    <output name="" message="{www.globalcompany.example.com}StoreFrontService_findCustomerInfoVO1CustomerInfoVOCriteriaResponse">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="true" namespace="www.globalcompany.example.com/types/" localPart="findCustomerInfoVO1CustomerInfoVOCriteriaResponse" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="parameters" required="true" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <sequence minOccurs="1" maxOccurs="1">
+                                <part name="result" required="false" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <array dimensions="1" type="2">
+                                    <type namespace="/oracle/fodemo/storefront/store/queries/common/" localPart="CustomerInfoVOSDO"/>
+                                  </array>
+                                </part>
+                              </sequence>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </output>
+                    <input name="" message="{www.globalcompany.example.com}StoreFrontService_findCustomerInfoVO1CustomerInfoVOCriteria">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="true" namespace="www.globalcompany.example.com/types/" localPart="findCustomerInfoVO1CustomerInfoVOCriteria" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="parameters" required="true" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <sequence minOccurs="1" maxOccurs="1">
+                                <part name="findCriteria" required="true" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="FindCriteria"/>
+                                </part>
+                                <part name="CustId" required="true" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                                </part>
+                                <part name="findControl" required="true" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <type namespace="http://xmlns.oracle.com/adf/svc/types/" localPart="FindControl"/>
+                                </part>
+                              </sequence>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </input>
+                    <fault name="ServiceException" message="{http://xmlns.oracle.com/adf/svc/errors/}ServiceException">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="false" namespace="http://schemas.xmlsoap.org/soap/envelope/" localPart="Fault" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="fault" required="false" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <part name="faultcode" required="false" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                              </part>
+                              <part name="faultstring" required="false" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                              </part>
+                              <part name="detail" required="true" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type>
+                                  <complexType elementQualified="true">
+                                    <part name="ServiceErrorMessage" required="true" elementQualified="false">
+                                      <type namespace="http://xmlns.oracle.com/adf/svc/errors/" localPart="ServiceErrorMessage"/>
+                                    </part>
+                                  </complexType>
+                                </type>
+                              </part>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </fault>
+                  </operation>
+                  <operation name="createOrderInfoVOSDO">
+                    <soap soapAction="www.globalcompany.example.com/createOrderInfoVOSDO" xmlns="http://schemas.xmlsoap.org/wsdl/soap/"/>
+                    <output name="" message="{www.globalcompany.example.com}StoreFrontService_createOrderInfoVOSDOResponse">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="true" namespace="www.globalcompany.example.com/types/" localPart="createOrderInfoVOSDOResponse" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="parameters" required="true" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <sequence minOccurs="1" maxOccurs="1">
+                                <part name="result" required="true" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <type namespace="/oracle/fodemo/storefront/store/queries/common/" localPart="OrderInfoVOSDO"/>
+                                </part>
+                              </sequence>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </output>
+                    <input name="" message="{www.globalcompany.example.com}StoreFrontService_createOrderInfoVOSDO">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="true" namespace="www.globalcompany.example.com/types/" localPart="createOrderInfoVOSDO" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="parameters" required="true" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <sequence minOccurs="1" maxOccurs="1">
+                                <part name="orderInfoVO1" required="true" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <type namespace="/oracle/fodemo/storefront/store/queries/common/" localPart="OrderInfoVOSDO"/>
+                                </part>
+                              </sequence>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </input>
+                    <fault name="ServiceException" message="{http://xmlns.oracle.com/adf/svc/errors/}ServiceException">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="false" namespace="http://schemas.xmlsoap.org/soap/envelope/" localPart="Fault" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="fault" required="false" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <part name="faultcode" required="false" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                              </part>
+                              <part name="faultstring" required="false" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                              </part>
+                              <part name="detail" required="true" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type>
+                                  <complexType elementQualified="true">
+                                    <part name="ServiceErrorMessage" required="true" elementQualified="false">
+                                      <type namespace="http://xmlns.oracle.com/adf/svc/errors/" localPart="ServiceErrorMessage"/>
+                                    </part>
+                                  </complexType>
+                                </type>
+                              </part>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </fault>
+                  </operation>
+                  <operation name="mergeOrderInfoVOSDO">
+                    <soap soapAction="www.globalcompany.example.com/mergeOrderInfoVOSDO" xmlns="http://schemas.xmlsoap.org/wsdl/soap/"/>
+                    <output name="" message="{www.globalcompany.example.com}StoreFrontService_mergeOrderInfoVOSDOResponse">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="true" namespace="www.globalcompany.example.com/types/" localPart="mergeOrderInfoVOSDOResponse" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="parameters" required="true" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <sequence minOccurs="1" maxOccurs="1">
+                                <part name="result" required="true" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <type namespace="/oracle/fodemo/storefront/store/queries/common/" localPart="OrderInfoVOSDO"/>
+                                  ence>
+                                </part>
+                              </sequence>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </output>
+                    <input name="" message="{www.globalcompany.example.com}StoreFrontService_mergeOrderInfoVOSDO">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="true" namespace="www.globalcompany.example.com/types/" localPart="mergeOrderInfoVOSDO" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="parameters" required="true" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <sequence minOccurs="1" maxOccurs="1">
+                                <part name="orderInfoVO1" required="true" namespace="www.globalcompany.example.com/types/" elementQualified="true">
+                                  <type namespace="/oracle/fodemo/storefront/store/queries/common/" localPart="OrderInfoVOSDO"/>
+                                </part>
+                              </sequence>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </input>
+                    <fault name="ServiceException" message="{http://xmlns.oracle.com/adf/svc/errors/}ServiceException">
+                      <message style="2" use="1" soapVersion="1" encodingStyle="" docLitWrapped="false" namespace="http://schemas.xmlsoap.org/soap/envelope/" localPart="Fault" xmlns="http://oracle.com/oracle/webservices/mdds">
+                        <part name="fault" required="false" xmlns="">
+                          <type>
+                            <complexType elementQualified="true">
+                              <part name="faultcode" required="false" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                              </part>
+                              <part name="faultstring" required="false" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type namespace="http://www.w3.org/2001/XMLSchema" localPart="string"/>
+                              </part>
+                              <part name="detail" required="true" nillable="true" namespace="http://schemas.xmlsoap.org/soap/envelope/" elementQualified="false">
+                                <type>
+                                  <complexType elementQualified="true">
+                                    <part name="ServiceErrorMessage" required="true" elementQualified="false">
+                                      <type namespace="http://xmlns.oracle.com/adf/svc/errors/" localPart="ServiceErrorMessage"/>
+                                    </part>
+                                  </complexType>
+                                </type>
+                              </part>
+                            </complexType>
+                          </type>
+                        </part>
+                      </message>
+                    </fault>
+                  </operation>
+                </port>
+              </service>
+            </model>
+          </wsconnection>
+            </Contents>
+         </XmlRefAddr>
+      </RefAddresses>
+   </Reference>
+   <Reference name="sta00751" className="oracle.tip.tools.ide.bam.rc.connection.BAMProviderImpl" credentialStoreKey="sta00751" xmlns="">
+      <Factory className="oracle.tip.tools.ide.bam.rc.connection.BAMProviderFactory"/>
+      <RefAddresses>
+         <StringRefAddr addrType="USER_NAME">
+            <Contents>weblogic</Contents>
+         </StringRefAddr>
+         <StringRefAddr addrType="WEBTIER_SERVER_PORT">
+            <Contents>9001</Contents>
+         </StringRefAddr>
+         <StringRefAddr addrType="EnableAppFlag">
+            <Contents>true</Contents>
+         </StringRefAddr>
+         <StringRefAddr addrType="BAM_SERVER_HOST">
+            <Contents>localhost</Contents>
+         </StringRefAddr>
+         <StringRefAddr addrType="WEBTIER_SERVER">
+            <Contents>localhost</Contents>
+         </StringRefAddr>
+         <StringRefAddr addrType="CONNECTION_NAME">
+            <Contents>sta00751</Contents>
+         </StringRefAddr>
+         <StringRefAddr addrType="BAM_SERVER_PORT">
+            <Contents>9001</Contents>
+         </StringRefAddr>
+         <StringRefAddr addrType="BAM_WEBTIER_PROTOCOL">
+            <Contents>http</Contents>
+         </StringRefAddr>
+         <StringRefAddr addrType="AppFlag">
+            <Contents>false</Contents>
+         </StringRefAddr>
+         <StringRefAddr addrType="PASSWORD">
+            <Contents>welcome1</Contents>
+         </StringRefAddr>
+         <StringRefAddr addrType="CONNECTION_MODE">
+            <Contents>BASIC</Contents>
+         </StringRefAddr>
+      </RefAddresses>
+   </Reference>
+</References>

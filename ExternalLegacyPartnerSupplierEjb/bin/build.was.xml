@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<project default="init">
+
+  <!-- use the global build props for the deployment information -->
+  <property file="../../bin/build.was.properties"/>
+  <!-- local build properties -->
+  <property file="build.properties"/>
+  <property name="deploy.ear.source"  value="${deploy.dir}/${ear.name}.ear"/>
+
+  <path id="was.classpath">
+    <fileset dir="${was.home}/plugins">
+      <include name="*.jar"/>
+    </fileset>
+    <fileset dir="${was.home}/lib">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+  
+  <taskdef name="wsadmin" classname="com.ibm.websphere.ant.tasks.WsAdmin">
+    <classpath refid="was.classpath"/>
+  </taskdef>
+  <taskdef name="wsStartApp" classname="com.ibm.websphere.ant.tasks.StartApplication">
+    <classpath refid="was.classpath"/>
+  </taskdef>
+
+  <path id="classpath">
+    <pathelement location="${oracle.home}/../modules/javax.ejb_3.0.1.jar"/>
+    <pathelement location="${was.home}/runtimes/com.ibm.ws.ejb.thinclient_7.0.0.jar"/>
+    <pathelement location="${was.home}/runtimes/com.ibm.ws.webservices.thinclient_7.0.0.jar"/>
+    <pathelement location="${was.home}/runtimes/com.ibm.ws.orb_7.0.0.jar"/>
+    <pathelement location="${was.home}/runtimes/com.ibm.ws.admin.client_7.0.0.jar"/>
+    <pathelement location="${was.home}/plugins/com.ibm.ws.runtime.jar"/>
+    <pathelement location="${output.dir}"/>
+  </path>
+
+  <target name="clean" description="Clean the project">
+    <echo>Cleaning up external partner supplier ejb project ${output.dir}/${deploy.dir}</echo>
+    <mkdir dir="${output.dir}"/>
+    <mkdir dir="${appinf.dir}"/>
+    <delete includeemptydirs="true" >
+      <fileset dir="${output.dir}" includes="**/*"/>
+      <fileset dir="${appinf.dir}" includes="**/*"/>
+    </delete>
+    <delete file="${deploy.dir}/${deploy.ear.source}"/>
+    <delete file="${deploy.dir}/${ear.name}.jar"/>
+    <delete file="${deploy.dir}/${jsca.name}.jar"/>    
+  </target>
+
+  <target name="init">
+    <tstamp/>
+    <mkdir dir="${output.dir}"/>
+  </target>
+
+  <target name="compile" description="Compile Java source files" depends="init">
+    <javac destdir="${output.dir}" classpathref="classpath"
+           debug="${javac.debug}" nowarn="${javac.nowarn}"
+           deprecation="${javac.deprecation}" encoding="Cp1252" source="1.6"
+           target="1.6">
+      <src path="${src.dir}"/>
+    </javac>
+  </target>
+
+ <target name="create-ear" description="creates the ear" depends="compile" >
+    <mkdir dir="${deploy.dir}" />
+    <delete includeemptydirs="true" >
+      <fileset dir="${deploy.dir}" includes="**/*"/>
+    </delete>
+    <jar compress="true" destfile="${deploy.dir}/${ear.name}.jar">
+        <fileset dir="${output.dir}">
+            <!-- jdev compiler junk -->
+            <exclude name="*/**/*jdb"/>
+            <exclude name="*/**/*lck"/>
+            <!-- app descriptors -->
+            <exclude name="META-INF/application-*.xml"/>
+            <exclude name="META-INF/weblogic-application.xml"/>
+            <exclude name="META-INF/jsca/spring-context.xml"/>        
+        </fileset>    
+    </jar>
+    <ear appxml="${src.dir}/META-INF/application-ejb.xml" basedir="${deploy.dir}"
+        destfile="${deploy.dir}/${deploy.ear.source}">
+    </ear>
+  </target>
+
+  <!-- deploy the app ear -->
+  <target name="deploy-application" 
+    description="Deploy the External PartnerSupplier Composite Service"
+    depends="create-deploy-py">
+    <property name="user.install.root" location="${was.home}"/>
+    <property name="wasinstall" location="${was.home}"/>
+    <wsadmin script="create-deploy.py" 
+             washome="${was.home}"
+             conntype="SOAP" host="${admin.server.host}"
+             port="${admin.server.port}"              
+             user="${server.user}"
+             password="${server.password}"
+             failonerror="true"/> 
+    <delete file="create-deploy.py"/>         
+  </target>
+
+  <!-- undeploy application -->
+  <target name="undeploy-application" description="Undeploy the service">
+    <wsadmin command="$AdminApp uninstall ${ear.name}" 
+             washome="${was.home}"
+             conntype="SOAP" host="${admin.server.host}"
+             port="${admin.server.port}"              
+             user="${server.user}"
+             password="${server.password}"
+             failonerror="true"/> 
+    <wsadmin command="$AdminConfig save" washome="${was.home}"
+             conntype="SOAP" host="${admin.server.host}"
+             port="${admin.server.port}"              
+             user="${server.user}"
+             password="${server.password}"
+             failonerror="true"/> 
+  
+  </target>
+
+  <!-- ibm magic target -->
+  <target name="getEJBClientStub" depends="compile">
+    <exec executable="${was.home}/bin/createEJBStubs.sh" dir="${output.dir}">
+      <arg line="com.otn.sample.fod.soa.externalps.IExternalPartnerSupplierService -cp ."/>
+    </exec>
+  </target>
+
+  <!-- test the ejb -->
+  <target name="test-remote-ejb" description="test the remote ejb via client stub"
+    depends="getEJBClientStub" >
+    <!-- local test task -->
+    <java classname="com.otn.sample.fod.soa.externalps.test.EpsSessionEJBClient"
+        dir="../." fork="true" failonerror="true">
+        <classpath refid="classpath"/>
+        <arg line="../bin/build.was.properties"/>
+    </java>    
+  </target>
+
+  <target name="create-deploy-py">
+    <echo file="create-deploy.py"># install the application
+import time
+    
+def installApp(appEAR, appName):
+
+  # If the Application exists, then update it, otherwise install it	
+  try:
+   app = AdminApp.view(appName)
+  except: 
+   print "***** App not found: " + appName + ". Installing " +appEAR+ " now\n"
+   options = "-appname " + appName + " -server ${server.targets} -node ${was.node} -cell ${was.cell}"
+   AdminApp.install(appEAR, options)
+   AdminConfig.save()
+   print "\n***** Done installing App: " + appName + ". Config saved .."
+   # sleep, cluster replication going on :-(
+   time.sleep(20)
+  else:
+   if app > 1:
+     print "***** The App EXISTS: " + appName + ". Skipping...\n"
+   #endif
+#enddef
+
+# start the application
+def startApp(appName):
+
+  # If the Application is already started then do not do anything.
+  try:
+    app = AdminControl.completeObjectName("type=Application,name=" + appName + ",*")
+  except:
+     print "***** The Application " + appName + " is already STARTED"
+     return 0
+     
+  if len(app) > 1:
+     print "***** The Application " + appName + " is already STARTED"
+     return 0
+  #endif
+	
+  # If the Application status is not Started, only then do the rest ...	
+  #get the ApplicationManager MBean
+  appMgr = AdminControl.queryNames("node=${was.node},type=ApplicationManager,process=" + srvr + ",*")
+	
+  #start the Application using the ApplicationManager MBean
+  try:
+    AdminControl.invoke(appMgr,'startApplication',appName)
+    print "\n***** Started: " + appName
+    return 0
+  except:
+    print "***** Retry start..."
+    return 1
+#enddef
+
+# *********  MAIN SECTION  *********** #
+# Global variables declaration
+global AdminConfig
+global AdminControl
+global AdminApp
+global AdminTask
+
+nodeName = "${was.node}"
+srvr = "${server.targets}"
+
+ejbappEAR = "${deploy.ear.source}" 
+# Raj ordered a nice name for tests - here it is.
+ejbappEARName = "FOD-${ear.name}" # display name of the enterprise App
+
+# functions for the deployment steps
+installApp (ejbappEAR,ejbappEARName)  # Step 1 - Install FOD EJB App
+
+for i in range(9):
+  time.sleep(15)
+  if startApp(ejbappEARName) == 0: # Step 2 - Start FOD EJB App
+    break
+  #endif
+#endfor
+
+</echo>
+  </target>
+  
+</project>

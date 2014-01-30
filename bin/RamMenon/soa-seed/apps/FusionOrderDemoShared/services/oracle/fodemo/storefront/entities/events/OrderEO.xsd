@@ -1,0 +1,55 @@
+<?xml version= '1.0' encoding= 'UTF-8' ?>
+<xs:schema targetNamespace="/oracle/fodemo/storefront/entities/events/schema/OrderEO" xmlns="/oracle/fodemo/storefront/entities/events/schema/OrderEO"
+     elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="NewOrderSubmittedInfo">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="OrderId" type="DecimalValuePair" minOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="OrderCompletedInfo">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="OrderId" type="xs:string" minOccurs="1"/>
+                <xs:element name="InstanceId" type="xs:string" minOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="OrderFaultedInfo">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="OrderId" type="xs:string" minOccurs="1"/>
+                <xs:element name="InstanceId" type="xs:string" minOccurs="1"/>
+                <xs:element name="FaultCode" type="xs:string" minOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="ValuePair" abstract="true"/>
+    <xs:complexType name="DecimalValuePair">
+        <xs:complexContent>
+            <xs:extension base="ValuePair">
+                <xs:sequence>
+                    <xs:element name="newValue" minOccurs="0">
+                        <xs:complexType>
+                            <xs:complexContent>
+                                <xs:extension base="xs:anyType">
+                                    <xs:attribute name="value" type="xs:decimal"/>
+                                </xs:extension>
+                            </xs:complexContent>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="oldValue" minOccurs="0">
+                        <xs:complexType>
+                            <xs:complexContent>
+                                <xs:extension base="xs:anyType">
+                                    <xs:attribute name="value" type="xs:decimal"/>
+                                </xs:extension>
+                            </xs:complexContent>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

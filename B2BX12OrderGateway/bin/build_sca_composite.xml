@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<project name="OrderBookingComposite" default="create-deployable-composite">
+
+  <!-- master build.properties -->  
+  <property file="../../bin/build.properties"/>
+  <!-- import the property file -->
+  <property file="sca-build.properties"/>           
+  <property name="deploy.dir" value="../deploy"/>
+
+  <!-- create and later deploy core ob version? -->
+  <condition property="enable.composite" value="true">
+    <equals arg1="${enable.b2b.composite}" arg2="true"/>
+  </condition>
+
+  <!-- seed do's? -->
+  <condition property="seed.b2b.objects" value="true">
+    <and>
+        <equals arg1="${seed.b2b.tpa}" arg2="true"/>
+    </and>    
+  </condition>
+
+  <path id="weblogic.classpath">
+    <pathelement location="${oracle.home}/soa/modules/oracle.soa.b2b_11.1.1/b2b.jar"/>
+    <pathelement location="${oracle.home}/../wlserver_10.3/server/lib/weblogic.jar"/>
+    <pathelement location="."/>
+  </path>
+
+  <!-- cleanup -->  
+  <target name="clean">
+    <property name="sca-inf.classes.dir" value="../SCA-INF/classes"/>
+    <echo message="Deleting contents of ${sca-inf.classes.dir}"/>
+    <delete dir="${sca-inf.classes.dir}" includeemptydirs="true" includes="*/**">
+    </delete>
+    <property name="deploy.composite.filename" 
+        value="${deploy.dir}/sca_${composite.name}_rev${composite.revision}.jar"/>
+    <delete dir="results" deleteonexit="true"/>
+    <echo message="Deleting ${deploy.composite.filename}"/>
+    <delete file="${deploy.composite.filename}"/>
+  </target>
+
+  <!-- create the deployable composite sar -->
+  <target name="create-deployable-composite">
+    <property name="sca-inf.classes.dir" value="../SCA-INF/classes"/>
+    <mkdir dir="${sca-inf.classes.dir}"/>
+    <ant antfile="${oracle.home}/bin/ant-sca-package.xml" target="package" inheritall="false">
+        <property name="oracle.home" value="${oracle.home}"/>
+        <!-- we leverage the inbuilt scac -->
+        <property name="compositeDir" value="${basedir}/../"/>
+        <!-- needed for adf config -->
+        <property name="scac.application.home" value="${basedir}/../.."/>
+        <!-- name of the composite -->
+        <property name="compositeName" value="${composite.name}"/>
+        <!-- revision of the composite -->
+        <property name="revision" value="${composite.revision}"/>
+        <!-- input for scac -->
+        <property name="java.passed.home" value="${java.home}"/>
+    </ant>
+    <antcall target="setupDeploymentEnvironment" inheritall="true"/>
+  </target>
+  
+  <!-- deploy the composite -->
+  <target name="deploy-composite" if="enable.composite">
+    <condition property="deploymentplan.name" value="null">
+       <not>
+          <isset property="${deploymentplan.name}"/>
+       </not>
+    </condition>
+    <!--
+        although the deploy task can do this, somewhere is an issue with a relative path, hence using 
+        the attachplan target directly
+    -->
+    <ant antfile="${oracle.home}/bin/ant-sca-compile.xml" target="attachplan" inheritall="false">
+        <property name="oracle.home" value="${oracle.home}"/>
+        <property name="scac.input" value="../"/>
+        <property name="java.passed.home" value="${java.home}"/>
+        <property name="scac.sar" value="${deploy.dir}/sca_${composite.name}_rev${composite.revision}.jar"/>
+        <!-- configplan-->
+        <property name="scac.plan" value="${basedir}/${deploymentplan.name}"/>
+    </ant>
+    <echo>Deploying to http://${managed.server.host}:${managed.server.port}/soa-infra/deployer</echo>
+    <ant antfile="${oracle.home}/bin/ant-sca-deploy.xml" target="deploy" 
+        inheritall="false" output="deployResult.dat">
+        <!-- reformat of prop names -->
+        <property name="user" value="${server.user}"/>
+        <property name="password" value="${server.password}"/>
+        <!-- overwrite? -->
+        <property name="overwrite" value="true"/>
+        <!-- create the url for deployment -->
+        <property name="serverURL" value="http://${managed.server.host}:${managed.server.port}/soa-infra/deployer"/>
+        <!-- location of the sar -->
+        <property name="sarLocation" value="${deploy.dir}/sca_${composite.name}_rev${composite.revision}.jar"/>
+        <!-- partition name -->
+        <property name="partition" value="${soa.partition.name}"/>
+    </ant>
+    <loadfile property="deploylog" srcfile="deployResult.dat"></loadfile>
+    <fail message="Deployment failed, please check above exception">
+        <condition>
+            <not>
+                <contains string="${deploylog}" substring="200"/>
+            </not>
+        </condition>
+    </fail>
+    <delete file="deployResult.dat"/>        
+    
+    <antcall target="importAndDeployB2BTradingAgreements"/>
+  </target>
+
+  <!-- undeploy the composite -->
+  <target name="undeploy-composite" if="enable.composite">
+    <ant antfile="${oracle.home}/bin/ant-sca-deploy.xml" target="undeploy" inheritall="false">
+        <!-- reformat of prop names -->
+        <property name="user" value="${server.user}"/>
+        <property name="password" value="${server.password}"/>
+        <!-- create the url for deployment -->
+        <property name="serverURL" value="http://${managed.server.host}:${managed.server.port}/soa-infra/deployer"/>
+        <!-- name of the composite -->
+        <property name="compositeName" value="${composite.name}"/>
+        <!-- revision of the composite -->
+        <property name="revision" value="${composite.revision}"/>
+        <!-- partition name -->
+        <property name="partition" value="${soa.partition.name}"/>        
+    </ant>
+    <antcall target="purgeB2BTradingAgreements"/>
+  </target>
+  
+  <!-- setup of connections.xml -->
+  <target name="setupDeploymentEnvironment">
+    <property name="deployment.xml.file" value="${deploymentplan.name}"/>
+    <copy file="templates/B2BX12OrderGateway_deployment_plan.seed" 
+        tofile="${deployment.xml.file}" overwrite="true"/>
+    
+    <echo>Setting up deployment plan, modifying ${deployment.xml.file} </echo>
+    
+    <property name="storefrontservice.http.endpoint" 
+        value="${managed.server.host}:${managed.server.port}"/>
+
+    <condition property="storefrontservice.contextUri" 
+        else="${storefrontservice.contextUri.soa}" 
+        value="${storefrontservice.contextUri.adf}" >
+          <equals arg1="${soa.only.deployment}" arg2="false" />
+    </condition>
+
+    <echo message="Replacing ws-endpoint with ${storefrontservice.http.endpoint}/${storefrontservice.contextUri}"/>    
+    <replace file="${deployment.xml.file}" 
+        token="@storefront.endpoint@" value="${storefrontservice.http.endpoint}/${storefrontservice.contextUri}"/>
+
+    <echo message="Replacing soa server and wls server information "/>    
+    <echo> -SOA: ${managed.server.host} ${managed.server.port}</echo>
+    <replace file="${deployment.xml.file}" 
+        token="@managed.server.host@" value="${managed.server.host}"/>  
+    <replace file="${deployment.xml.file}" 
+        token="@managed.server.port@" value="${managed.server.port}"/>  
+                
+    <echo>Replacing communication style, eventbased? ${use.events}</echo>   
+    <replace file="${deployment.xml.file}" 
+        token="@use.events@" value="${use.events}"/>  
+    
+    <echo>Replacing soa partition name with ${soa.partition.name}</echo>
+    <replace file="${deployment.xml.file}" 
+        token="@soa.partition.name@" value="${soa.partition.name}"/>  
+  </target>
+
+  <!-- composite tests -->
+  <target name="test-composite" if="enable.composite">
+    <echo>Running sca-testing for ${composite.name} against ${wls.mgd.server.url}</echo>
+    <!-- api expects a file - so we create one on demand -->
+    <property name="tmp.jndi.properties" value="${basedir}/tmp-jndi.properties"/>
+    <echo file="${tmp.jndi.properties}">java.naming.factory.initial=${java.naming.factory.initial}
+java.naming.provider.url=${wls.mgd.server.url}
+java.naming.security.principal=${server.user}
+java.naming.security.credentials=${server.password}
+dedicated.connection=true
+dedicated.rmicontext=true
+    </echo>
+    <ant antfile="${oracle.home}/bin/ant-sca-test.xml" target="test" inheritall="false">
+        <!-- connection information -->    
+        <property name="oracle.home" value="${oracle.home}"/>
+        <property name="java.home" value="${java.home}"/>
+        <!-- name of the composite -->
+        <property name="scatest.input" value="${composite.name}"/>
+        <!-- name of the testsuite -->
+        <property name="scatestsuite.input" value="OrderBookingMainTestsuite"/>
+        <!-- api is bad, hence default ones -->
+        <property name="jndi.properties.input" value="${tmp.jndi.properties}"/>
+        <!-- partition name -->
+        <property name="scatest.partition" value="${soa.partition.name}"/>
+    </ant>
+    <delete file="${tmp.jndi.properties}" />
+  </target>
+
+  <!-- install tpas -->
+  <target name="importAndDeployB2BTradingAgreements" 
+    if="seed.b2b.objects">
+    <echo>Importing and deploying b2b trading partner agreements</echo>
+    <property name="args" value="import ../config/OOW08_X12_10.zip"/>
+    <property name="tmp.jndi.properties" value="${basedir}/jndi.properties"/>
+    <!-- api expects a file - so we create one on demand -->
+    <echo file="${tmp.jndi.properties}">java.naming.factory.initial=${java.naming.factory.initial}
+java.naming.provider.url=${wls.mgd.server.url}
+java.naming.security.principal=${server.user}
+java.naming.security.credentials=${server.password}
+dedicated.connection=true
+dedicated.rmicontext=true
+    </echo>
+    <!-- import first / then deploy -->
+    <java classname="oracle.tip.b2b.utility.B2BCommandLineUtility"
+        classpathref="weblogic.classpath" fork="yes" >
+            <jvmarg value="-Xms512m" />
+            <jvmarg value="-Xmx512m" />
+            <jvmarg value="-Xmn300m" />
+            <arg line="${args}"/>
+    </java>	
+
+    <java classname="oracle.tip.b2b.utility.B2BCommandLineUtility"
+        classpathref="weblogic.classpath" fork="yes" >
+            <jvmarg value="-Xms512m" />
+            <jvmarg value="-Xmx512m" />
+            <jvmarg value="-Xmn300m" />
+            <arg line="deploy"/>
+    </java>	
+
+    <java classname="oracle.tip.b2b.utility.B2BCommandLineUtility"
+        classpathref="weblogic.classpath" fork="yes" >
+            <jvmarg value="-Xms512m" />
+            <jvmarg value="-Xmx512m" />
+            <jvmarg value="-Xmn300m" />
+            <arg line="restartb2b"/>
+    </java>	
+
+    <!--Delete jndi.properties from the oracle/work/b2b folder-->
+    <delete file="${tmp.jndi.properties}" failonerror="false"/> 
+  </target>
+
+  <!-- install tpas -->
+  <target name="purgeB2BTradingAgreements" if="seed.b2b.objects">
+    <echo>Purging b2b trading partner agreements</echo>
+    <property name="args" value="purge"/>
+    <property name="tmp.jndi.properties" value="${basedir}/jndi.properties"/>
+    <!-- api expects a file - so we create one on demand -->
+    <echo file="${tmp.jndi.properties}">java.naming.factory.initial=${java.naming.factory.initial}
+java.naming.provider.url=${wls.mgd.server.url}
+java.naming.security.principal=${server.user}
+java.naming.security.credentials=${server.password}
+dedicated.connection=true
+dedicated.rmicontext=true
+    </echo>
+    
+    <java classname="oracle.tip.b2b.utility.B2BCommandLineUtility"
+        classpathref="weblogic.classpath" fork="yes" >
+            <jvmarg value="-Xms512m" />
+            <jvmarg value="-Xmx512m" />
+            <jvmarg value="-Xmn300m" />
+            <arg line="${args}"/>
+    </java>	
+
+    <!--Delete jndi.properties from the oracle/work/b2b folder-->
+    <delete file="${tmp.jndi.properties}" failonerror="false"/> 
+  </target>
+  
+</project>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="findCustomerInfoVO1_Operations"
+          Package="orderapprovalhumantask.StoreFrontService"
+          BeanClass="orderapprovalhumantask.StoreFrontService.findCustomerInfoVO1_Operations"
+          isJavaBased="false">
+  <BuiltinOperation id="First"/>
+  <BuiltinOperation id="Next"/>
+  <BuiltinOperation id="Previous"/>
+  <BuiltinOperation id="Last"/>
+</JavaBean>

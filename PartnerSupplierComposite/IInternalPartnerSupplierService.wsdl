@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<wsdl:definitions
+     name="IInternalPartnerSupplierService"
+     targetNamespace="http://internalsupplier.soa.fod.sample.otn.com/"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:tns="http://internalsupplier.soa.fod.sample.otn.com/"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+     xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+     xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+     xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+    >
+    <wsdl:types>
+        <xs:schema version="1.0" targetNamespace="http://internalsupplier.soa.fod.sample.otn.com/types"
+             xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:complexType name="orderitem">
+                <xs:sequence>
+                    <xs:element name="price" type="xs:double"/>
+                    <xs:element name="productId" type="xs:string" minOccurs="0"/>
+                    <xs:element name="quantity" type="xs:int"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://internalsupplier.soa.fod.sample.otn.com/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://internalsupplier.soa.fod.sample.otn.com/"
+             xmlns:ns1="http://internalsupplier.soa.fod.sample.otn.com/types">
+            <import namespace="http://internalsupplier.soa.fod.sample.otn.com/types"/>
+            <xsd:complexType name="getPriceForOrderItemList">
+                <xsd:sequence>
+                    <xsd:element name="arg0" minOccurs="0" maxOccurs="unbounded" type="ns1:orderitem"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="getPriceForOrderItemList" type="tns:getPriceForOrderItemList"/>
+            <xsd:complexType name="getPriceForOrderItemListResponse">
+                <xsd:sequence>
+                    <xsd:element name="return" type="xsd:double"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="getPriceForOrderItemListResponse" type="tns:getPriceForOrderItemListResponse"/>
+            <xsd:complexType name="InternalSupplierException">
+                <xsd:sequence>
+                    <xsd:element name="Message" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="InternalSupplierException" type="tns:InternalSupplierException"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="getPriceForOrderItemListInput">
+        <wsdl:part name="parameters" element="tns:getPriceForOrderItemList"/>
+    </wsdl:message>
+    <wsdl:message name="getPriceForOrderItemListOutput">
+        <wsdl:part name="parameters" element="tns:getPriceForOrderItemListResponse"/>
+    </wsdl:message>
+    <wsdl:message name="InternalSupplierException">
+        <wsdl:part name="InternalSupplierException" element="tns:InternalSupplierException"/>
+    </wsdl:message>
+    <wsdl:portType name="IInternalPartnerSupplier">
+        <wsdl:operation name="getPriceForOrderItemList">
+            <wsdl:input message="tns:getPriceForOrderItemListInput" xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                 ns1:Action=""/>
+            <wsdl:output message="tns:getPriceForOrderItemListOutput" xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                 ns1:Action=""/>
+            <wsdl:fault name="InternalSupplierException" message="tns:InternalSupplierException"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

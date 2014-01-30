@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<decisionServices xmlns="http://xmlns.oracle.com/bpel/rules" name="EvaluatePreferredSupplierRule">
+    <ruleEngineProvider name="OracleRulesSDK" provider="Oracle_11.0.0.0.0">
+        <repository type="SCA-Archive">
+            <path>OrderBookingComposite/oracle/rules/com/example/globalcompany/ns/orderbookingservice/selectsupplierrule/EvaluatePreferredSupplierRule.rules</path>
+        </repository>
+    </ruleEngineProvider>
+    <decisionService targetNamespace="http://xmlns.oracle.com/EvaluatePreferredSupplierRule/OracleRules1_DecisionService_1" ruleEngineProviderReference="OracleRulesSDK" name="OracleRules1_DecisionService_1">
+        <catalog>EvaluatePreferredSupplierRule</catalog>
+        <pattern name="CallFunctionStateless">
+            <arguments>
+                <call>com.example.globalcompany.ns.orderbookingservice.selectsupplierrule.EvaluatePreferredSupplierRule.DecisionFunction_0</call>
+            </arguments>
+        </pattern>
+        <pattern name="CallFunctionStateful">
+            <arguments>
+                <call>com.example.globalcompany.ns.orderbookingservice.selectsupplierrule.EvaluatePreferredSupplierRule.DecisionFunction_0</call>
+            </arguments>
+        </pattern>
+    </decisionService>
+</decisionServices>

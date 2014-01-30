@@ -1,0 +1,17 @@
+<wsdl:definitions
+     name="FulfillOrder"
+     targetNamespace="http://xmlns.oracle.com/WebLogicFusionOrderDemo/OrderBookingComposite/FulfillOrder"
+     xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:tns="http://xmlns.oracle.com/WebLogicFusionOrderDemo/OrderBookingComposite/FulfillOrder"
+     xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    >
+    <wsdl:import namespace="http://xmlns.oracle.com/WebLogicFusionOrderDemo/OrderBookingComposite/FulfillOrder"
+         location="FulfillOrder.wsdl"/>
+    <plnk:partnerLinkType name="FulfillOrder.FulfillOrder">
+        <plnk:role name="execute_ptt">
+            <plnk:portType name="tns:execute_ptt"/>
+        </plnk:role>
+    </plnk:partnerLinkType>
+</wsdl:definitions>

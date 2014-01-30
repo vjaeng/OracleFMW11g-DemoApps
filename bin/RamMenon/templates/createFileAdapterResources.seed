@@ -1,0 +1,16 @@
+"""
+   WLST Python script that seeds file adapter resources for fusion order demo
+"""   
+import sys
+from java.lang import System
+
+print "Starting creation of File adapter resources .."
+connect('@server.user@','@server.password@','t3://@admin.server.host@:@admin.server.port@') 
+
+try:
+    # updateApplication('FileAdapter', '@deployment.plan@', upload='true', stageMode='stage') 
+    redeploy('FileAdapter', '@deployment.plan@', upload='true', stageMode='stage') 
+    
+except:
+    print "Error while modifying file adapter connection factory"
+     

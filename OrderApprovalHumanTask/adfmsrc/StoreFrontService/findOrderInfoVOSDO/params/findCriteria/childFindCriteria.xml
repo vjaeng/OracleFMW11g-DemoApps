@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<JavaBean xmlns="http://xmlns.oracle.com/adfm/beanmodel" version="11.1.1.50.95"
+          id="childFindCriteria"
+          Package="StoreFrontService.findOrderInfoVOSDO.params.findCriteria"
+          BeanClass="StoreFrontService.findOrderInfoVOSDO.params.findCriteria.childFindCriteria"
+          isJavaBased="false">
+  <Attribute Name="fetchStart" Type="java.lang.Integer"/>
+  <Attribute Name="fetchSize" Type="java.lang.Integer"/>
+  <Attribute Name="excludeAttribute" Type="java.lang.Boolean"/>
+  <Attribute Name="childAttrName" Type="java.lang.String"/>
+  <AccessorAttribute id="filter" IsCollection="false"
+                     BeanClass="StoreFrontService.findOrderInfoVOSDO.params.findCriteria.filter"/>
+  <AccessorAttribute id="sortOrder" IsCollection="false"
+                     BeanClass="StoreFrontService.findOrderInfoVOSDO.params.findCriteria.sortOrder"/>
+  <AccessorAttribute id="findAttribute" IsCollection="true"
+                     BeanClass="StoreFrontService.findOrderInfoVOSDO.params.findCriteria.childFindCriteria.findAttribute"
+                     CollectionBeanClass="StoreFrontService.findOrderInfoVOSDO.params.findCriteria.childFindCriteria_Operations"/>
+</JavaBean>

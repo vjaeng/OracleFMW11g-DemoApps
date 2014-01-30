@@ -1,0 +1,797 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<project name="FusionOrderDemoWas" default="init">
+
+  <!-- master build.properties --> 
+  <property file="build.was.properties"/>  
+  <!-- this is the adf config we need to load the mds store from -->
+  <property name="adf.config.uri" value="../.adf/META-INF/adf-config.xml"/>
+  <property name="sas.client.file" value="was_conf/sas.client.props"/>  
+    
+  <!-- debug out the versions -->
+  <echo>Websphere App server - fod script: ${oracle.home} / ${was.home}</echo>
+  <echo>Ant: ${ant.version} Java: ${ant.java.version}</echo>
+
+  <!--*******************************************************************-->
+  <!-- Marco to run wsadmin for WAS                                      -->
+  <!--*******************************************************************-->
+  <macrodef name="wsascript">
+    <attribute name="script"/>
+    <attribute name="washome"/>
+    <attribute name="host"/>
+    <attribute name="port"/>
+    <attribute name="conntype" default="SOAP"/>
+    <attribute name="user"/>
+    <attribute name="password"/>
+    <sequential>
+      <property name="wsadminargs"
+                value="-host @{host} -port @{port} -conntype @{conntype} -user @{user} -password @{password} -lang jython -log_priority=debug -f @{script}"/>
+      <echo>${wsadminargs}</echo>
+      <exec dir="." 
+            executable="${oracle.common.home}/common/bin/wsadmin.sh"
+            resolveexecutable="true" 
+            failonerror="false"
+            resultproperty="deploy.results">
+        <arg line="${wsadminargs}"/>
+        <env key="MW_HOME"                value="${oracle.home}/.."/>
+        <env key="COMMON_COMPONENTS_HOME" value="${oracle.common.home}"/>
+        <env key="WAS_HOME"               value="@{washome}"/>
+      </exec>
+    </sequential>
+  </macrodef>
+
+  <!-- check if oracle.home is valid -->
+  <fail message="Oracle Home ${oracle.home} is not valid - does not contain /soa/modules/oracle.soa.bpel_11.1.1/orabpel-common">
+    <condition>
+        <not>
+            <available file="${oracle.home}/soa/modules/oracle.soa.bpel_11.1.1/orabpel-common.jar"/>
+        </not>    
+    </condition>
+  </fail>
+  
+  <!-- get the java.home -->
+  <property environment="env"/>
+  <fail message="JAVA_HOME is not available. Please provide this property (as system property or as java.).">
+      <condition>
+          <and>
+              <not>
+                  <isset property="env.JAVA_HOME"/>
+              </not>
+              <not>
+                  <isset property="java.home"/>
+              </not>
+          </and>
+      </condition>
+  </fail>
+  <condition property="java.home" value="${env.JAVA_HOME}">
+      <isset property="env.JAVA_HOME"/>
+  </condition>
+  
+  <!-- check to make sure this is run out of the right context -->
+  <fail message="Deployment and building must be run with ws_ant in ${was.home}/bin">
+    <condition>
+      <not>
+          <available classname="com.ibm.wsspi.bootstrap.WSPreLauncher"/>
+      </not>   
+    </condition>
+  </fail>
+
+  <!-- check if java version is 1.6
+  <fail message="ant.java.home must contain Java sdk 6">
+    <condition>
+      <not>
+          <equals arg1="${ant.java.version}" arg2="1.6"/>
+      </not>   
+    </condition>
+  </fail> -->
+  
+  <!-- check if ant is version 1.7
+  <fail message="ant version must be at least ant 1.7">
+      <condition>
+        <not>
+            <contains string="${ant.version}" substring="1.7"/>
+        </not>   
+      </condition>
+  </fail>  -->
+
+  <!-- Check the mds settings ..  -->
+  <fail message="foreign mds type must be either db / jdev / or server.file">
+      <condition>
+        <and>
+            <not>
+                <equals arg1="${foreign.mds.type}" arg2="db"/>
+            </not>   
+            <not>
+                <equals arg1="${foreign.mds.type}" arg2="jdev"/>
+            </not>   
+            <not>
+                <equals arg1="${foreign.mds.type}" arg2="server.file"/>
+            </not>   
+        </and>
+      </condition>
+  </fail>    
+
+    <echo>Using mds-type : ${foreign.mds.type}</echo>
+    <condition property="db.based" value="true">
+        <equals arg1="${foreign.mds.type}" arg2="db"></equals>
+    </condition>
+    <condition property="file.based" value="true">
+        <equals arg1="${foreign.mds.type}" arg2="jdev"></equals>
+    </condition>
+    <condition property="server.file.based" value="true">
+        <equals arg1="${foreign.mds.type}" arg2="server.file"></equals>
+    </condition>
+
+  <!-- fixes the asinst soa.mgmt jar issue -->
+  <condition property="oracle.soa.mgmt.home"
+             value="${oracle.common.home}"
+             else="${oracle.home}">
+    <available file="${oracle.common.home}/soa/modules/oracle.soa.mgmt_11.1.1/soa-infra-mgmt.jar"/>
+  </condition>  
+
+  <!-- prompt for password.  With Ant 1.7, if the property is already set   -->
+  <!--   this input will be skipped.  This will allow users to decide if    -->
+  <!--   they want to code the password in the build.properties file, or    -->
+  <!--   input that password during deployment.                             -->
+  <input
+    message="Please enter the password for the application (weblogic) server:"
+    addproperty="server.password"
+  />
+
+    <!-- 
+        classpath for mds transfer task and soa libs for the standalone sample 
+    -->
+    <path id="soaClasspath_was">
+        <pathelement location="util/classes"/>
+        <pathelement location="${was.home}/runtimes/com.ibm.jaxws.thinclient_7.0.0.jar"/>
+        <pathelement location="${was.home}/runtimes/com.ibm.ws.ejb.thinclient_7.0.0.jar"/>
+        <pathelement location="${was.home}/runtimes/com.ibm.ws.webservices.thinclient_7.0.0.jar"/>
+        <pathelement location="${was.home}/runtimes/com.ibm.ws.orb_7.0.0.jar"/>
+        <pathelement location="${was.home}/runtimes/com.ibm.ws.admin.client_7.0.0.jar"/>
+        <pathelement location="${was.home}/plugins/com.ibm.ws.runtime.jar"/>
+        <pathelement location="${oracle.home}/../modules/javax.ejb_3.0.1.jar"/>
+
+        <!-- mds libs -->
+        <fileset file="${oracle.common.home}/modules/oracle.mds_11.1.1/mdslcm.jar"/>
+        <fileset file="${oracle.common.home}/modules/oracle.mds_11.1.1/mdsrt.jar"/>
+        <fileset file="${oracle.common.home}/modules/javax.management.j2ee_1.0.jar"/>
+        <!-- xdk -->
+        <fileset file="${oracle.common.home}/modules/oracle.xdk_11.1.0/xmlparserv2.jar"/>
+        <fileset file="${oracle.common.home}/modules/oracle.xdk_11.1.0/xml.jar"/>
+        <!-- ADF lib -->
+        <fileset file="${oracle.common.home}/modules/oracle.adf.share_11.1.1/adf-share-support.jar"/>
+        <fileset file="${oracle.common.home}/modules/oracle.adf.share.ca_11.1.1/adf-share-ca.jar"/>
+        <fileset file="${oracle.common.home}/modules/oracle.adf.share.ca_11.1.1/adf-share-base.jar"/>
+        <fileset file="${oracle.common.home}/modules/oracle.adf.share_11.1.1/adflogginghandler.jar"/>
+        <fileset file="${oracle.common.home}/modules/oracle.idm_11.1.1/identitystore.jar"/>
+        <fileset file="${oracle.common.home}/modules/oracle.javacache_11.1.1/cache.jar"/>
+        <!-- jaxb for mds -->
+        <fileset file="${oracle.common.home}/modules/javax.xml.bind_2.1.1.jar"/>
+            
+        <!-- dms -->
+        <fileset file="${oracle.common.home}/modules/oracle.dms_11.1.1/dms.jar"/>
+        <!-- ojdl -->
+        <fileset file="${oracle.common.home}/modules/oracle.odl_11.1.1/ojdl.jar"/>
+        <!-- xmlef -->
+        <fileset file="${oracle.common.home}/modules/oracle.xmlef_11.1.1/xmlef.jar"/>
+        <!-- bali share -->
+        <fileset file="${oracle.common.home}/modules/oracle.bali.share_11.1.1/share.jar"/>
+        <!-- oracle jdbc libs -->
+        <fileset file="${oracle.common.home}/modules/oracle.ucp_11.1.0.jar"/>
+        <fileset file="${oracle.common.home}/modules/oracle.jdbc_11.1.1/ojdbc6.jar"/>
+        <!-- ant -->
+        <fileset file="${was.home}/uninstall/lib/ant.jar"/>
+        
+        <!-- webserivces -->
+        <fileset file="${oracle.common.home}/modules/oracle.jrf_11.1.1/jrf.jar"/>
+        <fileset file="${oracle.common.home}/modules/oracle.webservices_11.1.1/wsclient.jar"/>
+        <fileset file="${oracle.common.home}/modules/oracle.webservices_11.1.1/oracle.webservices.standalone.client.jar"/>
+
+        <!-- soa -->
+        <fileset file="${oracle.home}/soa/modules/oracle.soa.fabric_11.1.1/fabric-runtime.jar"/>
+        <fileset file="${oracle.common.home}/modules/oracle.fabriccommon_11.1.1/fabric-common.jar"/>
+        <fileset file="${oracle.home}/soa/modules/oracle.soa.fabric_11.1.1/fabric-runtime-ext-was.jar"/>
+        <!-- moved to common home for em -->
+        <fileset dir="${oracle.soa.mgmt.home}">
+            <include name="soa/modules/oracle.soa.mgmt_11.1.1/soa-infra-mgmt.jar"/>
+            <include name="soa/modules/oracle.soa.mgmt_11.1.1/soa-client-stubs-was.jar"/>
+        </fileset>        
+        <!-- direct invocation api -->
+        <fileset file="${oracle.home}/soa/modules/oracle.soa.fabric_11.1.1/oracle-soa-client-api.jar"/>
+        <!-- sdo -->
+        <pathelement location="${was.home}/plugins/org.eclipse.emf.ecore.sdo.jar"/>
+        <pathelement location="${was.home}/plugins/org.eclipse.emf.commonj.sdo.jar"/>
+        <pathelement location="${oracle.common.home}/modules/oracle.toplink_11.1.1/eclipselink.jar"/>
+    </path>
+
+  <path id="was.classpath">
+    <fileset dir="${was.home}/plugins">
+      <include name="*.jar"/>
+    </fileset>
+    <fileset dir="${was.home}/lib">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+  
+  <taskdef name="wsadmin" classname="com.ibm.websphere.ant.tasks.WsAdmin">
+    <classpath refid="was.classpath"/>
+  </taskdef>
+
+  <target name="init" depends="clean">
+      <echo>SOA Suite 11g version: </echo>
+      <!-- dump the build info -->
+      <java classname="com.collaxa.cube.util.BuildInfo">
+        <classpath>
+            <pathelement location="${oracle.home}/soa/modules/oracle.soa.bpel_11.1.1/orabpel.jar"/>
+            <pathelement location="${oracle.home}/soa/modules/oracle.soa.bpel_11.1.1/orabpel-common.jar"/>
+            <pathelement location="${oracle.home}/soa/modules/oracle.soa.fabric_11.1.1/fabric-runtime.jar"/>
+        </classpath>
+      </java>
+      <!-- compile the utility classes -->
+      <echo>soa infra mgmt home: ${oracle.soa.mgmt.home} </echo>
+      <mkdir dir="util/classes"/>
+      <javac classpathref="soaClasspath_was" destdir="util/classes" debug="true"
+        excludes="com/otn/sample/fod/soa/wls/WLSSpecificSoaTests.java" >
+          <src path="util/src"/>
+      </javac> 
+      <copy file="templates/was/sas.client.props.seed" 
+        tofile="${sas.client.file}" overwrite="true"/>
+      <replace file="${sas.client.file}" 
+        token="@username@" value="${server.user}"/>
+      <replace file="${sas.client.file}" 
+        token="@password@" value="${server.password}"/>
+      <replace file="${sas.client.file}" 
+        token="@managed.server.host@" value="${managed.server.host}"/>
+      <replace file="${sas.client.file}" 
+        token="@managed.server.rmi.port@" value="${managed.server.rmi.port}"/>
+  </target>
+
+  <target name="clean">
+      <echo>SOA Suite 11g version: </echo>
+      <!-- dump the build info -->
+      <mkdir dir="util/classes"/>
+      <delete>
+        <fileset dir="util/classes"/>
+      </delete>
+      <delete failonerror="false" file="${sas.client.file}"/>
+  </target>
+
+  <!-- seed jms resources via wlst to the target server -->
+  <target name="seedFodJmsResources"
+    description="creates the needed jms resources">  
+    <echo>Seeding jms topic and connection factory for fusion order demo</echo>
+		<!--property name="jms.ws.args"
+		  value=" -lang jython washome=${was.home} conntype=SOAP host=${admin.server.host} port=${admin.server.port} user=${server.user} password=${server.password} -f ${basedir}/createJMSResources.was.seed"/>
+
+		<exec dir="${env.WAS_HOME}/was-nd/bin" executable="wsadmin.sh" resolveexecutable="true" failonerror="true">
+		  <arg line="${jms.ws.args}"/>
+		</exec-->
+    
+    <property name="jmsSeedScript" value="templates/was/createJMSResources.py"/>
+    <copy file="templates/was/createJMSResources.was.seed" tofile="${jmsSeedScript}" 
+        overwrite="true"/>
+    <replace file="${jmsSeedScript}" token="@server.username@" 
+        value="${server.user}"/>
+    <replace file="${jmsSeedScript}" token="@server.password@" 
+        value="${server.password}"/>
+    <replace file="${jmsSeedScript}" token="@was.node@"
+        value="${was.node}"/>
+    <replace file="${jmsSeedScript}" token="@was.cell@"
+        value="${was.cell}"/>
+    <replace file="${jmsSeedScript}" token="@server.targets@"
+        value="${server.targets}"/>
+    <replace file="${jmsSeedScript}" token="@jms.topic.jndi@" 
+        value="${orderbooking.jms.topic.jndi}"/>
+    
+    <wsadmin washome="${was.home}"
+             script="${jmsSeedScript}"
+             conntype="SOAP" host="${admin.server.host}"
+             port="${admin.server.port}"              
+             user="${server.user}"
+             password="${server.password}"
+             failonerror="true"/> 
+    
+		<echo>JMS Adapter J2C Config done</echo> 
+    <delete file="${jmsSeedScript}"/>
+
+  </target>
+
+  <!-- remove jms resources via wlst on the target server -->
+  <target name="removeFodJmsResources" description="removes the FOD jms resources">  
+    <echo>Removing jms topic and connection factory for fusion order demo</echo>
+    
+    <property name="jmsSeedScript" value="templates/was/removeJMSResources.py"/>
+    <copy file="templates/was/removeJMSResources.was.seed" tofile="${jmsSeedScript}" 
+        overwrite="true"/>
+    
+    <replace file="${jmsSeedScript}" token="@server.username@" 
+        value="${server.user}"/>
+    <replace file="${jmsSeedScript}" token="@server.password@" 
+        value="${server.password}"/>
+    <replace file="${jmsSeedScript}" token="@was.node@"
+        value="${was.node}"/>
+    <replace file="${jmsSeedScript}" token="@was.cell@"
+        value="${was.cell}"/>
+    <replace file="${jmsSeedScript}" token="@server.targets@"
+        value="${server.targets}"/>
+    <replace file="${jmsSeedScript}" token="@jms.topic.jndi@" 
+        value="${orderbooking.jms.topic.jndi}"/>
+    
+    <wsadmin washome="${was.home}"
+             script="${jmsSeedScript}"
+             conntype="SOAP" host="${admin.server.host}"
+             port="${admin.server.port}"              
+             user="${server.user}"
+             password="${server.password}"
+             failonerror="true"/> 
+    
+		<echo>JMS Adapter J2C Config (removal of connection factory) done</echo> 
+    <delete file="${jmsSeedScript}"/>
+    
+  </target>
+
+
+  <!-- file adapter -->
+  <target name="seedFodFileAdapterResources"
+    description="creates the needed file adapter resources">  
+    <echo>Seeding file adapter connection factory for fusion order demo</echo>
+    
+		<!--property name="file.ws.args"
+		  value=" -lang jython -username wasadmin -password welcome1 -conntype NONE -f ${basedir}/createFileAdapterResources.was.seed"/>
+
+		<exec dir="${env.WAS_HOME}/was-nd/bin" executable="wsadmin.sh" resolveexecutable="true" failonerror="true">
+		  <arg line="${file.ws.args}"/>
+		</exec-->
+    <property name="fileSeedScript" value="templates/was/createFileAdapterResources.py"/>
+
+    <copy file="templates/was/createFileAdapterResources.was.seed" 
+        tofile="${fileSeedScript}" 
+        overwrite="true"/>
+    <replace file="${fileSeedScript}" token="@was.node@"
+        value="${was.node}"/>
+    <replace file="${fileSeedScript}" token="@was.cell@"
+        value="${was.cell}"/>
+    <replace file="${fileSeedScript}" token="@file.adapter.controldir@" 
+        value="${orderbooking.file.adapter.control.dir}"/>
+    <replace file="${fileSeedScript}" token="@server.targets@"
+        value="${server.targets}"/>
+
+    <wsadmin washome="${was.home}"
+             script="${fileSeedScript}"
+             conntype="SOAP" host="${admin.server.host}"
+             port="${admin.server.port}"              
+             user="${server.user}"
+             password="${server.password}"
+             failonerror="true"/> 
+    
+		<echo>File Adapter J2C Config done</echo>
+    <delete file="${fileSeedScript}"/>
+  </target>  
+
+  <!-- creates mds connection information for adf-config.xml -->
+  <target name="createMDSConnections" 
+    description="seed the mds connection information based on the properties in build.properties"
+    depends="init">    
+    <antcall target="createMDSConnectionForDB"/>
+    <antcall target="createMDSConnectionForFileStore"/>    
+    <antcall target="createMDSConnectionForServerFileStore"/>    
+  </target>
+    
+  <!-- root target to create MDS connection based on db / file / server.file -->
+  <target name="createMDSConnectionForDB" if="db.based">
+    <echo>Creating ${adf.config.uri} for database backed MDS</echo>
+
+    <!-- prompt for password.  With Ant 1.7, if the property is already set   -->
+    <!--   this input will be skipped.  This will allow users to decide if    -->
+    <!--   they want to code the password in the build.properties file, or    -->
+    <!--   input that password during deployment.                             -->
+    <input
+      message="Please enter the password for the MDS schema:"
+      addproperty="mds.db.password"
+    />  
+
+    <copy file="templates/adf-config-db.seed" tofile="${adf.config.uri}" overwrite="true"/>
+    <replace file="${adf.config.uri}" token="@db.user@" value="${mds.db.userid}"/>
+    <replace file="${adf.config.uri}" token="@db.password@" value="${mds.db.password}"/>
+    <replace file="${adf.config.uri}" token="@db.connect.string@" value="${mds.db.jdbc-url}"/>
+    <echo>Using ${mds.db.jdbc-url} for db-based backing, with user ${mds.db.userid}</echo>
+  </target>
+
+  <target name="createMDSConnectionForFileStore" if="file.based">
+    <echo>Creating ${adf.config.uri} for filebased MDS</echo>
+    <copy file="templates/adf-config-file.seed" tofile="${adf.config.uri}" overwrite="true"/>
+    <replace file="${adf.config.uri}" token="@oracle.home@" value="${oracle.home}"/>
+    <echo>Using ${oracle.home}/integration for file-based backing</echo>
+  </target>
+
+  <target name="createMDSConnectionForServerFileStore" if="server.file.based">
+    <echo>Creating ${adf.config.uri} for server-filebased MDS</echo>
+    <copy file="templates/adf-config-server-file.seed" tofile="${adf.config.uri}" overwrite="true"/>
+    <replace file="${adf.config.uri}" token="@bea.home@" value="${oracle.home}/../"/>
+    <replace file="${adf.config.uri}" token="@domain.name@" value="${server.domain.name}"/>
+    <echo>Using ${oracle.home}/../user_projects/domains/${server.domain.name}/gmds/applications/soa-infra for file-based backing</echo>
+  </target>
+
+  <!-- seed bpm demo user community -->
+  <target name="seedDemoUsers" description="seed bpm demo user community"
+    depends="create-deploy-py-bpm">
+    <property name="seed.bpm.py.file" value="create-deploy-bpm.py"/> 
+    <wsadmin washome="${was.home}"
+             script="${seed.bpm.py.file}"
+             conntype="SOAP" host="${admin.server.host}"
+             port="${admin.server.port}"              
+             user="${server.user}"
+             password="${server.password}"
+             failonerror="true"/> 
+    
+    <property name="server.url" value="http://${managed.server.host}:${managed.server.port}"/>
+    <echo message="Server URL: ${server.url} ${oracle.home} ${basedir}/bpm-seed/demoseed-invoke.jar"/>
+    <java classname="oracle.bpel.demoseed.DemoCommunitySeed" fork="yes">
+       <classpath>
+          <pathelement location="${basedir}/bpm-seed/demoseed-invoke.jar"/>
+       </classpath>
+       <arg line="-serverURL ${server.url} -action SEED_COMMUNITY -adminServerURL http://${managed.server.host}:${managed.server.rmi.port} -adminUser ${server.user} -adminPwd ${server.password}"/>
+    </java>
+    <delete file="${seed.bpm.py.file}" failonerror="false"/>
+  </target>
+
+  <!-- remove bpm demo user community, including application -->
+  <target name="removeDemoUsers" description="remove bpm demo user community">
+  </target>
+
+  <!-- seed jndi credentials -->
+  <target name="seedJndiCredentials" description="seed jndi credentials"
+    depends="create-was-jndi-creds-py">
+
+    <chmod file="${was.home}/bin/wsadmin.sh" perm="ugo+x"/>
+    
+    <property name="seed.jndi.py.file" value="create-soa-jndi-creds.py"/> 
+    <property name="user.install.root" location="${was.home}"/>
+    <property name="wasinstall" location="${was.home}"/>
+    <wsascript script="${seed.jndi.py.file}" 
+               washome="${was.home}"
+               host="${admin.server.host}"
+               port="${admin.server.port}"              
+               user="${server.user}"
+               password="${server.password}"/> 
+    <delete file="${seed.jndi.py.file}"/>
+  </target>    
+
+  <!-- seed jndi credentials -->
+  <target name="removeJndiCredentials" description="remove jndi credentials"
+    depends="create-was-jndi-creds-remove-py">
+
+    <chmod file="${was.home}/bin/wsadmin.sh" perm="ugo+x"/>
+    
+    <property name="seed.jndi.py.file" value="create-soa-jndi-creds-remove.py"/> 
+    <property name="user.install.root" location="${was.home}"/>
+    <property name="wasinstall" location="${was.home}"/>
+    <wsascript script="${seed.jndi.py.file}" 
+               washome="${was.home}"
+               host="${admin.server.host}"
+               port="${admin.server.port}"              
+               user="${server.user}"
+               password="${server.password}"/> 
+    <delete file="${seed.jndi.py.file}"/>
+  </target>    
+
+
+    <!-- import common defs/xsds into mds -->
+    <target name="importCommonServiceArtifactsIntoMds" 
+        depends="createMDSConnections"
+        description="imports the common wsdls/xsds into the mds store">
+        <java classpathref="soaClasspath_was" fork="true"  
+            classname="com.otn.sample.fod.soa.util.MdsImportTask"
+            failonerror="true">
+            <sysproperty key="oracle.home" value="${oracle.home}"/>
+            <!-- location of adf config (where we transfer to) -->
+            <arg value="../.adf/META-INF/adf-config.xml"/>
+            <!-- store usage defined in adf-config.xml -->
+            <arg value="mstore-usage_1"/>            
+            <!-- mds namespace to import from (src) and to -->
+            <arg value="apps"/>         
+            <!-- local repo, the above param will be postfixed to the below -->
+            <arg value="./soa-seed"/>            
+        </java>
+    </target>
+
+    <!-- delete common defs/xsds from mds -->
+    <target name="deleteCommonServiceArtifactsFromMds" 
+        depends="createMDSConnections"
+        description="imports the common wsdls/xsds into the mds store">
+        <java classpathref="soaClasspath_was" fork="true"  
+            classname="com.otn.sample.fod.soa.util.MdsDeleteTask"
+            failonerror="true">
+            <sysproperty key="oracle.home" value="${oracle.home}"/>
+            <!-- location of adf config (where we transfer to) -->
+            <arg value="../.adf/META-INF/adf-config.xml"/>
+            <!-- store usage defined in adf-config.xml -->
+            <arg value="mstore-usage_1"/>            
+            <!-- mds namespace to delete from -->
+            <arg value="apps"/>         
+            <!-- local repo, the above param will be postfixed to the below -->
+            <arg value="./soa-seed"/>            
+        </java>
+    </target>
+    
+    <!-- retrieve files from remote mds into the local soa-seed one -->
+    <target name="manageSOASuiteConfiguration" 
+        depends="createMDSConnections"
+        description="retrieves remote mds files for local modification">
+        <input message="soa configuration filename: " addproperty="config.file" 
+            defaultvalue="**"/>
+        <input message="import (to remote) / export (from remote): " 
+            addproperty="config.command" defaultvalue="export"/>
+        <java classpathref="soaClasspath_was" fork="true"  
+            classname="com.otn.sample.fod.soa.util.MdsSOAInfraConfigurationMgmtTask"
+            failonerror="true">
+            <sysproperty key="oracle.home" value="${oracle.home}"/>
+            <!-- in order to overwrite it from outside -->
+            <sysproperty key="mds.fileName" value="${config.file}"/>
+            <sysproperty key="mds.command" value="${config.command}"/>
+            <!--
+                <arg value="../.adf/META-INF/adf-config.xml"/>
+                <arg value="mstore-usage_1"/>            
+                <arg value="soa/configuration/default"/>         
+                <arg value="./soa-seed"/> 
+            -->    
+        </java>
+    </target>    
+
+  <!-- validate settings of configuration (build.properties as well as mds) -->
+  <target name="validateFodConfigSettings" 
+    description="validates fod config settings including mds" 
+    depends="createMDSConnections, create-was-jndi-creds-py">  
+
+    <chmod file="${was.home}/bin/wsadmin.sh" perm="ugo+x"/>
+    <property name="validate.jndi.py.file" 
+      value="validateFODConfigSettings.py"/> 
+
+    <copy file="templates/was/checkFODSettings.was.seed" 
+        tofile="${validate.jndi.py.file}" 
+        overwrite="true"/>
+    <replace file="${validate.jndi.py.file}" token="@was.node@"
+        value="${was.node}"/>
+    <replace file="${validate.jndi.py.file}" token="@was.cell@"
+        value="${was.cell}"/>
+    <replace file="${validate.jndi.py.file}" token="@server.targets@"
+        value="${server.targets}"/>
+        
+    <property name="user.install.root" location="${was.home}"/>
+    <property name="wasinstall" location="${was.home}"/>
+    <wsascript script="${validate.jndi.py.file}" 
+               washome="${was.home}"
+               host="${admin.server.host}"
+               port="${admin.server.port}"              
+               user="${server.user}"
+               password="${server.password}"/> 
+    <delete file="${validate.jndi.py.file}"/>
+
+    <java classpathref="soaClasspath_was" fork="true"  
+        classname="com.otn.sample.fod.soa.util.MdsImportTask"
+        failonerror="true">
+        <!-- needed for the oracle home that can be set in adf-config.xml -->
+        <sysproperty key="oracle.home" value="${oracle.home}"/>        
+        <!-- location of adf config (where we transfer to) -->
+        <arg value="../.adf/META-INF/adf-config.xml"/>
+        <!-- store usage defined in adf-config.xml -->
+        <arg value="mstore-usage_1"/>            
+        <!-- mds path to go from (src) and to -->
+        <arg value="apps"/>         
+        <!-- local repo, the above param will be postfixed to the below -->
+        <arg value="./soa-seed"/>    
+        <!-- validate the settings only, no import -->
+        <arg value="true"/>
+    </java>    
+    <fail message="While ALL tests have passed, you MUST set the property named
+'foreign.mds.type' to 'db' in order to be able to deploy! Currently it is set to '${foreign.mds.type}'">
+        <condition>
+            <not>
+                <equals arg1="${foreign.mds.type}" arg2="db"/>
+            </not>
+        </condition>
+    </fail>
+  </target>    
+  
+  <!-- check if partition is there, if not create it .. -->
+  <target name="createSOAPartitionIfNotExist" 
+    description="Create a new partition for fod if it's not already there">
+    <property name="outputfileName" value="partitionList.dat"/>
+    <ant antfile="${oracle.home}/bin/ant-sca-mgmt.xml" target="listPartitions"
+      output="${outputfileName}">
+        <property name="user" value="${server.user}"/>
+        <property name="password" value="${server.password}"/>
+        <property name="host" value="${managed.server.host}"/>
+        <property name="port" value="${managed.server.rmi.port}"/>
+        <property name="was.home" value="${was.home}"/>
+        <property name="user" value="${server.user}"/>
+    </ant>    
+    <loadfile property="output" srcfile="${outputfileName}" />
+    <condition property="createPartition" value="true">
+      <and>
+        <not>
+          <equals arg1="${soa.partition.name}" arg2="default"/>
+        </not>  
+        <not>
+          <contains string="${output}" substring="${soa.partition.name}"/>
+        </not>
+     </and>     
+    </condition>
+    <echo>Creating partition ${soa.partition.name}? ${createPartition}</echo>
+    <antcall target="doCreatePartition" inheritall="true"/>
+    <delete file="${outputfileName}"/>
+  </target>
+
+  <target name="doCreatePartition" if="createPartition">
+    <ant antfile="${oracle.home}/bin/ant-sca-mgmt.xml" target="createPartition">
+        <property name="user" value="${server.user}"/>
+        <property name="password" value="${server.password}"/>
+        <property name="host" value="${managed.server.host}"/>
+        <property name="port" value="${managed.server.rmi.port}"/>
+        <property name="partition" value="${soa.partition.name}"/>
+        <property name="was.home" value="${was.home}"/>
+        <property name="user" value="${server.user}"/>        
+    </ant>
+  </target>
+
+  <!-- check if partition is named default, if not delete it .. -->
+  <target name="deleteSOAPartitionIfNotExistsAndNotDefault" 
+    description="Delete the fod  partition if it is not the default one">
+    <property name="outputfileName" value="partitionList.dat"/>
+    <ant antfile="${oracle.home}/bin/ant-sca-mgmt.xml" target="listPartitions"
+      output="${outputfileName}">
+        <property name="user" value="${server.user}"/>
+        <property name="password" value="${server.password}"/>
+        <property name="host" value="${managed.server.host}"/>
+        <property name="port" value="${managed.server.rmi.port}"/>
+        <property name="was.home" value="${was.home}"/>
+        <property name="user" value="${server.user}"/>        
+    </ant>
+    <condition property="deletePartition" value="true">
+      <and>
+        <not>
+          <equals arg1="${soa.partition.name}" arg2="default"/>
+        </not>  
+        <contains string="${output}" substring="${soa.partition.name}"/>
+     </and>     
+    </condition>
+    <echo>Deleting partition ${soa.partition.name}? ${deletePartition}</echo>
+    <antcall target="deletePartition" inheritall="true"/>
+    <delete file="${outputfileName}"/>    
+  </target>
+
+  <target name="deletePartition" description="Deletes the fod partition"
+    if="deletePartition">
+    <ant antfile="${oracle.home}/bin/ant-sca-mgmt.xml" target="deletePartition">
+        <property name="user" value="${server.user}"/>
+        <property name="password" value="${server.password}"/>
+        <property name="host" value="${managed.server.host}"/>
+        <property name="port" value="${managed.server.rmi.port}"/>
+        <property name="partition" value="${soa.partition.name}"/>
+        <property name="was.home" value="${was.home}"/>
+        <property name="user" value="${server.user}"/>        
+    </ant>
+  </target>
+
+  <target name="create-deploy-py-bpm">
+    <echo file="create-deploy-bpm.py"># install the application
+import time
+    
+def installApp(crAppWAR, appName):
+
+  # If the Application exists, then update it, otherwise install it	
+  try:
+   app = AdminApp.view(appName)
+  except: 
+   print "***** App not found: " + appName + ". Installing " +crAppWAR+ " now\n"
+   options = "-appname " + appName + " -server ${server.targets} -node ${was.node} -cell ${was.cell} -contextroot /integration/SOADemoCommunity -defaultbinding.virtual.host default_host -usedefaultbindings -useAutoLink"
+   AdminApp.install(crAppWAR, options)
+   AdminConfig.save()
+   print "\n***** Done installing App: " + appName + ". Config saved .."
+  else:
+   if app > 1:
+     print "***** The App EXISTS: " + appName + ". Skipping...\n"
+   #endif
+#enddef
+
+# start the application
+def startApp(appName):
+
+  # If the Application is already started then do not do anything.
+  try:
+    app = AdminControl.completeObjectName("type=Application,name=" + appName + ",*")
+  except:
+     print "***** The Application " + appName + " is already STARTED"
+     return 0
+     
+  if len(app) > 1:
+     print "***** The Application " + appName + " is already STARTED"
+     return 0
+  #endif
+	
+  # If the Application status is not Started, only then do the rest ...	
+  #get the ApplicationManager MBean
+  appMgr = AdminControl.queryNames("node=${was.node},type=ApplicationManager,process=" + srvr + ",*")
+	
+  #start the Application using the ApplicationManager MBean
+  try:
+    AdminControl.invoke(appMgr,'startApplication',appName)
+    print "\n***** Started: " + appName
+    return 0
+  except:
+    print "***** Retry start..."
+    return 1
+#enddef
+
+# *********  MAIN SECTION  *********** #
+# Global variables declaration
+global AdminConfig
+global AdminControl
+global AdminApp
+global AdminTask
+
+nodeName = "${was.node}"
+srvr = "${server.targets}"
+
+crAppWAR = "bpm-seed/SOATestDemoApp-was.ear" 
+crAppName = "FOD-BPMDemoApp" # display name of the enterprise App
+
+# functions for the deployment steps
+installApp (crAppWAR,crAppName)  # Step 1 - Install BPM seed users app
+
+for i in range(9):
+  time.sleep(15)
+  if startApp(crAppName) == 0: # Step 2 - Start the bpm seed app
+    break
+  #endif
+#endfor
+</echo>
+  </target>
+
+  <!-- target to crete the jndi lookup credentials seed script -->
+  <target name="create-was-jndi-creds-py" >
+    <echo file="create-soa-jndi-creds.py" append="false">#
+global AdminConfig
+global AdminTask
+
+#
+# Permission for JNDI lookups to the group Administrators
+#
+AdminTask.mapGroupsToNamingRole('[-roleName CosNamingRead -accessids [group:${ldap.host}:${ldap.port}/cn=Administrators,ou=Groups,dc=us,dc=oracle,dc=com ] -groupids [cn=Administrators,ou=Groups,dc=us,dc=oracle,dc=com@${ldap.host}:${ldap.port} ]]')
+AdminTask.mapGroupsToNamingRole('[-roleName CosNamingWrite -accessids [group:${ldap.host}:${ldap.port}/cn=Administrators,ou=Groups,dc=us,dc=oracle,dc=com ] -groupids [cn=Administrators,ou=Groups,dc=us,dc=oracle,dc=com@${ldap.host}:${ldap.port} ]]')
+AdminTask.mapGroupsToNamingRole('[-roleName CosNamingCreate -accessids [group:${ldap.host}:${ldap.port}/cn=Administrators,ou=Groups,dc=us,dc=oracle,dc=com ] -groupids [cn=Administrators,ou=Groups,dc=us,dc=oracle,dc=com@${ldap.host}:${ldap.port} ]]')
+AdminTask.mapGroupsToNamingRole('[-roleName CosNamingDelete -accessids [group:${ldap.host}:${ldap.port}/cn=Administrators,ou=Groups,dc=us,dc=oracle,dc=com ] -groupids [cn=Administrators,ou=Groups,dc=us,dc=oracle,dc=com@${ldap.host}:${ldap.port} ]]') 
+#
+# Store Info into CSF
+#
+Opss.createCred(map="SOA",key="Deployer",user="${server.user}",password="${server.password}");
+#
+# Save Configuration
+#
+AdminConfig.save()</echo>
+  </target>
+
+  <!-- target to crete the jndi lookup credentials seed script -->
+  <target name="create-was-jndi-creds-remove-py" >
+    <echo file="create-soa-jndi-creds-remove.py" append="false">#
+global AdminConfig
+global AdminTask
+
+#
+# Remove permission for JNDI lookups to the group Administrators
+#
+    
+AdminTask.removeGroupsFromNamingRole('[-roleName CosNamingRead -groupids [cn=Administrators,ou=Groups,dc=us,dc=oracle,dc=com@${ldap.host}:${ldap.port} ]]')
+AdminTask.removeGroupsFromNamingRole('[-roleName CosNamingWrite -groupids [cn=Administrators,ou=Groups,dc=us,dc=oracle,dc=com@${ldap.host}:${ldap.port} ]]')
+AdminTask.removeGroupsFromNamingRole('[-roleName CosNamingCreate -groupids [cn=Administrators,ou=Groups,dc=us,dc=oracle,dc=com@${ldap.host}:${ldap.port} ]]')
+AdminTask.removeGroupsFromNamingRole('[-roleName CosNamingDelete -groupids [cn=Administrators,ou=Groups,dc=us,dc=oracle,dc=com@${ldap.host}:${ldap.port} ]]') \
+
+# remove the credentials
+Opss.deleteCred(map="SOA",key="Deployer");
+
+#
+# Save Configuration
+#
+AdminConfig.save()</echo>
+  </target>
+
+</project>

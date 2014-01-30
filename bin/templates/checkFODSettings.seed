@@ -1,0 +1,48 @@
+"""
+   WLST Python script that checks validity of basic config settings, from build.properties
+"""   
+import httplib
+import sys
+from java.lang import System
+
+print "Checking fod settings .. - admin server: @admin.server.host@ port: @admin.server.port@"
+connect('@server.user@','@server.password@','t3://@admin.server.host@:@admin.server.port@') 
+
+# get the server mbean to lookup, to see if the server is valid after all'
+print "Connecting to target managed server: Servers/@server.target@"
+
+servermb=getMBean("Servers/@server.target@")
+print servermb
+if servermb is None:
+    print 'Servers/@server.target@ is an invalid managed server name'
+    raise ServerTargetNotFound, 'Servers/@server.target@ not found'
+
+print 'Checking status of managed server - must be running'
+status = servermb.getStartupMode()
+if (status != "RUNNING"):
+    raise ManagedServerNotRunning, 'Status is ' + status
+
+print "Checking listen port of managed server - from build properties: @managed.server.port@"
+# check listen port to make sure it's reachable there
+serverPort=servermb.getListenPort()
+if (@managed.server.port@ != serverPort):
+    raise InvalidManagedServerPort, 'Server port is wrong. (Actual: ' + serverPort + ')' 
+
+print "Sending ping to @managed.server.host@:@managed.server.port@ - for soa-infra app"
+serverCon = '@managed.server.host@:@managed.server.port@'
+conn = httplib.HTTPConnection(serverCon)
+conn.request("GET", "/soa-infra")
+r1 = conn.getresponse()
+print 'Response: ',r1.status
+
+if (r1.status == 500 or r1.status == 404):
+    raise SOAInfraAppNotFound, 'Could not find soa-infra app on target managed server (' + serverCon + ')'
+
+# get the domain rt to lookup the domain name
+domainRt = domainRuntime()
+domainName=  domainRt.getName()
+print 'Domain name: ' + domainName
+if (domainName is None or domainName != '@server.domain.name@'):
+    raise DomainNameWrong, 'Domain name is: ' + domainName + 'configured: @server.domain.name@'
+
+print 'All tests passed - ready to install Fusion Order Demo for SOA Suite 11g' 
